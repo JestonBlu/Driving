@@ -6,7 +6,7 @@ rm(list = ls())
 load("R-Data/faces.rda")
 
 ## Calculate the baseline
-baseline = ddply(subset(faces, Trial == '001'), 
+baseline = ddply(subset(faces, Trial == '004'), 
                  .(Subject, Age, Gender), summarise,
                  mu_Anger = mean(Anger),
                  mu_Contempt = mean(Contempt),
@@ -17,7 +17,8 @@ baseline = ddply(subset(faces, Trial == '001'),
                  mu_Surprise = mean(Surprise),
                  mu_Neutral = mean(Neutral))
 
-faces.cen = faces
+## Concentrating on simulations 4-7
+faces.cen = faces[faces$Trial %in% c('004', '005', '006', '007'), ]
 faces.cen = join(faces.cen, baseline, by = "Subject", type = "inner")
 
 ## Center all emotions
@@ -34,28 +35,47 @@ faces.cen = faces.cen[, -(19:28)]
 
 ## Calculate the average value and variance for each trial, event, expression
 stats = ddply(faces.cen, .(Subject, Trial, Event, Age, Gender, Event.Switch), summarise,
-               mu_Anger = mean(Anger),
-               var_Anger = var(Anger),
-               mu_Contempt = mean(Contempt),
-               var_Contempt = var(Contempt),
-               mu_Disgust = mean(Disgust),
-               var_Disgust = var(Disgust),
-               mu_Fear = mean(Fear),
-               var_Fear = var(Fear),
-               mu_Joy = mean(Joy),
-               var_Joy = var(Joy),
-               mu_Sad = mean(Sad),
-               var_Sad = var(Sad),
-               mu_Surprise = mean(Surprise),
-               var_Surprise = var(Surprise),
-               mu_Neutral = mean(Neutral),
-               var_Neutral = var(Neutral))
-
-stats[, 7:22] = apply(stats[, 7:22], 2, function(x) round(x, 3))
+              mu_Anger = mean(Anger),
+              var_Anger = var(Anger),
+              min_Anger = min(Anger),
+              max_Anger = max(Anger),
+              mu_Contempt = mean(Contempt),
+              var_Contempt = var(Contempt),
+              min_Contempt = min(Contempt),
+              max_Contempt = max(Contempt),
+              mu_Disgust = mean(Disgust),
+              var_Disgust = var(Disgust),
+              min_Disgust = min(Disgust),
+              max_Disgust = max(Disgust),
+              mu_Fear = mean(Fear),
+              var_Fear = var(Fear),
+              min_Fear = min(Fear),
+              max_Fear = max(Fear),
+              mu_Joy = mean(Joy),
+              var_Joy = var(Joy),
+              min_Joy = min(Joy),
+              max_Joy = max(Joy),
+              mu_Sad = mean(Sad),
+              var_Sad = var(Sad),
+              min_Sad = min(Sad),
+              max_Sad = max(Sad),
+              mu_Surprise = mean(Surprise),
+              var_Surprise = var(Surprise),
+              min_Surprise = min(Surprise),
+              max_Surprise = max(Surprise),
+              mu_Neutral = mean(Neutral),
+              var_Neutral = var(Neutral),
+              min_Neutral = min(Neutral),
+              max_Neutral = max(N)
+              )
 
 faces$Texting = 0
 faces$Texting[faces$Event %in% c("Texting", "Texting and Talking")] = 1
 faces$Texting = factor(faces$Texting)
+
+stats$texting = 0
+stats$texting[stats$Event %in% c("Texting", "Texting and Talking")] = 1
+stats$texting = factor(stats$texting)
 
 save(list = "faces", file = "R-Data/faces.rda")
 save(list = c("stats", "baseline", "faces.cen"), file = "R-Data/other.rda")
