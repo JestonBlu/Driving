@@ -66,7 +66,7 @@ stats = ddply(faces.cen, .(Subject, Trial, Event, Age, Gender, Event.Switch), su
               mu_Neutral = mean(Neutral),
               var_Neutral = var(Neutral),
               min_Neutral = min(Neutral),
-              max_Neutral = max(N)
+              max_Neutral = max(Neutral)
               )
 
 faces$Texting = 0
@@ -78,8 +78,9 @@ stats$texting[stats$Event %in% c("Texting", "Texting and Talking")] = 1
 stats$texting = factor(stats$texting)
 
 save(list = "faces", file = "R-Data/faces.rda")
-save(list = c("stats", "baseline", "faces.cen"), file = "R-Data/other.rda")
-
+save(list = "stats", file = "R-Data/stats.rda")
+save(list = "baseline", file = "R-Data/baseline.rda")
+save(list = "faces.cen", file = "R-Data/faces_cen.rda")
 
 
 
