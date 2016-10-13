@@ -69,6 +69,10 @@ stats = ddply(faces.cen, .(Subject, Trial, Event, Age, Gender, Event.Switch), su
               max_Neutral = max(Neutral)
               )
 
+faces.cen$Texting = 0
+faces.cen$Texting[faces.cen$Event %in% c("Texting", "Texting and Talking")] = 1
+faces.cen$Texting = factor(faces.cen$Texting)
+
 faces$Texting = 0
 faces$Texting[faces$Event %in% c("Texting", "Texting and Talking")] = 1
 faces$Texting = factor(faces$Texting)

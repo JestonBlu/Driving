@@ -1,0 +1,25 @@
+---
+title: ""
+author: "Joseph Blubaugh"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    highlight: pygments
+mainfont: DejaVu Sans Mono
+sansfont: DejaVu Sans Mono
+fontsize: 11pt
+geometry: margin=1in
+---
+
+```{r setup, echo=FALSE}
+
+library(knitr)
+library(ggplot2)
+library(plyr)
+library(reshape2)
+library(pander)
+
+load(file = "../R-Data/faces.rda")
+
+```

@@ -2,6 +2,7 @@
 title: "Distracted Driving Data Analysis Proposal"
 author: "Joseph Blubaugh"
 date: "`r format(Sys.time(), '%d %B %Y')`"
+p
 output:
   pdf_document:
     latex_engine: xelatex
@@ -35,11 +36,11 @@ x[, 5:12] = apply(x[, 5:12], 2, function(x) round(x, 3))
 pander(x, style = 'rmarkdown', caption = "Combined Simulation and Stimuli Datasets", split.table = Inf)
 ```
 
-There were several misspelled descriptions in the stimuli files so I reconstructed the event names. At least one of the events appears to be miscoded. There is only one simulation in trial 006 that has a Mathematical Question event. This appears to be miscoded and should probably be coded as Emotional Question instead. 
+There were several misspelled descriptions in the stimuli files so I reconstructed the event names. At least one of the events appears to be miscoded. There is only one simulation in trial 006 that has a Mathematical Question event. This appears to be miscoded and should probably be coded as Emotional Question instead.
 
 ```{r tab1, echo=FALSE, comment=NA, results='asis'}
 
-x = dcast(ddply(stats, .(Trial, Event), summarise, count = length(Subject)), 
+x = dcast(ddply(stats, .(Trial, Event), summarise, count = length(Subject)),
       Event ~ Trial, value.var = "count")
 x[is.na(x)] = 0
 x$Event = relevel(x$Event, ref = "No Event")
@@ -57,13 +58,13 @@ The plot below shows the output of two driving simulations for a single subject 
 
 x = subset(faces, Trial == '007' | Trial == '004')
 x = melt(x, id.vars = c("Subject", "Age", "Gender", "Time", "Event", "Event.Switch", "Trial"),
-         measure.vars = c("Anger", "Contempt", "Disgust", "Fear", "Joy", 
+         measure.vars = c("Anger", "Contempt", "Disgust", "Fear", "Joy",
                           "Sad", "Surprise", "Neutral"))
 ## Old Female
 ggplot(subset(x, Subject == 'T086'), aes(x = Time, y = value, group = Trial, color = Event)) +
   geom_point(alpha = .03) +
   geom_smooth(size = .2, aes(color = Trial))+
-  scale_color_manual("", labels = c("Sim 004 (Driving)", "Sim 007 (Texting & Driving)", "Not Texting", "Texting"), 
+  scale_color_manual("", labels = c("Sim 004 (Driving)", "Sim 007 (Texting & Driving)", "Not Texting", "Texting"),
                      values = c("blue", "red", "gray50", "#f0b823")) +
   scale_x_continuous("Seconds") +
   scale_y_continuous("Emotional Likelihood", breaks = c(0, .5, 1)) +
@@ -76,5 +77,3 @@ ggplot(subset(x, Subject == 'T086'), aes(x = Time, y = value, group = Trial, col
 ```
 
 I propose that this analysis focus on building a model to detect whether the subject is texting or otherwise distracted based on demographics and changes in facial expressions. I would also like to leave in the time series component and experiment with complex models such as neural nets or support vector machines. I am particularly interested in measuring the similarities in facial expression changes based on encountered events. I would also like to understand if one model performs reasonably well on all or most subjects, or are the subjects so unique that only individual models would perform well.
-
-
