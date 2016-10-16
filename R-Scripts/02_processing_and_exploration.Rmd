@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "Data Processing and Extraction"
 author: "Joseph Blubaugh"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
@@ -23,3 +23,38 @@ library(pander)
 load(file = "../R-Data/faces.rda")
 
 ```
+
+## Dataset Overview
+The data in this project are of 8 driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation. There are over 6.7 million observations in the entire dataset. The data from each simulation includes likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds. Stimuli data which records targetted events that were introduced into each simulation and basic demographic data on each subject are also available.
+
+
+## Data Extraction
+In order to prepare the data for analysis each of the 509 simulation files needed to be extracted and combined into a single file. A python program was witten to accomplish this. All of the simulation files are excel files and all except 2 have identical layouts. The python program extracted data from each simulation file beginning on the 9th (header) row. Two of the simulation files did not start on the 9th row (8th & 10th) and had to be corrected manually.
+
+
+```{r dta1, comment=NA, echo=FALSE}
+x = head(faces[, c(2,3,6,10:17)])
+x[, 4:11] = apply(x[, 4:11], 2, function(x) round(x, 4))
+pander(x, style = "rmarkdown", split.table = Inf, caption= "Simulation Example: T001-001",
+       justify = "left")
+```
+
+There are 267 stimuli files (.stm) that record events that occur in each simulation. They have identical formats and were able to be extracted in the same manner as the simulation data. Python was also used to extract the data.
+
+                          Table 2: Stimuli Example: T001-007.stm
+
+|StartTime |	EndTime |	EventSwitch |	Action Type |	Question Number |
+|:---------|:---------|:------------|:------------|:----------------|
+| 81       |	240     |	1           |	4           |	Texting         |
+| 510      |	671     |	1           |	4           |	Texting         |
+
+The two python programs used to extract the data and a third file which contained basic demographics data were all read into R. An R program was written to combine the three datasets. The stimuli data was joined with the simulation data based on the file name and the start and end times of the events.
+
+```{r dta2, echo=FALSE, comment=NA}
+x = head(faces[, c(2:17)])
+x[, c(6,9:16)] = apply(x[, c(6,9:16)], 2, function(x) round(x, 4))
+pander(x, caption = "Final Combined Dataset", justify = "left")
+```
+
+## Data Quality
+In addition to the two simulation files with differing formats, several misspellings occur in the description of the event action types. 
