@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "Distracted Driving Initial Analysis"
 author: "Joseph Blubaugh"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
@@ -12,14 +12,171 @@ fontsize: 11pt
 geometry: margin=1in
 ---
 
-```{r setup, echo=FALSE}
+## Overview
+This analysis is focussed on trying to detect texting events from subjects participating in the driving simulation trial 007. In the distracted driving experiment, trial 004 was used as a practice run where the driver drove approximately 11 kilometers on a crowded four lane road with a speed limit of 70 kph. There was a period in the drive where the driver had to take a short detour, but otherwise the drive was a straight line. No events occurred in this simulation and so trial 004 can be used as a baseline to compare against trial 007 where the driver encounters texting events on the same road and in the same conditions.
+
+## Establishing a Baseline
+In order to establish a baseline, the overall mean was computed for each subject's emotional likelihood over the entire simulation. The mean was subtracted from each observation in trial 007 to calculate a baseline starting point.
+
+```{r setup, echo=FALSE, fig.width=8, fig.height=6, message=FALSE, warning=FALSE}
 
 library(knitr)
 library(ggplot2)
 library(plyr)
 library(reshape2)
 library(pander)
+suppressPackageStartupMessages(library(nnet))
+suppressPackageStartupMessages(library(randomForest))
 
 load(file = "../R-Data/faces.rda")
+load(file = "../R-Data/faces_cen.rda")
+load(file = "../R-Data/stats.rda")
+
+## Baseline example for a Young male
+x = subset(faces, Trial == '004' & Subject == 'T001')
+x = melt(x, id.vars = c("Subject", "Age", "Gender", "Time", "Event", "Event.Switch", "Trial"),
+         measure.vars = c("Anger", "Contempt", "Disgust", "Fear", "Joy",
+                          "Sad", "Surprise", "Neutral"))
+x.avg = ddply(x, .(variable), summarise, avg = mean(value))
+
+ggplot(x, aes(x = Time, y = value, group = Trial, color = Event)) +
+  geom_point(alpha = .03) +
+  geom_smooth(size = .2, aes(color = Trial))+
+  geom_hline(aes(yintercept = avg), lty = 2, data = x.avg) +
+  scale_color_manual("", values = c("black", "gray50"), labels = c("Loess Smoother", "mean")) +
+  scale_x_continuous("Seconds") +
+  scale_y_continuous("Emotional Likelihood", breaks = c(0, .5, 1)) +
+  facet_wrap(~variable) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
+  ggtitle("Subject T001 (Young Male)\nSim 004 (No Events)") +
+  theme(legend.position = "bottom")
 
 ```
+
+\newpage
+
+Every observation of trial 004 and 007 are plotted below. Zero on the y-axis represents the baseline value for the Emotional Likelihood in trial 004. Gray points represent no events in the drive and yellow points represent texting events during the drive which only occur in trial 007. The black and red lines are loess smoothers to show the overall trend. This particular subject shows both positive and negative values of neutral, disgust, and contempt vs the baseline indicating that any deviation from the baseline regardless of direction may indicate texting. The disgust emotion appears to show more variation during texting events relative to non-events. There are also significant shifts away from the baseline for non-events. The most noticeable emotion is anger where during a non-event, anger increases rapidly vs the baseline and remains high even after a texting event occurs. This example may support the claim in the published paper that residual effects of texting seem to linger in driving behavior even after a texting event ends. These types of sudden shifts in emotional likelihood could make it difficult to detect texting events based on facial expressions alone.
+
+```{r cen2, echo=FALSE, fig.width=8, fig.height=6}
+
+## Baseline example for a Young male
+x = subset(faces, (Trial == '004' | Trial == '007') & Subject == 'T001')
+x = melt(x, id.vars = c("Subject", "Age", "Gender", "Time", "Event", "Event.Switch", "Trial"),
+         measure.vars = c("Anger", "Contempt", "Disgust", "Fear", "Joy",
+                          "Sad", "Surprise", "Neutral"))
+
+ggplot(x, aes(x = Time, y = value, group = Trial, color = Event)) +
+  geom_point(alpha = .03) +
+  geom_smooth(size = .2, aes(color = Trial))+
+  scale_color_manual("", labels = c("LS Trial 004","LS Trial 007", "No Event", "Texting Event"),
+                     values = c("black", "red", "gray50", "#f0b823")) +
+  scale_x_continuous("Seconds") +
+  scale_y_continuous("Emotional Likelihood", breaks = c(0, .5, 1)) +
+  facet_wrap(~variable) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
+  ggtitle("Subject T001 (Young Male)\nSim 004 (No Events) and Sim 007 (Texting)\nCentered on Baseline") +
+  theme(legend.position = "bottom")
+
+```
+
+The plot below shows individual loess smoother plots for each individual that participated in the non-event trial (004) and texting trial (007). The main point of this plot is to show differences in variation between the two trials. The lines are significantly more "wiggly" in the bottom row (007) than the top row (004) for all 5 emotions. Fear, joy, and surprise had smaller scale differences and were removed from this view to give more plotting space to the other emotions.
+
+```{r cen3, echo=FALSE, fig.width=8, fig.height=4}
+
+## Baseline example for a Young male (centered)
+x = subset(faces.cen, (Trial == '007' | Trial == '004'))
+x = melt(x, id.vars = c("Subject", "Age", "Gender", "Time", "Event", "Event.Switch", "Trial"),
+         measure.vars = c("Anger", "Contempt", "Disgust", "Fear", "Joy",
+                          "Sad", "Surprise", "Neutral"))
+x = subset(x, variable %in% c("Anger", "Contempt", "Disgust", "Sad", "Neutral"))
+
+ggplot(x, aes(x = Time, y = value, group = Subject)) +
+  geom_smooth(size = .2, se = FALSE)+
+  scale_x_continuous("Seconds") +
+  scale_y_continuous("Emotional Likelihood") +
+  facet_grid(Trial~variable) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
+  ggtitle("All Subjects\nNo Event Trial (004) vs Texting Event Trial (007)") +
+  theme(legend.position = "bottom")
+
+```
+
+## Exploring a Macro Level Model
+One of the interesting aspects of this analysis is to explore the differences between subject's reactions. In this case we are limited to facial expression data and simple demographics so its worth investigating whether a single model can effectively classify a texting event. Since the baseline has been established and the mean effect has been removed, I only used trial 007 in this portion of the analysis. In each of the texting trials, texting events occur twice with periods of non-events in between.
+
+In 2012 Ford sponsored a competition to develop a model that could successfully detect whether a driver was paying attention to the road. The data was similar to this project and the winner of the Ford competition wrote that instead of approaching the analysis as a time series problem, he instead averaged all values over the entire trial so that he had a single observation per trial. I have elected to try a similar approarch first. I computed the min, max, mean, var, and iqr for every simulation, grouped by the event. For all simulations, 119 observations and 40 descriptive statistics were available.
+
+The 119 observations were split into a training and testing set with a 60/40 ratio. A neural net and random forest model were both applied to the training set with default parameters. An overall quality measure of (Sensitivity + Specificity) / 2 was used to evaluate each model.
+
+\newpage
+
+```{r conf1, echo=FALSE, message=FALSE, warning=FALSE, comment=NA}
+
+metric = function(confusion) {
+  sensitivity = confusion[4] / (confusion[2] + confusion[4])
+  specificity = confusion[1] / (confusion[1] + confusion[3])
+  score = (sensitivity + specificity) / 2
+  return(score)
+}
+
+
+#stats = stats[!(stats$Subject %in% crash.list), ]
+stats = subset(stats, Trial %in% c('007'))
+
+x = sample(x = nrow(stats), size = round(nrow(stats) * .6), replace = FALSE)
+
+train = stats[x, c(4:5, 7:47)]
+test = stats[-x, c(4:5, 7:47)]
+
+mdl.nnet = nnet(formula = texting ~ ., size = 15, data = train, trace = FALSE)
+mdl.rf = randomForest(formula = texting ~ ., ntree = 1000, data = train)
+
+
+results = data.frame(actual = train$texting, nn.pred = predict(mdl.nnet, train, type = "raw"))
+results$nn.pred.class = 0; results$nn.pred.class[results$nn.pred > .5] = 1
+
+## Training Set
+results$rf.pred = predict(mdl.rf, train, type = "prob")[, 2]
+results$rf.pred.class = 0; results$rf.pred.class[results$rf.pred > .5] = 1
+
+cat("------------------------------------------------------------------------------------------")
+cat("Neural Network Confusion Matrix")
+cat("------------------------------------------------------------------------------------------")
+table(Actual = results$actual, Predicted = results$nn.pred.class)
+cat("(Training Set) Overall Performance:", metric(table(results$actual, results$nn.pred.class)))
+
+cat("------------------------------------------------------------------------------------------")
+cat("Random Forest Confusion Matrix")
+cat("------------------------------------------------------------------------------------------")
+table(Actual = results$actual, Predicted = results$rf.pred.class)
+cat("(Training Set) Overall Performance:", metric(table(results$actual, results$rf.pred.class)))
+
+## Testing Set
+results = data.frame(actual = test$texting, nn.pred = predict(mdl.nnet, test, type = "raw"))
+results$nn.pred.class = 0; results$nn.pred.class[results$nn.pred > .5] = 1
+
+results$rf.pred = predict(mdl.rf, test, type = "prob")[, 2]
+results$rf.pred.class = 0; results$rf.pred.class[results$rf.pred > .5] = 1
+
+cat("------------------------------------------------------------------------------------------")
+cat("Neural Network Confusion Matrix")
+cat("------------------------------------------------------------------------------------------")
+table(actual = results$actual, predicted = results$nn.pred.class)
+cat("(Testing Set) Neural Net Overall Performance", metric(table(actual = results$actual, predicted = results$nn.pred.class)))
+
+cat("------------------------------------------------------------------------------------------")
+cat("Random Forest Confusion Matrix")
+cat("------------------------------------------------------------------------------------------")
+table(actual = results$actual, predicted = results$rf.pred.class)
+cat("(Testing Set) Random Forest", metric(table(actual = results$actual, predicted = results$rf.pred.class)))
+
+```
+
+The training set performance is near perfect in most cases, but the testing set performance is comparable to a coin flip. It is obvious from the results of the confusion matrix that both models are guilty of overfitting. I tried decreasing the amount of data considered by the models and got similar results. Some minor experimenting with tuning parameters also had no effect. An inspection of the variable importance plot of the random forest model shows that the mean of the neutral emotion tends to have the highest impact on texting prediction. This in itself might be a reason why the models struggle to fit this type of data. The neutral emotion might be the best emotion to predict texting simply because people are unique tend to react differently when its comes to texting events or stimuli in general.
+
+```{r conf2, echo=FALSE, message=FALSE, warning=FALSE, comment=NA}
+varImpPlot(mdl.rf, main = "Variable Importance", cex = .5)
+```
+
+## Conclusions and Next Steps
+The summary statistics calculated at each event does not provide a good enough foundation to adequately detect event changes. Furthermore, it seems there is evidence that a one size fits all model will not work for this problem given that the neutral face seems most important when it comes to predicting texting. The restrictive size of the aggregated dataset makes overfitting a challenge and in fact may filter out the signals needed to detect texting events. In the next phase of this analysis, I would like to focus on looking at the same trials in the original times series format. The nature of the experimental design affords the ability to create a training and testing set for each subject in the texting trial. I will also spend a significant amount of time experimenting with model tuning.
