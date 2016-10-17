@@ -34,7 +34,7 @@ ggplot(subset(x, Subject == 'T001'), aes(x = Time, y = value, group = Trial, col
   theme()
 
 ## Young Female
-ggplot(subset(x, Subject == 'T004'), aes(x = Time, y = value, group = Trial, color = Event)) +
+ggplot(subset(x, Subject == 'T002'), aes(x = Time, y = value, group = Trial, color = Event)) +
   geom_point(alpha = .03) +
   geom_smooth(size = .2, aes(color = Trial))+
   scale_color_manual("Event", values = c("blue" , "red", "gray50", "#f0b823")) +
@@ -43,9 +43,19 @@ ggplot(subset(x, Subject == 'T004'), aes(x = Time, y = value, group = Trial, col
   ggtitle("") +
   theme()
 
+
+## Old Female
+ggplot(subset(x, Subject == 'T027'), aes(x = Time, y = value, group = Trial, color = Event)) +
+  geom_point(alpha = .03) +
+  geom_smooth(size = .2, aes(color = Trial))+
+  scale_color_manual("Event", values = c("blue" , "red", "gray50", "#f0b823")) +
+  facet_wrap(~variable) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
+  ggtitle("") +
+  theme()
 
 ## Old Male
-ggplot(subset(x, Subject == 'T088'), aes(x = Time, y = value, group = Trial, color = Event)) +
+ggplot(subset(x, Subject == 'T045'), aes(x = Time, y = value, group = Trial, color = Event)) +
   geom_point(alpha = .03) +
   geom_smooth(size = .2, aes(color = Trial))+
   scale_color_manual("Event", values = c("blue" , "red", "gray50", "#f0b823")) +
@@ -53,12 +63,15 @@ ggplot(subset(x, Subject == 'T088'), aes(x = Time, y = value, group = Trial, col
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
   ggtitle("") +
   theme()
+
 
 ## Old Female
 ggplot(subset(x, Subject == 'T086'), aes(x = Time, y = value, group = Trial, color = Event)) +
   geom_point(alpha = .03) +
   geom_smooth(size = .2, aes(color = Trial))+
-  scale_color_manual("", labels = c("Sim 004 (No Events)", "Sim 007 (Texting Events)", "No Event", "Texting Event"), 
+  scale_color_manual("", labels = c("Sim 004 (No Events)", 
+                                    "Sim 007 (Texting Events)", 
+                                    "No Event", "Texting Event"), 
                      values = c("blue" , "red", "gray50", "#f0b823")) +
   scale_x_continuous("Seconds") +
   scale_y_continuous("Emotional Likelihood", breaks = c(0, .5, 1)) +

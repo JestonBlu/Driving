@@ -1,4 +1,4 @@
-rm(list = ls())
+ rm(list = ls())
 
 library(plyr)
 
@@ -13,16 +13,16 @@ faces$Action = 0
 
 ## Join the datasets
 for (i in 1:nrow(stimuli)) {
-  
+
   x = stimuli[i, ]
   x.id = as.character(x$ID)
   x.str = as.numeric(x$StartTime)
   x.end = as.numeric(x$EndTime)
-  
+
   x.event.switch = as.numeric(x$Event.Switch)
   x.event = as.character(x$Question.Number)
   x.action = as.numeric(x$Action.Type)
-  
+
   faces$Event.Switch[which(faces$ID %in% x.id & faces$Time >= x.str & faces$Time <= x.end)] = x.event.switch
   faces$Event[which(faces$ID %in% x.id & faces$Time >= x.str & faces$Time <= x.end)] = x.event
   faces$Action[which(faces$ID %in% x.id & faces$Time >= x.str & faces$Time <= x.end)] = x.action
@@ -64,13 +64,3 @@ faces$Event = factor(faces$Event)
 
 ## Saves Data Frame
 save("faces", file = "R-Data/faces.rda")
-
-
-
-
-
-
-
-
-
-

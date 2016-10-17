@@ -7,7 +7,7 @@ Driving/
        |---Files/
               |---Faces/   (.xlsx files not on Github)
               |---Stimuli/ (.stm files not stored on Github)
-              |---Other/   (Subject Biographic Info.xlsx)
+              |---Other/   (Subject Biographic Info.csv)
               |---extract_faces.py
               |---extract_stimuli.py
        |---R-Scripts/
