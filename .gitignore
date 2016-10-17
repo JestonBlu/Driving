@@ -4,3 +4,4 @@ Files/*.csv
 .Rproj.user
 *.RData
 *.rda
+.Rhistory
