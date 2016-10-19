@@ -13,9 +13,11 @@ geometry: margin=1in
 ---
 
 ## Overview
+
 This analysis is focussed on trying to detect texting events from subjects participating in the driving simulation trial 007. In the distracted driving experiment, trial 004 was used as a practice run where the driver drove approximately 11 kilometers on a crowded four lane road with a speed limit of 70 kph. There was a period in the drive where the driver had to take a short detour, but otherwise the drive was a straight line. No events occurred in this simulation and so trial 004 can be used as a baseline to compare against trial 007 where the driver encounters texting events on the same road and in the same conditions.
 
 ## Establishing a Baseline
+
 In order to establish a baseline, the overall mean was computed for each subject's emotional likelihood over the entire simulation. The mean was subtracted from each observation in trial 007 to calculate a baseline starting point.
 
 ```{r setup, echo=FALSE, fig.width=8, fig.height=6, message=FALSE, warning=FALSE}
@@ -39,7 +41,7 @@ x = melt(x, id.vars = c("Subject", "Age", "Gender", "Time", "Event", "Event.Swit
                           "Sad", "Surprise", "Neutral"))
 x.avg = ddply(x, .(variable), summarise, avg = mean(value))
 
-ggplot(x, aes(x = Time, y = value, group = Trial, color = Event)) +
+g1 = ggplot(x, aes(x = Time, y = value, group = Trial, color = Event)) +
   geom_point(alpha = .03) +
   geom_smooth(size = .2, aes(color = Trial))+
   geom_hline(aes(yintercept = avg), lty = 2, data = x.avg) +
@@ -50,8 +52,11 @@ ggplot(x, aes(x = Time, y = value, group = Trial, color = Event)) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
   ggtitle("Subject T001 (Young Male)\nSim 004 (No Events)") +
   theme(legend.position = "bottom")
+ggsave(filename = "../Plots/05_g1.png", plot = g1, width = 8, height = 5.25)
 
 ```
+
+![](../Plots/05_g1.png)
 
 \newpage
 
@@ -65,7 +70,7 @@ x = melt(x, id.vars = c("Subject", "Age", "Gender", "Time", "Event", "Event.Swit
          measure.vars = c("Anger", "Contempt", "Disgust", "Fear", "Joy",
                           "Sad", "Surprise", "Neutral"))
 
-ggplot(x, aes(x = Time, y = value, group = Trial, color = Event)) +
+g2 = ggplot(x, aes(x = Time, y = value, group = Trial, color = Event)) +
   geom_point(alpha = .03) +
   geom_smooth(size = .2, aes(color = Trial))+
   scale_color_manual("", labels = c("LS Trial 004","LS Trial 007", "No Event", "Texting Event"),
@@ -77,7 +82,12 @@ ggplot(x, aes(x = Time, y = value, group = Trial, color = Event)) +
   ggtitle("Subject T001 (Young Male)\nSim 004 (No Events) and Sim 007 (Texting)\nCentered on Baseline") +
   theme(legend.position = "bottom")
 
+ggsave(filename = "../Plots/05_g2.png", plot = g2, width = 8, height = 5.75)
+
 ```
+
+![](../Plots/05_g2.png)
+
 
 The plot below shows individual loess smoother plots for each individual that participated in the non-event trial (004) and texting trial (007). The main point of this plot is to show differences in variation between the two trials. The lines are significantly more "wiggly" in the bottom row (007) than the top row (004) for all 5 emotions. Fear, joy, and surprise had smaller scale differences and were removed from this view to give more plotting space to the other emotions.
 
@@ -90,7 +100,7 @@ x = melt(x, id.vars = c("Subject", "Age", "Gender", "Time", "Event", "Event.Swit
                           "Sad", "Surprise", "Neutral"))
 x = subset(x, variable %in% c("Anger", "Contempt", "Disgust", "Sad", "Neutral"))
 
-ggplot(x, aes(x = Time, y = value, group = Subject)) +
+g3 = ggplot(x, aes(x = Time, y = value, group = Subject)) +
   geom_smooth(size = .2, se = FALSE)+
   scale_x_continuous("Seconds") +
   scale_y_continuous("Emotional Likelihood") +
@@ -99,9 +109,14 @@ ggplot(x, aes(x = Time, y = value, group = Subject)) +
   ggtitle("All Subjects\nNo Event Trial (004) vs Texting Event Trial (007)") +
   theme(legend.position = "bottom")
 
+ggsave(filename = "../Plots/05_g3.png", plot = g3, width = 8, height = 5.25)
+
 ```
 
+![](../Plots/05_g3.png)
+
 ## Exploring a Macro Level Model
+
 One of the interesting aspects of this analysis is to explore the differences between subject's reactions. In this case we are limited to facial expression data and simple demographics so its worth investigating whether a single model can effectively classify a texting event. Since the baseline has been established and the mean effect has been removed, I only used trial 007 in this portion of the analysis. In each of the texting trials, texting events occur twice with periods of non-events in between.
 
 In 2012 Ford sponsored a competition to develop a model that could successfully detect whether a driver was paying attention to the road. The data was similar to this project and the winner of the Ford competition wrote that instead of approaching the analysis as a time series problem, he instead averaged all values over the entire trial so that he had a single observation per trial. I have elected to try a similar approarch first. I computed the min, max, mean, var, and iqr for every simulation, grouped by the event. For all simulations, 119 observations and 40 descriptive statistics were available.

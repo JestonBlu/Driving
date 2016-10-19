@@ -1,9 +1,15 @@
 rm(list = ls())
 
-library(nnet)
-library(randomForest)
+library(knitr)
+library(ggplot2)
+library(plyr)
+library(reshape2)
+library(pander)
+suppressPackageStartupMessages(library(nnet))
+suppressPackageStartupMessages(library(randomForest))
 
 load("R-Data/stats.rda")
+load("R-Data/faces.rda")
 load("R-Data/faces_cen.rda")
 
 ## Suspected crash list
@@ -155,8 +161,15 @@ y2 = x$est_kph_004[!(x$Subject %in% crash.list)]
 
 ks.test(y1, y2)
 
+plot(density(y1), col = "blue", xlim = c(40, 75), ylim = c(0, .25)) ## Suspected Crash
+lines(density(y2), col = "red") ## Everyone Else
+
+
 y1 = x$est_kph_004[x$Subject %in% crash.list]
 y2 = x$est_kph_007[x$Subject %in% crash.list]
+
+plot(density(y1), col = "blue", xlim = c(40, 75), ylim = c(0, .25)) ## Suspected Crash
+lines(density(y2), col = "red") ## Everyone Else
 
 ks.test(y1, y2)
 
