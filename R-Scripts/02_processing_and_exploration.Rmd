@@ -1,5 +1,5 @@
 ---
-title: "Data Processing and Extraction"
+title: "Data Extraction and Processing"
 author: "Joseph Blubaugh"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
@@ -29,32 +29,79 @@ The data in this project are of 8 driving simulations for 66 individuals ranging
 
 
 ## Data Extraction
-In order to prepare the data for analysis each of the 509 simulation files needed to be extracted and combined into a single file. A python program was witten to accomplish this. All of the simulation files are excel files and all except 2 have identical layouts. The python program extracted data from each simulation file beginning on the 9th (header) row. Two of the simulation files did not start on the 9th row (8th & 10th) and had to be corrected manually.
+In order to prepare the data for analysis each of the 509 simulation files needed to be extracted and combined into a single file. A python program was witten to accomplish this. All of the simulations were stored as excel files. The python program extracted data from each simulation file beginning on the 9th (header) row. Two of the simulation files did not start on the 9th row (8th & 10th) and had to be corrected manually (see extract_faces.py on github repo).
 
 
 ```{r dta1, comment=NA, echo=FALSE}
-x = head(faces[, c(2,3,6,10:17)])
-x[, 4:11] = apply(x[, 4:11], 2, function(x) round(x, 4))
-pander(x, style = "rmarkdown", split.table = Inf, caption= "Simulation Example: T001-001",
+x = head(faces[, c(2,3,6:7,11:18)])
+x[, 4:12] = apply(x[, 4:12], 2, function(x) round(x, 3))
+pander(x, style = "rmarkdown", split.table = Inf, caption= "Simulation Sample: T001-001 (first 6 rows)",
        justify = "left")
 ```
 
 There are 267 stimuli files (.stm) that record events that occur in each simulation. They have identical formats and were able to be extracted in the same manner as the simulation data. Python was also used to extract the data.
 
-                          Table 2: Stimuli Example: T001-007.stm
+                          Table 2: Stimuli Sample: T001-007.stm
 
-|StartTime |	EndTime |	EventSwitch |	Action Type |	Question Number |
-|:---------|:---------|:------------|:------------|:----------------|
-| 81       |	240     |	1           |	4           |	Texting         |
-| 510      |	671     |	1           |	4           |	Texting         |
+|StartTime |	EndTime |	Event Switch |	Action Type |	Question Number |
+|:---------|:---------|:-------------|:-------------|:----------------|
+| 81       |	240     |	1            |	4           |	Texting         |
+| 510      |	671     |	1            |	4           |	Texting         |
 
-The two python programs used to extract the data and a third file which contained basic demographics data were all read into R. An R program was written to combine the three datasets. The stimuli data was joined with the simulation data based on the file name and the start and end times of the events.
-
-```{r dta2, echo=FALSE, comment=NA}
-x = head(faces[, c(2:17)])
-x[, c(6,9:16)] = apply(x[, c(6,9:16)], 2, function(x) round(x, 4))
-pander(x, caption = "Final Combined Dataset", justify = "left")
-```
 
 ## Data Quality
-In addition to the two simulation files with differing formats, several misspellings occur in the description of the event action types. 
+In addition to the two simulation files with differing formats, several misspellings occur in the event descriptions. 
+
+```{r dta3, echo=FALSE, comment=NA}
+stm = read.csv("../Files/data-stimuli.csv")
+
+library(plyr)
+
+colnames(stm) = c("StartTime", "EndTime", "Event Switch", "Action Type", "Question Number")
+
+pander(ddply(stm, .(`Action Type`, `Question Number`), summarise, Count = length(`Question Number`)), caption = "Record Count by Event (original .stm data)", justify = "left", style = "rmarkdown")
+```
+
+It was assumed that Action Type and Question Number are directly related and that Question Number is supposed to reflect the name of the event. The Question Number was renamed Event and the descriptions were renamed based on the most frequent event per action type.
+
+```{r dta4, echo=FALSE, comment=NA}
+stm = read.csv("../Files/data-stimuli.csv")
+
+x = ddply(faces, .(Action, Event), summarise, Count = length(unique(ID)))
+pander(x, caption = "Record Count by Event (Corrected data)", justify = "left", style = "rmarkdown")
+
+```
+
+## Final Dataset
+An R program was written to combine the three datasets (2 .csv, 1 .xlsx). The stimuli data was joined with the simulation data based on the file name and the start and end times of the events. For each frame in a particular subject's simulation, if the frame time were between the start and end time in the stimuli (.stm) file, then every record in that interval is assumed to have the corresponding event. The stimuli files only record designed events, so records that fall outside of the event time intervals were coded as "No Event".
+
+```{r dta2, echo=FALSE, comment=NA}
+x = subset(faces, ID == 'T001-007')
+x = x[x$Time >= 80.9 & x$Time < 81.1, c(2:17)]
+x[, c(6,9:16)] = apply(x[, c(6,9:16)], 2, function(x) round(x, 5))
+#x = x[, c(1:6, 8, 10:16)]
+x$Event = as.character(x$Event)
+#x$Event[x$Event == "No Event"] = "No_Event"
+row.names(x) = NULL
+pander(x, caption = "Final Combined Dataset", justify = "left", style = "rmarkdown", split.table = 110)
+```
+
+## Possible Misscoding
+A possible event misscoding appears when you view the simulation trials by event. Trial 006 has 62 out of 63 trials where the only event involves emotional questions, however one trial shows as having mathematical question events. This appears to be a data error based on the experimental design where mathematical and anlaytical questions are only supposed to occur in trial 005. The subject who this possible misscoding is associated with is T018-006.
+
+```{r dta5, echo=FALSE, comment=NA, warning=FALSE}
+
+x = dcast(ddply(faces, .(Trial, Event), summarise, count = length(unique(Subject))),
+      Event ~ Trial, value.var = "count")
+x[is.na(x)] = 0
+x$Event = relevel(x$Event, ref = "No Event")
+
+pander(arrange(x, Event), caption = "Count of Simulations by Event Type", justify = "left", style = "rmarkdown", split.table = 110)
+```
+
+## Additional Comment
+The final dataset does not include the possible correction to T018-006 because it is does not interfere with my proposed analysis. Anyone who uses this subject and trial should analyze further or consider omitting this simulation.
+
+## Reproducible Code
+All of the findings and code used in this project can be reproduced by cloning my project repository on github: https://github.com/JestonBlu/driving
+
