@@ -5,13 +5,14 @@ library(plyr)
 ## Import Data
 faces = read.csv("Files/data-faces.csv")
 stimuli = read.csv("Files/data-stimuli.csv")
-demograph = read.csv("Files/Other/Subject Biographic Info.csv")
+demograph = read.csv("Files/Other/data-demographics.csv")
 
 faces$Event.Switch = 0
 faces$Event = ""
 faces$Action = 0
 
 ## Join the datasets
+## If the faces time is between the event time interval of in the stimuli data then code all frames with that event
 for (i in 1:nrow(stimuli)) {
 
   x = stimuli[i, ]
@@ -61,6 +62,5 @@ faces$Event[faces$Action == 5] = 'Texting and Talking'
 faces$Event[faces$Action == 6] = 'Failure Event'
 faces$Event = factor(faces$Event)
 
-
-## Saves Data Frame
+## Save the Data Frame
 save("faces", file = "R-Data/faces.rda")

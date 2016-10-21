@@ -50,7 +50,7 @@ There are 267 stimuli files (.stm) that record events that occur in each simulat
 
 
 ## Data Quality
-In addition to the two simulation files with differing formats, several misspellings occur in the event descriptions. 
+In addition to the two simulation files with differing formats, several misspellings occur in the event descriptions.
 
 ```{r dta3, echo=FALSE, comment=NA}
 stm = read.csv("../Files/data-stimuli.csv")
@@ -73,15 +73,13 @@ pander(x, caption = "Record Count by Event (Corrected data)", justify = "left", 
 ```
 
 ## Final Dataset
-An R program was written to combine the three datasets (2 .csv, 1 .xlsx). The stimuli data was joined with the simulation data based on the file name and the start and end times of the events. For each frame in a particular subject's simulation, if the frame time were between the start and end time in the stimuli (.stm) file, then every record in that interval is assumed to have the corresponding event. The stimuli files only record designed events, so records that fall outside of the event time intervals were coded as "No Event".
+An R program was written to combine the three datasets (faces.csv, stimuli.csv, demographics.csv). The stimuli data was joined with the simulation data based on the file name and the start and end times of the events. For each frame in a particular subject's simulation, if the frame time were between the start and end time in the stimuli (.stm) file, then every record in that interval is assumed to have the corresponding event. The stimuli files only record designed events, so records that fall outside of the event time intervals were coded as "No Event".
 
 ```{r dta2, echo=FALSE, comment=NA}
 x = subset(faces, ID == 'T001-007')
 x = x[x$Time >= 80.9 & x$Time < 81.1, c(2:17)]
 x[, c(6,9:16)] = apply(x[, c(6,9:16)], 2, function(x) round(x, 5))
-#x = x[, c(1:6, 8, 10:16)]
 x$Event = as.character(x$Event)
-#x$Event[x$Event == "No Event"] = "No_Event"
 row.names(x) = NULL
 pander(x, caption = "Final Combined Dataset", justify = "left", style = "rmarkdown", split.table = 110)
 ```
@@ -104,4 +102,3 @@ The final dataset does not include the possible correction to T018-006 because i
 
 ## Reproducible Code
 All of the findings and code used in this project can be reproduced by cloning my project repository on github: https://github.com/JestonBlu/driving
-

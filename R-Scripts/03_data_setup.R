@@ -6,7 +6,7 @@ rm(list = ls())
 load("R-Data/faces.rda")
 
 ## Calculate the baseline
-baseline = ddply(subset(faces, Trial == '004'), 
+baseline = ddply(subset(faces, Trial == '004'),
                  .(Subject, Age, Gender), summarise,
                  mu_Anger = mean(Anger),
                  mu_Contempt = mean(Contempt),
@@ -31,6 +31,7 @@ faces.cen$Sad = with(faces.cen, Sad - mu_Sad)
 faces.cen$Surprise = with(faces.cen, Surprise - mu_Surprise)
 faces.cen$Neutral = with(faces.cen, Neutral - mu_Neutral)
 
+## Remove unneeded columsn
 faces.cen = faces.cen[, -(19:28)]
 
 ## Calculate the average value and variance for each trial, event, expression
@@ -77,6 +78,7 @@ stats = ddply(faces.cen, .(Subject, Trial, Event, Age, Gender, Event.Switch), su
               max_Neutral = max(Neutral)
               )
 
+## Create indicators for Texting
 faces.cen$Texting = 0
 faces.cen$Texting[faces.cen$Event %in% c("Texting", "Texting and Talking")] = 1
 faces.cen$Texting = factor(faces.cen$Texting)
@@ -89,21 +91,8 @@ stats$texting = 0
 stats$texting[stats$Event %in% c("Texting", "Texting and Talking")] = 1
 stats$texting = factor(stats$texting)
 
+## Save individual datasets
 save(list = "faces", file = "R-Data/faces.rda")
 save(list = "stats", file = "R-Data/stats.rda")
 save(list = "baseline", file = "R-Data/baseline.rda")
 save(list = "faces.cen", file = "R-Data/faces_cen.rda")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
