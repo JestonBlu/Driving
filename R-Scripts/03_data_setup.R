@@ -32,7 +32,7 @@ faces.cen$Surprise = with(faces.cen, Surprise - mu_Surprise)
 faces.cen$Neutral = with(faces.cen, Neutral - mu_Neutral)
 
 ## Remove unneeded columsn
-faces.cen = faces.cen[, -(19:28)]
+faces.cen = faces.cen[, -(19:29)]
 
 ## Calculate the average value and variance for each trial, event, expression
 stats = ddply(faces.cen, .(Subject, Trial, Event, Age, Gender, Event.Switch), summarise,
