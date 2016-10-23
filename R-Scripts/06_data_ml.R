@@ -61,11 +61,16 @@ texting.sim = texting.sim[, c(1, 15:16, 4, 6:14)]
 texting.sim$Subject = factor(texting.sim$Subject)
 
 ## Center the data
-texting.sim[, 5:12] = apply(texting.sim[, 5:12], 2, scale)
-
+#texting.sim[, 5:12] = apply(texting.sim[, 5:12], 2, scale)
 ml.train = subset(texting.sim, Time <= 365)
-ml.test = subset(texting.sim, Time > 365)
+y.max = apply(ml.train[, 5:12], 2, max)
+y.min = apply(ml.train[, 5:12], 2, min)
+ml.train[, 5:12] = scale(ml.train[, 5:12], scale = y.max - y.min)
 
+ml.test = subset(texting.sim, Time > 365)
+y.max = apply(ml.test[, 5:12], 2, max)
+y.min = apply(ml.test[, 5:12], 2, min)
+ml.test[, 5:12] = scale(ml.test[, 5:12], scale = y.max - y.min)
 
 save(list = c("ml.train", "ml.test", "texting.sim"), file = "R-Data/data-ml.rda")
 

@@ -1,9 +1,13 @@
 library(nnet)
 library(caret)
+library(plyr)
+library(doMC)
 
 rm(list = ls())
 
 load("R-Data/data-ml.rda")
+
+registerDoMC(cores = 4)
 
 metric = function(confusion) {
   sensitivity = confusion[4] / (confusion[2] + confusion[4])
@@ -15,22 +19,27 @@ metric = function(confusion) {
 
 #############################################################
 ## Model No time
-mdl = nnet(factor(Texting) ~ . - Time, data = ml.train, size = 13)
+# mdl = nnet(factor(Texting) ~ . - Time, data = ml.train, size = 10)
+# 
+# x = predict(mdl, ml.train, type = "class")
+# table(Actual = ml.train$Texting, Predicted = x)
+# metric(table(Actual = ml.train$Texting, Predicted = x))
+# 
+# y = predict(mdl, ml.test, type = "class")
+# table(Actual = ml.test$Texting, Predicted = y)
+# metric(table(Actual = ml.test$Texting, Predicted = y))
 
-x = predict(mdl, ml.train, type = "class")
-table(Actual = ml.train$Texting, Predicted = x)
-metric(table(Actual = ml.train$Texting, Predicted = x))
 
-y = predict(mdl, ml.test, type = "class")
-table(Actual = ml.test$Texting, Predicted = y)
-metric(table(Actual = ml.test$Texting, Predicted = y))
+#############################################################
+## Model No time: Tuning
+fit.control = trainControl(method = "cv", number = 2)
+search.grid = expand.grid(decay = c(0, .1, .5), size = c(5, 10, 15))
+fit = train(Texting ~ . - Time, ml.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = 10000,
+            maxit = 2)
 
-
-# fitControl <- trainControl(method = "repeatedcv", number = 1, repeats = 1)
-#
-# search.grid = expand.grid(.decay = c(.1), .size = c(5))
-# fit = train(Texting ~ . - Time, data = ml.train, method = "nnet",
-#             maxit = 100, tuneGrid = search.grid)
 
 
 ################################################################3
@@ -50,7 +59,6 @@ ml.train = ddply(ml.train, .(Subject, Age_Old, Gender_Male), summarise,
                  Surprise = diff(Surprise),
                  Neutral = diff(Neutral))
 ml.train = cbind(ml.train, Texting = x)
-x
 
 ## Calculated the first row for each Subject to remove
 ml.test$row = 1:nrow(ml.test)
@@ -75,43 +83,24 @@ ml.test = cbind(ml.test, Texting = x2)
 rm(x, x2, y)
 
 
-mdl = nnet(Texting ~ ., data = ml.train, size = 30, maxit = 1000, decay = .1, MaxNWts = 10000)
+# mdl = nnet(Texting ~ ., data = ml.train, size = 50, maxit = 100, decay = .1, MaxNWts = 10000)
+# 
+# x = predict(mdl, ml.train, type = "class")
+# table(Actual = ml.train$Texting, Predicted = x)
+# metric(table(Actual = ml.train$Texting, Predicted = x))
+# 
+# y = predict(mdl, ml.test, type = "class")
+# table(Actual = ml.test$Texting, Predicted = y)
+# metric(table(Actual = ml.test$Texting, Predicted = y))
 
-x = predict(mdl, ml.train, type = "class")
-table(Actual = ml.train$Texting, Predicted = x)
-metric(table(Actual = ml.train$Texting, Predicted = x))
 
-y = predict(mdl, ml.test, type = "class")
-table(Actual = ml.test$Texting, Predicted = y)
-metric(table(Actual = ml.test$Texting, Predicted = y))
+## Model No time: Tuning
+fit.control = trainControl(method = "cv", number = 4)
+search.grid = expand.grid(decay = c(0, .1, .5), size = c(5, 10, 25, 50))
+fit = train(Texting ~ ., ml.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = 10000,
+            maxit = 1000)
 
 
-#####################################################################
-## All obs
-
-x = texting.sim[texting.sim$Time != 0, "Texting"]
-
-texting.sim = ddply(texting.sim, .(Subject, Age_Old, Gender_Male), summarise,
-                 Anger = diff(Anger),
-                 Contempt = diff(Contempt),
-                 Disgust = diff(Disgust),
-                 Fear = diff(Fear),
-                 Joy = diff(Joy),
-                 Sad = diff(Sad),
-                 Surprise = diff(Surprise),
-                 Neutral = diff(Neutral))
-texting.sim = cbind(texting.sim, Texting = x)
-
-mdl = nnet(Texting ~ ., data = ml.train, size = 10, maxit = 100, MaxNWts = 10000)
-
-x = predict(mdl, ml.train, type = "class")
-table(Actual = ml.train$Texting, Predicted = x)
-metric(table(Actual = ml.train$Texting, Predicted = x))
-
-x = predict(mdl, ml.test, type = "class")
-table(Actual = ml.test$Texting, Predicted = x)
-metric(table(Actual = ml.test$Texting, Predicted = x))
-
-x = predict(mdl, texting.sim, type = "class")
-table(Actual = texting.sim$Texting, Predicted = x)
-metric(table(Actual = texting.sim$Texting, Predicted = x))
