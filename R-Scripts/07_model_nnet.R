@@ -103,4 +103,4 @@ fit = train(Texting ~ ., ml.train, method = "nnet",
             MaxNWts = 10000,
             maxit = 1000)
 
-
+save("fit", file = "R-Models/nnet_differenced.rda")
