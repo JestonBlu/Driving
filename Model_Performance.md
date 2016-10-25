@@ -1,6 +1,7 @@
 
 ### Neural Network Differenced Data
 
+```r
 513151 samples
     11 predictors
      2 classes: '0', '1'
@@ -23,3 +24,4 @@ Resampling results across tuning parameters:
   0.5    10    0.6183774  0.14512859
   0.5    25    0.6349866  0.19037442
   0.5    50    0.6504849  0.23269485
+```
