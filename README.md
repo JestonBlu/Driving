@@ -13,8 +13,8 @@ The data accompanying this project are too large to host on github. I have creat
 **Extract and Process Raw Data**
   * Execute `python extract_faces.py` from the Files/ folder.
   * Execute `python extract_stimuli.py` from the Files/ folder.
-  * The py scripts should produce 2 files in `Files/` (data_faces.csv, data_stimuli.csv).
-  * Run `01_data_prep.R`, combines and cleans the 3 data files
+  * The py scripts should produce 2 files in `Files/` (data-faces.csv, data-stimuli.csv).
+  * Run `01_data_prep.R`, combines and cleans the 3 data files (/Files/Other/data-demographics.csv is the 3rd file)
   * Run `03_data_setup.R`, creates centered and summary level datasets
 
 **Reproduce my written analysis (produces .pdf reports)**
