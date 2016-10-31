@@ -34,9 +34,7 @@ metric = function(confusion) {
 
 ## Overview
 
-The first pass analysis used summarized statistical measures to fit both a random forest and neural network model to the data. The results primarily showed that aggregating the data over an entire event prevented the two algorithms from detecting texting events. Also, because the data was aggregated, there were very few data points to model between testing and training sets. The random forest algorithm was a better choice than the neural network because of the large number of predictor variables relative to the number of observations. Both models however, were guilty of overfitting.
-
-For the next phase of this analysis, I am focussing on looking at the data in its original form. I have chosen to focus on the neural network rather than the random forest mainly because of the data structure. In the previous analysis the aggregated data set contained 119 observations with 40 predictor variables. Since I am using the original data with no statistical measures the data set contains more than 1 million rows on 12 predictor variables.
+The first pass analysis used summarized statistical measures to fit both a random forest and neural network model to the data. The results primarily showed that aggregating the data over an entire event prevented the two algorithms from detecting texting events. Also, because the data was aggregated, there were very few data points to model between testing and training sets. The random forest algorithm was a better choice than the neural network because of the large number of predictor variables relative to the number of observations. Both models however, were guilty of overfitting. For the next phase of this analysis, I am focussing on looking at the data in its original form. I have chosen to focus on the neural network rather than the random forest mainly because of the data structure. In the previous analysis the aggregated data set contained 119 observations with 40 predictor variables. Since I am using the original data with no statistical measures the data set contains more than 1 million rows on 12 predictor variables.
 
 ## Basic Neural Net
 
@@ -123,8 +121,7 @@ fit = train(Texting ~ . - Time, mdl.02.train, method = "nnet",
             MaxNWts = maxWt,
             maxit = maxIt)
 
-542550 samples
-12 predictors
+542550 samples, 12 predictors
 2 classes: '0', '1'
 
 Resampling: Cross-Validated (10 fold)
@@ -282,11 +279,17 @@ for (i in 1:59) {
 
 }
 
-row.names(tab) = tab$Subject
-tab = tab[,-1]
-
 tab = arrange(tab, desc(Test))
-pander(t(round(tab,3)), col.names = subject)
+tab$Train = round(tab$Train, 3)
+tab$Test = round(tab$Test, 3)
+subject = as.character(tab$Subject)
+
+tab2 = t(tab)
+tab2 = data.frame(tab2)
+colnames(tab2) = subject
+tab2 = tab2[-1, ]
+
+pander(tab2, split.table = 90)
 
 ```
 
