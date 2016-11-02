@@ -89,14 +89,13 @@ Current Results:
 |:---------|:----------------------------------------------------------------|:---------|:---------|
 | Model 1: | Training and Testing data split at the 365 second               | .78      | .69      |
 | Model 2: | Training set was sampled from the entire simulation             | .75      | .75      |
-| Model 3: | Differencing based on Model 1 training data split               |          |          |
-| Model 4: | Random sample from differenced of the entire simulation         |          |          |
+| Model 3: | Differencing based on Model 1 training data split               | .59      | .57      |
+| Model 4: | Random sample from differenced of the entire simulation         | .59      | .59      |
 | Model 5: | Moving average of all predictors then split data at 365 seconds |          |          |
 | Model 6: | Differencing based on the moving average over entire simulation |          |          |
 
 General Model Form:
-nnet(Texting ~ Subject + Age + Gender + Anger + Contempt +
-               Disgust + Fear + Joy + Sad + Surprise + Neutral)
+nnet(Texting ~ Subject + Age + Gender + Anger + Contempt + Disgust + Fear + Joy + Sad + Surprise + Neutral)
 
 \newpage
 

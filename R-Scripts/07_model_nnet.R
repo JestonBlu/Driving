@@ -5,7 +5,7 @@ library(doMC)
 
 rm(list = ls())
 
-registerDoMC(cores = 5)
+registerDoMC(cores = 6)
 
 
 ## Model Performance Metric
