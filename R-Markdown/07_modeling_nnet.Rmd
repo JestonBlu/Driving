@@ -36,70 +36,28 @@ metric = function(confusion) {
 
 The first pass analysis used summarized statistical measures to fit both a random forest and neural network model to the data. The results primarily showed that aggregating the data over an entire event prevented the two algorithms from detecting texting events. Also, because the data was aggregated, there were very few data points to model between testing and training sets. The random forest algorithm was a better choice than the neural network because of the large number of predictor variables relative to the number of observations. Both models however, were guilty of overfitting. For the next phase of this analysis, I am focussing on looking at the data in its original form. I have chosen to focus on the neural network rather than the random forest mainly because of the data structure. In the previous analysis the aggregated data set contained 119 observations with 40 predictor variables. Since I am using the original data with no statistical measures the data set contains more than 1 million rows on 12 predictor variables.
 
-## Basic Neural Net
-
-Neural networks are a class of statistical learning models that are well suited for large datasets of continuous variables. They are a series of interconnected nodes and weights that iterate on training data to update weights and minimize training errors. There are several types of neural nets and the type that I have used so far is the feed forward neural net, meaning that data is fed into the model through the input nodes, through the hidden layers, to the output nodes. Other more complex models may have a recursive function that feeds errors back through the model.
-
-The following diagrams are an example of a basic neural net with 2 predictor variables (input), 3 hidden nodes, and 1 output node. Hidden layer weights are calculated using the sum product of the input values and the starting weights which are chosen randomly.
-
-![Starting Weights](../Plots/07_basic_diag.png)
-![Hidden Weights](../Plots/07_basic_diag2.png)
-
-Neural networks require an activation function to transform the input into the appropriate output. In the case of this analysis I am trying to predict texting events so I only want predictions between 0 and 1. An appropriate activation function for this is sigmoid (S(x)).
-
-Weights are initially chosen randomly so neural nets have an iterative process to minimize error by feeding the training error back through the model. The change for each iteration is calculated by multiplying the first derivative of the activation function by the most recent training error.
-
-The following steps complete the update for a single training iteration:
-
-```
-# Calculate the weight change for the weights between the hidden nodes and output node:
-# S'(1.049) = S(1.049)(1 - S(1.049)) * -.7406 = -.1619
-
-# Update the Weights between the Hidden and Output Nodes:
-# (-.1619) / [.645, .668, .732] = [-.251, -.242, -.221]
-
-# W7: .645 - .251 = .394
-# W8: .668 - .242 = .426
-# W9: .731 - .221 = .510
-
-# Calculate the change of the hidden weights
-# Divide the weight change by the original [w7, w8, w9] weights times S'(w3, w4, w5)
-# -.1619 / [.3, .5, .7] * S'([.6, .7, .1]) = [-.1234, -.0717, -.0454]
-
-# Update the weights between the input nodes and hidden nodes
-# [-.1234, -.0717, -.0454] / [1, 1]
-```
-
-
-The diagram below shows the updated neural net for one iteration of the training cycle. It shows that the updated error is slightly smaller than the original training error using random weights.
-
-![Hidden Weights](../Plots/07_basic_diag3.png)
-
-\newpage
-
 ##  Neural Nets applied to Distracted Driving
 
 In order to standardize the results of my analysis, I have elected to use the R package caret to train all of my models (http://topepo.github.io/caret/index.html). Caret is a modeling framework that allows you to run many different types of models with different combinations of parameter sets at the same time. It can easily use models from other popular packages and offers a rich set of validation tests and diagnostic plots. Another benefit to using this package is enabling parallel computing of cross validation tasks.
 
 I am using k=10 cross validation for all models as well as several combinations of paramters. Training and Testing sets are all approximately the same size 50/50 split. Only Models 1 and 2 have been fully trained.
 
-Current Results:
+Model Results: (DS: Data split at 365 Seconds, ES: Training Set taken from Entire Simulation)
 
-| Model    | Data                                                            | Training | Testing  |
-|:---------|:----------------------------------------------------------------|:---------|:---------|
-| Model 1: | Training and Testing data split at the 365 second               | .78      | .69      |
-| Model 2: | Training set was sampled from the entire simulation             | .75      | .75      |
-| Model 3: | Differencing based on Model 1 training data split               | .59      | .57      |
-| Model 4: | Random sample from differenced of the entire simulation         | .59      | .59      |
-| Model 5: | Moving average of all predictors then split data at 365 seconds |          |          |
-| Model 6: | Differencing based on the moving average over entire simulation |          |          |
+| Model     | Data Processing | Data Split | Size | Decay | Training | Testing |
+|:----------|:----------------|:-----------|:-----|:------|:---------|:--------|
+| Model 1:  | Original        | DS         | 15   | .20   | .783     | .690    |
+| Model 2:  | Original        | ES         | 100  | .10   | .798     | .796    |
+| Model 3:  | Differencing    | DS         | 15   | .05   | .594     | .571    |
+| Model 4:  | Differencing    | ES         | 15   | .05   | .592     | .591    |
+| Model 5:  | Moving Avg      | DS         | 30   | .05   | .525     | .527    |
+| Model 6:  | Moving Avg      | ES         | 10   | .00   | .528     | .528    |
+| Model 7:  | 30 Sec Cut      | DS         | 100  | .10   | .868     | .724    |
+| Model 8:  | 30 Sec Cut      | ES         | 100  | .10   | .847     | .820    |
+| Model 9:  | 30 Sec Diff     | DS         | 50   | .00   | .741     | .653    |
+| Model 10: | 30 Sec Diff     | ES         | 30   | .05   | .790     | .678    |
 
-General Model Form:
-nnet(Texting ~ Subject + Age + Gender + Anger + Contempt + Disgust + Fear + Joy + Sad + Surprise + Neutral)
-
-\newpage
-
-```R
+```r
 #################################################################
 ## Code for running Model 2
 ## Compute time: 12 hours over 6 CPU
@@ -149,15 +107,16 @@ decay  size  Accuracy   Kappa
 0.20   10    0.7728504  0.5181559
 0.20   15    0.7821215  0.5392592
 ```
+\newpage
 
 ```{r c, echo=FALSE, comment=NA}
 load("../R-Data/data-mdl-02.rda")
 load("../R-Models/mdl_02_nnet.rda")
 
-plot(fit, main = "Model 2")
+plot(mdl.02, main = "Model 2")
 
-x = predict(fit, mdl.02.train, type = "raw")
-y = predict(fit, mdl.02.test, type = "raw")
+x = predict(mdl.02, mdl.02.train, type = "raw")
+y = predict(mdl.02, mdl.02.test, type = "raw")
 
 cat("------------------------------------------------------------------")
 cat("Neural Network Confusion Matrix")
@@ -168,20 +127,18 @@ table(Actual = mdl.02.test$Texting, Predicted = y)
 cat("(Testing Set) Neural Net Overall Performance", metric(table(Actual = mdl.02.test$Texting, Predicted = y)))
 ```
 
-\newpage
-
 ## Plots
 
-The following 3 plots overlay the prediction for model 2 against the test sets for the first 3 subjects. Yellow dots represent predictions for Texting events and the black dots are no texting events. The blue curve is a loess curve for the probability prediction. It shows the overall trend for the predictions by time. It is encouraging that for Subject 001, the probability tends to peak during the periods of texting which are highlighted in gray in the background.  
+The following 3 plots overlay the prediction for model 2 against the test sets for the first 3 subjects. Yellow dots represent predictions for Texting events and the black dots are no texting events. The blue curve is a loess curve for the probability prediction. It shows the overall trend for the predictions by time. It is encouraging that for Subject 001, the probability tends to peak during the periods of texting which are highlighted in gray in the background.
 
-Just as interesting though is the plot for Subject 002 where the model has a horrible fit overall and only predicts texting correctly about 60% of the time. Subject 003 has an excellent fit overall with a large majority of positive predictions occurring during the texting event window.  
+Just as interesting though is the plot for Subject 002 where the model has a horrible fit overall and only predicts texting correctly about 60% of the time. Subject 003 has an excellent fit overall with a large majority of positive predictions occurring during the texting event window.
 
 
 
 ```{r d, echo=FALSE}
 
-mdl.02.test$Predict = predict(fit, mdl.02.test, type = "raw")
-y = predict(fit, mdl.02.test, type = "prob")[2]
+mdl.02.test$Predict = predict(mdl.02, mdl.02.test, type = "raw")
+y = predict(mdl.02, mdl.02.test, type = "prob")[2]
 mdl.02.test$Prob = y = as.numeric(y$`1`)
 
 sub = 'T001'
@@ -208,9 +165,9 @@ ggsave(filename = "../Plots/07_g1.png", plot = g1, width = 8, height = 5.25)
 ```
 
 
-![Model 2 Prediction](../Plots/07_g1.png)  
-  
-  
+![Model 2 Prediction](../Plots/07_g1.png)
+
+
 \newpage
 
 ```{r d2, echo=FALSE}
@@ -269,7 +226,7 @@ Accuracy by Subject:
 
 ```{r e, echo=FALSE}
 
-mdl.02.train$Predict = predict(fit, mdl.02.train, type = "raw")
+mdl.02.train$Predict = predict(mdl.02, mdl.02.train, type = "raw")
 
 subject = as.character(unique(mdl.02.train$Subject))
 

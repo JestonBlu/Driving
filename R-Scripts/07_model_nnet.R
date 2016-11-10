@@ -25,11 +25,14 @@ metric = function(confusion) {
 fit.control = trainControl(method = "cv", number = 10)
 
 ## Create combination of model parameters to train on
-search.grid = expand.grid(decay = c(0, .05, .1, .2), 
-                          size = c(1, 3, 5, 10, 15))
+# search.grid = expand.grid(decay = c(0, .05, .1, .2),
+#                           size = c(10, 15, 30, 50))
+
+search.grid = expand.grid(decay = c(0, .1, .2),
+                          size = c(1, 5, 15, 30, 50, 75, 100, 150))
 
 ## Limit the iterations and weights each model can run
-maxIt = 500; maxWt = 10000
+maxIt = 100; maxWt = 10000
 
 
 
@@ -58,16 +61,18 @@ y = predict(fit, mdl.01.test, type = "raw")
 table(Actual = mdl.01.test$Texting, Predicted = y)
 metric(table(Actual = mdl.01.test$Texting, Predicted = y))
 
-save("fit", file = "R-Models/mdl_01_nnet.rda")
-rm(x, y, fit)
+mdl.01 = fit
 
+save("mdl.01", file = "R-Models/mdl_01_nnet.rda")
+rm(x, y, fit, mdl.01, mdl.01.train, mdl.01.test)
 
 
 #############################################################
 ## Model 2: 
 ##
-## Data Set: Sample from total simulation 
-## Exclusions: Time
+## Data Set:       Sample from total simulation 
+## Exclusions:     Time
+## Execution Time: Smaller: 12 hours, Expanded: 60 hours
 ##
 load("R-Data/data-mdl-02.rda")
 
@@ -87,8 +92,11 @@ y = predict(fit, mdl.02.test, type = "raw")
 table(Actual = mdl.02.test$Texting, Predicted = y)
 metric(table(Actual = mdl.02.test$Texting, Predicted = y))
 
-save("fit", file = "R-Models/mdl_02_nnet.rda")
-rm(x, y, fit)
+
+mdl.02 = fit
+
+save("mdl.02", file = "R-Models/mdl_02_nnet.rda")
+rm(x, y, fit, mdl.02, mdl.02.train, mdl.02.test)
 
 
 
@@ -115,9 +123,11 @@ y = predict(fit, mdl.03.test, type = "raw")
 table(Actual = mdl.03.test$Texting, Predicted = y)
 metric(table(Actual = mdl.03.test$Texting, Predicted = y))
 
-save("fit", file = "R-Models/mdl_03_nnet.rda")
-rm(x, y, fit)
 
+mdl.03 = fit
+
+save("mdl.03", file = "R-Models/mdl_03_nnet.rda")
+rm(x, y, fit, mdl.03, mdl.03.train, mdl.03.test)
 
 
 ################################################################
@@ -139,5 +149,169 @@ y = predict(fit, mdl.04.test, type = "raw")
 table(Actual = mdl.04.test$Texting, Predicted = y)
 metric(table(Actual = mdl.04.test$Texting, Predicted = y))
 
-save("fit", file = "R-Models/mdl_04_nnet.rda")
-rm(x, y, fit)
+
+mdl.04 = fit
+
+save("mdl.04", file = "R-Models/mdl_04_nnet.rda")
+rm(x, y, fit, mdl.04, mdl.04.train, mdl.04.test)
+
+
+################################################################
+## Model 5: Differencing with Moving Average 365 Split
+load("R-Data/data-mdl-05.rda")
+
+fit = train(Texting ~ ., mdl.05.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = maxWt,
+            maxit = maxIt)
+fit
+
+x = predict(fit, mdl.05.train, type = "raw")
+table(Actual = mdl.05.train$Texting, Predicted = x)
+metric(table(Actual = mdl.05.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.05.test, type = "raw")
+table(Actual = mdl.05.test$Texting, Predicted = y)
+metric(table(Actual = mdl.05.test$Texting, Predicted = y))
+
+
+mdl.05 = fit
+
+save("mdl.05", file = "R-Models/mdl_05_nnet.rda")
+rm(x, y, fit, mdl.05, mdl.05.train, mdl.05.test)
+
+
+################################################################
+## Model 6: Differencing with Moving Average, entire sim
+load("R-Data/data-mdl-06.rda")
+
+fit = train(Texting ~ ., mdl.06.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = maxWt,
+            maxit = maxIt)
+fit
+
+x = predict(fit, mdl.06.train, type = "raw")
+table(Actual = mdl.06.train$Texting, Predicted = x)
+metric(table(Actual = mdl.06.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.06.test, type = "raw")
+table(Actual = mdl.06.test$Texting, Predicted = y)
+metric(table(Actual = mdl.06.test$Texting, Predicted = y))
+
+
+mdl.06 = fit
+
+save("mdl.06", file = "R-Models/mdl_06_nnet.rda")
+rm(x, y, fit, mdl.06, mdl.06.train, mdl.06.test)
+
+
+
+################################################################
+## Model 7: Averaging values over fixed .5 seconds
+load("R-Data/data-mdl-07.rda")
+
+fit = train(Texting ~ . - Time, mdl.07.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = maxWt,
+            maxit = maxIt)
+fit
+
+x = predict(fit, mdl.07.train, type = "raw")
+table(Actual = mdl.07.train$Texting, Predicted = x)
+metric(table(Actual = mdl.07.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.07.test, type = "raw")
+table(Actual = mdl.07.test$Texting, Predicted = y)
+metric(table(Actual = mdl.07.test$Texting, Predicted = y))
+
+
+mdl.07 = fit
+
+save("mdl.07", file = "R-Models/mdl_07_nnet.rda")
+rm(x, y, fit, mdl.07, mdl.07.train, mdl.07.test)
+
+
+
+################################################################
+## Model 8: Averaging values over fixed .5 seconds
+load("R-Data/data-mdl-08.rda")
+
+fit = train(Texting ~ . - Time, mdl.08.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = maxWt,
+            maxit = maxIt)
+fit
+
+x = predict(fit, mdl.08.train, type = "raw")
+table(Actual = mdl.08.train$Texting, Predicted = x)
+metric(table(Actual = mdl.08.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.08.test, type = "raw")
+table(Actual = mdl.08.test$Texting, Predicted = y)
+metric(table(Actual = mdl.08.test$Texting, Predicted = y))
+
+
+mdl.08 = fit
+
+save("mdl.08", file = "R-Models/mdl_08_nnet.rda")
+rm(x, y, fit, mdl.08, mdl.08.train, mdl.08.test)
+
+
+
+################################################################
+## Model 9: Averaging values over fixed .5 seconds, differenced
+load("R-Data/data-mdl-09.rda")
+
+fit = train(Texting ~ ., mdl.09.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = maxWt,
+            maxit = maxIt)
+fit
+
+x = predict(fit, mdl.09.train, type = "raw")
+table(Actual = mdl.09.train$Texting, Predicted = x)
+metric(table(Actual = mdl.09.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.09.test, type = "raw")
+table(Actual = mdl.09.test$Texting, Predicted = y)
+metric(table(Actual = mdl.09.test$Texting, Predicted = y))
+
+
+mdl.09 = fit
+
+save("mdl.09", file = "R-Models/mdl_09_nnet.rda")
+rm(x, y, fit, mdl.09, mdl.09.train, mdl.09.test)
+
+
+
+################################################################
+## Model 10: Averaging values over fixed .5 seconds, differenced
+load("R-Data/data-mdl-10.rda")
+load("R-Models/mdl_10_nnet.rda")
+
+fit = train(Texting ~ ., mdl.10.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = maxWt,
+            maxit = maxIt)
+fit
+
+x = predict(fit, mdl.10.train, type = "raw")
+table(Actual = mdl.10.train$Texting, Predicted = x)
+metric(table(Actual = mdl.10.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.10.test, type = "raw")
+table(Actual = mdl.10.test$Texting, Predicted = y)
+metric(table(Actual = mdl.10.test$Texting, Predicted = y))
+
+
+mdl.10 = fit
+
+save("mdl.10", file = "R-Models/mdl_10_nnet.rda")
+rm(x, y, fit, mdl.10, mdl.10.train, mdl.10.test)

@@ -4,6 +4,7 @@ rm(list = ls())
 
 library(plyr)
 library(ggplot2)
+library(TTR)
 
 load("R-Data/faces_cen.rda")
 stimuli = read.csv("Files/data-stimuli.csv")
@@ -113,9 +114,7 @@ rm(x, mdl.02.test, mdl.02.train)
 ##
 ## Need to remove the first observation for each Subject
 ## Uses the mdl.01.train/test data sets as a starting point
-x = mdl.01.train[mdl.01.train$Time != 0, "Texting"]
-
-mdl.03.train = ddply(mdl.01.train, .(Subject, Age_Old, Gender_Male), summarise,
+mdl.03.train = ddply(mdl.01.train, .(Subject, Age_Old, Gender_Male, Texting), summarise,
                  Anger = diff(Anger),
                  Contempt = diff(Contempt),
                  Disgust = diff(Disgust),
@@ -124,17 +123,12 @@ mdl.03.train = ddply(mdl.01.train, .(Subject, Age_Old, Gender_Male), summarise,
                  Sad = diff(Sad),
                  Surprise = diff(Surprise),
                  Neutral = diff(Neutral))
-mdl.03.train = cbind(mdl.03.train, Texting = x)
 
 ## Calculated the first row for each Subject to remove
 mdl.01.test$row = 1:nrow(mdl.01.test)
-y = ddply(mdl.01.test, .(Subject), summarise, minRow = min(row))
-
-x2 = mdl.01.test$Texting
-x2 = x2[-(y$minRow)]
 
 ## Calculated differencing for the test set
-mdl.03.test = ddply(mdl.01.test, .(Subject, Age_Old, Gender_Male), summarise,
+mdl.03.test = ddply(mdl.01.test, .(Subject, Age_Old, Gender_Male, Texting), summarise,
                 Anger = diff(Anger),
                 Contempt = diff(Contempt),
                 Disgust = diff(Disgust),
@@ -143,10 +137,9 @@ mdl.03.test = ddply(mdl.01.test, .(Subject, Age_Old, Gender_Male), summarise,
                 Sad = diff(Sad),
                 Surprise = diff(Surprise),
                 Neutral = diff(Neutral))
-mdl.03.test = cbind(mdl.03.test, Texting = x2)
 
 save(list = c("mdl.03.train", "mdl.03.test"), file = 'R-Data/data-mdl-03.rda')
-rm(mdl.01.train, mdl.01.test, mdl.03.train, mdl.03.test, y, x, x2)
+rm(mdl.01.train, mdl.01.test, mdl.03.train, mdl.03.test)
 
 
 
@@ -154,9 +147,7 @@ rm(mdl.01.train, mdl.01.test, mdl.03.train, mdl.03.test, y, x, x2)
 ## Model 04: Differencing with total data set
 ##
 ## Need to remove the first observation for each Subject
-x = texting.sim[texting.sim$Time != 0, "Texting"]
-
-mdl.04.train = ddply(texting.sim, .(Subject, Age_Old, Gender_Male), summarise,
+mdl.04.train = ddply(texting.sim, .(Subject, Age_Old, Gender_Male, Texting), summarise,
                      Anger = diff(Anger),
                      Contempt = diff(Contempt),
                      Disgust = diff(Disgust),
@@ -165,16 +156,198 @@ mdl.04.train = ddply(texting.sim, .(Subject, Age_Old, Gender_Male), summarise,
                      Sad = diff(Sad),
                      Surprise = diff(Surprise),
                      Neutral = diff(Neutral))
-mdl.04.train = cbind(mdl.04.train, Texting = x)
 
 set.seed(1123)
 x = sample(nrow(mdl.04.train), nrow(mdl.04.train) / 2)
 
-mdl.04.train = mdl.04.train[x, ]
 mdl.04.test = mdl.04.train[-x, ]
+mdl.04.train = mdl.04.train[x, ]
 
 save(list = c("mdl.04.train", "mdl.04.test"), file = 'R-Data/data-mdl-04.rda')
 rm(mdl.04.train, mdl.04.test, x)
 
 
+##################################################################################
+## Model 05: Simple Running Averages for each emotion
+##
+## Training and Testing split at the 365 second
+mdl.05.train = subset(texting.sim, Time <= 365)
+mdl.05.test = subset(texting.sim, Time > 365)
+
+mdl.05.train = ddply(mdl.05.train, .(Subject, Age_Old, Gender_Male, Texting), summarise,
+                     Anger    = diff(runMean(Anger,    n = 30)),
+                     Contempt = diff(runMean(Contempt, n = 30)),
+                     Disgust  = diff(runMean(Disgust,  n = 30)),
+                     Fear     = diff(runMean(Fear,     n = 30)),
+                     Joy      = diff(runMean(Joy,      n = 30)),
+                     Sad      = diff(runMean(Sad,      n = 30)),
+                     Surprise = diff(runMean(Surprise, n = 30)),
+                     Neutral  = diff(runMean(Neutral,  n = 30)))
+
+mdl.05.test = ddply(mdl.05.test, .(Subject, Age_Old, Gender_Male, Texting), summarise,
+                     Anger    = diff(runMean(Anger,    n = 30)),
+                     Contempt = diff(runMean(Contempt, n = 30)),
+                     Disgust  = diff(runMean(Disgust,  n = 30)),
+                     Fear     = diff(runMean(Fear,     n = 30)),
+                     Joy      = diff(runMean(Joy,      n = 30)),
+                     Sad      = diff(runMean(Sad,      n = 30)),
+                     Surprise = diff(runMean(Surprise, n = 30)),
+                     Neutral  = diff(runMean(Neutral,  n = 30)))
+
+mdl.05.train = na.omit(mdl.05.train)
+mdl.05.test = na.omit(mdl.05.test)
+
+save(list = c("mdl.05.train", "mdl.05.test"), file = 'R-Data/data-mdl-05.rda')
+rm(mdl.05.train, mdl.05.test)
+
+
+##################################################################################
+## Model 06: Simple Running Averages for each emotion
+##
+## Samples taken over the entire simulation
+mdl.06.train = ddply(texting.sim, .(Subject, Age_Old, Gender_Male, Texting), summarise,
+                     Anger    = diff(runMean(Anger,    n = 30)),
+                     Contempt = diff(runMean(Contempt, n = 30)),
+                     Disgust  = diff(runMean(Disgust,  n = 30)),
+                     Fear     = diff(runMean(Fear,     n = 30)),
+                     Joy      = diff(runMean(Joy,      n = 30)),
+                     Sad      = diff(runMean(Sad,      n = 30)),
+                     Surprise = diff(runMean(Surprise, n = 30)),
+                     Neutral  = diff(runMean(Neutral,  n = 30)))
+
+mdl.06.train = na.omit(mdl.06.train)
+
+set.seed(1123)
+x = sample(nrow(mdl.06.train), nrow(mdl.06.train) / 2)
+
+mdl.06.test = mdl.06.train[-x, ]
+mdl.06.train = mdl.06.train[x, ]
+
+save(list = c("mdl.06.train", "mdl.06.test"), file = 'R-Data/data-mdl-06.rda')
+rm(mdl.06.train, mdl.06.test, x)
+
+
+
+##################################################################################
+## Model 07: Average values for each .5 secods
+##
+## Training and Testing split at the 365 second
+mdl.07.train = subset(texting.sim, Time <= 365)
+mdl.07.test = subset(texting.sim, Time > 365)
+
+mdl.07.train = ddply(mdl.07.train, .(Subject, Age_Old, Gender_Male, Texting, 
+                                     Time = round_any(Time, .5, f = floor)), summarise,
+                     Anger    = mean(Anger),
+                     Contempt = mean(Contempt),
+                     Disgust  = mean(Disgust),
+                     Fear     = mean(Fear),
+                     Joy      = mean(Joy),
+                     Sad      = mean(Sad),
+                     Surprise = mean(Surprise),
+                     Neutral  = mean(Neutral))
+
+mdl.07.test = ddply(mdl.07.test, .(Subject, Age_Old, Gender_Male, Texting, 
+                                   Time = round_any(Time, .5, f = floor)), summarise,
+                    Anger    = mean(Anger),
+                    Contempt = mean(Contempt),
+                    Disgust  = mean(Disgust),
+                    Fear     = mean(Fear),
+                    Joy      = mean(Joy),
+                    Sad      = mean(Sad),
+                    Surprise = mean(Surprise),
+                    Neutral  = mean(Neutral))
+
+mdl.07.train = na.omit(mdl.07.train)
+mdl.07.test = na.omit(mdl.07.test)
+
+save(list = c("mdl.07.train", "mdl.07.test"), file = 'R-Data/data-mdl-07.rda')
+rm(mdl.07.train, mdl.07.test)
+
+
+
+##################################################################################
+## Model 08: Average values for each .5 secods
+##
+## Training sampled from the entire sim
+mdl.08.train = ddply(texting.sim, .(Subject, Age_Old, Gender_Male, Texting, 
+                                     Time = round_any(Time, .5, f = floor)), summarise,
+                     Anger    = mean(Anger),
+                     Contempt = mean(Contempt),
+                     Disgust  = mean(Disgust),
+                     Fear     = mean(Fear),
+                     Joy      = mean(Joy),
+                     Sad      = mean(Sad),
+                     Surprise = mean(Surprise),
+                     Neutral  = mean(Neutral))
+
+set.seed(1123)
+x = sample(nrow(mdl.08.train), nrow(mdl.08.train) / 2)
+
+mdl.08.test = mdl.08.train[-x, ]
+mdl.08.train = mdl.08.train[x, ]
+
+save(list = c("mdl.08.train", "mdl.08.test"), file = 'R-Data/data-mdl-08.rda')
+rm(mdl.08.train, mdl.08.test, x)
+
+
+
+##################################################################################
+## Model 09: Averaged Values differencing based on mdl.07 data
+##
+## Training and Testing split at the 365 second
+load("R-Data/data-mdl-07.rda")
+
+mdl.09.train = ddply(mdl.07.train, .(Subject, Age_Old, Gender_Male, Texting), summarise,
+                     Anger = diff(Anger),
+                     Contempt = diff(Contempt),
+                     Disgust = diff(Disgust),
+                     Fear = diff(Fear),
+                     Joy = diff(Joy),
+                     Sad = diff(Sad),
+                     Suprise = diff(Surprise),
+                     Neutral = diff(Neutral))
+
+mdl.09.test = ddply(mdl.07.test, .(Subject, Age_Old, Gender_Male, Texting), summarise,
+                    Anger = diff(Anger),
+                    Contempt = diff(Contempt),
+                    Disgust = diff(Disgust),
+                    Fear = diff(Fear),
+                    Joy = diff(Joy),
+                    Sad = diff(Sad),
+                    Suprise = diff(Surprise),
+                    Neutral = diff(Neutral))
+
+save(list = c("mdl.09.train", "mdl.09.test"), file = 'R-Data/data-mdl-09.rda')
+rm(mdl.09.train, mdl.09.test, mdl.07.train, mdl.07.test)
+
+
+
+##################################################################################
+## Model 10: Averaged Values differencing based on mdl.08 data
+##
+## Training and Testing split at the 365 second
+load("R-Data/data-mdl-08.rda")
+
+mdl.10.train = ddply(mdl.08.train, .(Subject, Age_Old, Gender_Male, Texting), summarise,
+                     Anger = diff(Anger),
+                     Contempt = diff(Contempt),
+                     Disgust = diff(Disgust),
+                     Fear = diff(Fear),
+                     Joy = diff(Joy),
+                     Sad = diff(Sad),
+                     Suprise = diff(Surprise),
+                     Neutral = diff(Neutral))
+
+mdl.10.test = ddply(mdl.08.test, .(Subject, Age_Old, Gender_Male, Texting), summarise,
+                    Anger = diff(Anger),
+                    Contempt = diff(Contempt),
+                    Disgust = diff(Disgust),
+                    Fear = diff(Fear),
+                    Joy = diff(Joy),
+                    Sad = diff(Sad),
+                    Suprise = diff(Surprise),
+                    Neutral = diff(Neutral))
+
+save(list = c("mdl.10.train", "mdl.10.test"), file = 'R-Data/data-mdl-10.rda')
+rm(mdl.10.train, mdl.10.test, mdl.08.train, mdl.08.test)
 
