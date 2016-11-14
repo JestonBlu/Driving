@@ -156,7 +156,7 @@ Resampling results across tuning parameters:
 load("../R-Data/data-mdl-08.rda")
 load("../R-Models/mdl_08_nnet.rda")
 
-plot(mdl.08, main = "Model 2")
+plot(mdl.08, main = "Model 8")
 
 x = predict(mdl.08, mdl.08.train, type = "raw")
 y = predict(mdl.08, mdl.08.test, type = "raw")
@@ -209,7 +209,7 @@ ggsave(filename = "../Plots/07_g1.png", plot = g1, width = 8, height = 5.25)
 ```
 
 
-![Model 2 Prediction](../Plots/07_g1.png)
+![Model 8 Prediction](../Plots/07_g1.png)
 
 
 \newpage
