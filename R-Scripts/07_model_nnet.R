@@ -25,14 +25,11 @@ metric = function(confusion) {
 fit.control = trainControl(method = "cv", number = 10)
 
 ## Create combination of model parameters to train on
-# search.grid = expand.grid(decay = c(0, .05, .1, .2),
-#                           size = c(10, 15, 30, 50))
-
 search.grid = expand.grid(decay = c(0, .1, .2),
-                          size = c(1, 5, 15, 30, 50, 75, 100, 150))
+                          size = c(1, 5, 15, 30, 50, 75, 100))
 
 ## Limit the iterations and weights each model can run
-maxIt = 100; maxWt = 10000
+maxIt = 100; maxWt = 15000
 
 
 
@@ -293,7 +290,6 @@ rm(x, y, fit, mdl.09, mdl.09.train, mdl.09.test)
 ################################################################
 ## Model 10: Averaging values over fixed .5 seconds, differenced
 load("R-Data/data-mdl-10.rda")
-load("R-Models/mdl_10_nnet.rda")
 
 fit = train(Texting ~ ., mdl.10.train, method = "nnet", 
             trControl = fit.control, 
@@ -313,5 +309,66 @@ metric(table(Actual = mdl.10.test$Texting, Predicted = y))
 
 mdl.10 = fit
 
-save("mdl.10", file = "R-Models/mdl_10_nnet.rda")
-rm(x, y, fit, mdl.10, mdl.10.train, mdl.10.test)
+save("mdl.10", file = "R-Models/mdl_09_nnet.rda")
+rm(x, y, fit, mdl.10, mdl.10.train, mdl.10.test) 
+
+
+
+#############################################################
+## Model 11: 
+##
+## Data Set:   
+## Specifics:  Train First Half, Test Second Half
+## 
+load("R-Data/data-mdl-11.rda")
+
+fit = train(Texting ~ . - Time, mdl.11.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = maxWt,
+            maxit = maxIt)
+
+fit
+
+x = predict(fit, mdl.11.train, type = "raw")
+table(Actual = mdl.11.train$Texting, Predicted = x)
+metric(table(Actual = mdl.11.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.11.test, type = "raw")
+table(Actual = mdl.11.test$Texting, Predicted = y)
+metric(table(Actual = mdl.11.test$Texting, Predicted = y))
+
+mdl.11 = fit
+
+save("mdl.11", file = "R-Models/mdl_11_nnet.rda")
+rm(x, y, fit, mdl.11, mdl.11.train, mdl.11.test)
+
+
+#############################################################
+## Model 12: 
+##
+## Data Set:   
+## Specifics:  Train First Half, Test Second Half
+## 
+load("R-Data/data-mdl-12.rda")
+
+fit = train(Texting ~ . - Time, mdl.12.train, method = "nnet", 
+            trControl = fit.control, 
+            tuneGrid = search.grid,
+            MaxNWts = maxWt,
+            maxit = maxIt)
+
+fit
+
+x = predict(fit, mdl.12.train, type = "raw")
+table(Actual = mdl.12.train$Texting, Predicted = x)
+metric(table(Actual = mdl.12.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.12.test, type = "raw")
+table(Actual = mdl.12.test$Texting, Predicted = y)
+metric(table(Actual = mdl.12.test$Texting, Predicted = y))
+
+mdl.12 = fit
+
+save("mdl.12", file = "R-Models/mdl_12_nnet.rda")
+rm(x, y, fit, mdl.12, mdl.12.train, mdl.12.test)

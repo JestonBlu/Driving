@@ -34,115 +34,159 @@ metric = function(confusion) {
 
 ## Overview
 
-The first pass analysis used summarized statistical measures to fit both a random forest and neural network model to the data. The results primarily showed that aggregating the data over an entire event prevented the two algorithms from detecting texting events. Also, because the data was aggregated, there were very few data points to model between testing and training sets. The random forest algorithm was a better choice than the neural network because of the large number of predictor variables relative to the number of observations. Both models however, were guilty of overfitting. For the next phase of this analysis, I am focussing on looking at the data in its original form. I have chosen to focus on the neural network rather than the random forest mainly because of the data structure. In the previous analysis the aggregated data set contained 119 observations with 40 predictor variables. Since I am using the original data with no statistical measures the data set contains more than 1 million rows on 12 predictor variables.
+The first pass analysis used summarized statistical measures to fit both a random forest and neural network model to the data. The results primarily showed that aggregating the data over an entire event prevented the two algorithms from detecting texting events. Also, because the data was aggregated, there were very few data points to model between testing and training sets. The random forest algorithm was a better choice than the neural network because of the large number of predictor variables relative to the number of observations. Both models however, were guilty of overfitting. For the next phase of this analysis, I am focussing on looking at the data in its original form. I have chosen to focus on the neural network rather than the random forest mainly because of the data structure. In the previous analysis the aggregated data set contained 119 observations with 40 predictor variables. Since I am using the original data the data set contains more than 1 million rows on 11 predictor variables.
 
 ##  Neural Nets applied to Distracted Driving
 
 In order to standardize the results of my analysis, I have elected to use the R package caret to train all of my models (http://topepo.github.io/caret/index.html). Caret is a modeling framework that allows you to run many different types of models with different combinations of parameter sets at the same time. It can easily use models from other popular packages and offers a rich set of validation tests and diagnostic plots. Another benefit to using this package is enabling parallel computing of cross validation tasks.
 
-I am using k=10 cross validation for all models as well as several combinations of paramters. Training and Testing sets are all approximately the same size 50/50 split. Only Models 1 and 2 have been fully trained.
+##### Time Omission
 
-Model Results: (DS: Data split at 365 Seconds, ES: Training Set taken from Entire Simulation)
+Time has been intentionally omitted from all of the models. The training/testing strategies in this analysis include either splitting the data roughly in the middle of the simulation or sampling from the entire simulation. Since texting events happen during specific fixed intervals of each simulation, a neural net will learn that time is an important factor in determining texting and the results will be biased. I discovered this when I initially included the time variable in the split data set. The training set performance measured very high with an overall accuracy of .95, but the testing accuracy was 0 because the model only saw time observations between 0-365 seconds and so it predicted no texting for all observations >365.
 
-| Model     | Data Processing | Data Split | Size | Decay | Training | Testing |
-|:----------|:----------------|:-----------|:-----|:------|:---------|:--------|
-| Model 1:  | Original        | DS         | 15   | .20   | .783     | .690    |
-| Model 2:  | Original        | ES         | 100  | .10   | .798     | .796    |
-| Model 3:  | Differencing    | DS         | 15   | .05   | .594     | .571    |
-| Model 4:  | Differencing    | ES         | 15   | .05   | .592     | .591    |
-| Model 5:  | Moving Avg      | DS         | 30   | .05   | .525     | .527    |
-| Model 6:  | Moving Avg      | ES         | 10   | .00   | .528     | .528    |
-| Model 7:  | 30 Sec Cut      | DS         | 100  | .10   | .868     | .724    |
-| Model 8:  | 30 Sec Cut      | ES         | 100  | .10   | .847     | .820    |
-| Model 9:  | 30 Sec Diff     | DS         | 50   | .00   | .741     | .653    |
-| Model 10: | 30 Sec Diff     | ES         | 30   | .05   | .790     | .678    |
+For the following models I am using the nnet package which ships with base R. I am using k=10 cross validation for all models and Im training on different combinations of size and decay parameters. Training and testing sets are all approximately a 50/50 split.
+
+\newpage
+
+The following sections describe the values in the model results table:
+
+##### Data Processing:
+  * Original: Data in its original form. Variables are the 8 emotions measured at .03 second intervals.
+  * Differencing: First order differening of each original observation.
+  * Moving Avg: Running averages n=30 for all of the emotions.
+  * 30 Sec Cut: Time is cut into half second intervals with the average value of each emotion recorded over the interval.
+  * 30 Sec Diff: First order differncing of the 30 second cut data.
+  * 30 Sec Cut Stat: In addition to mean, sd, min, max, iqr, and median are calculated.
+
+##### Data Split:
+  * 365 Split: The data are split at the 365 second of the simulation. This is approximately half way through the entire simulation and is in between texting events for all subjects.
+  * Entire Sim: The training set is randomly selected from the entire simulation. The testing set are all observations not selected for the training set.
+
+##### Model Specifics:
+  * MaxItr: Max Number of iterations allowed for the alogrithm to converge.
+  * Converged: Whether the model convered or not during training. If the model did not converge then it was still improving when it hit the iteration limit.
+  * Size: Number of hidden nodes in the model.
+  * Decay: The rate of decay towards zero placed on the weights when they do not update after an interation.
+  * Training and Testing: Total percentage of correctly predicted observations.
+
+##### General Model Form:
+  * Texting ~ Subject + Age + Gender + Anger + Contempt + Disgust + Fear + Joy + Sad + Surprise + Neutral
+
+\newpage
+
+##### Model Results:
+
+| Model     | Data Processing | Data Split | MaxItr | Converged | Size | Decay | Training | Testing |
+|:----------|:----------------|:-----------|:-------|:----------|:-----|:------|:---------|:--------|
+| Model 1:  | Original        | 365 Split  | 500    | No        | 15   | .20   | .783     | .690    |
+| Model 2:  | Original        | Entire Sim | 500    | No        | 100  | .10   | .798     | .796    |
+| Model 3:  | Differencing    | 365 Split  | 500    | Yes       | 15   | .05   | .594     | .571    |
+| Model 4:  | Differencing    | Entire Sim | 500    | Yes       | 15   | .05   | .592     | .591    |
+| Model 5:  | Moving Avg      | 365 Split  | 500    | Yes       | 30   | .05   | .525     | .527    |
+| Model 6:  | Moving Avg      | Entire Sim | 500    | Yes       | 10   | .00   | .528     | .528    |
+| Model 7:  | 30 Sec Cut      | 365 Split  | 500    | Yes       | 100  | .00   | .884     | .722    |
+| Model 8:  | 30 Sec Cut      | Entire Sim | 500    | Yes       | 100  | .10   | .839     | .816    |
+| Model 9:  | 30 Sec Diff     | 365 Split  | 500    | Yes       | 100  | .10   | .716     | .647    |
+| Model 10: | 30 Sec Diff     | Entire Sim | 100    | Yes       | 100  | .10   | .687     | .625    |
+| Model 11: | 30 Sec Cut Stat | 365 Split  | 100    | Yes       | 100  | .00   | .849     | .717    |
+| Model 12: | 30 Sec Cut Stat | Entire Sim | 100    | Yes       | 75   | .10   | .826     | .809    |
+
+##### Interesting Observations
+  * Model 8 currently has the best overall performance.
+  * Overall the models trained over the entire simulation fair better than models trained on the time split data sets. This suggests that there are could be distinct differences between two texting segments.
+  * Model 2 took 3 days to train on 6 cpu. Its interesting that it still did not converge during this time and would have continued improving if given more iterations. The testing and training scores are virtually even so Model 2 could probably be given more iterations.
+  * Overall the models built on data that was differenced perform the worst. The differnced models using the 30 second intervals is much improved over the the original differencing models.
+  * Models 2 and 8 are using the same dataset except that model 8 has cut the data into 30 second intervals. Performance actually improves when you look at the data at a slightly higher level indicating that looking at the raw data measured every .03 seconds might actually make inference more difficult
+
+
+\newpage
 
 ```r
-#################################################################
-## Code for running Model 2
-## Compute time: 12 hours over 6 CPU
+############################################################
+## Model 8: Training and Evaluation
 
 ## Set Cross Validation
 fit.control = trainControl(method = "cv", number = 10)
 
 ## Create combination of model parameters to train on
-search.grid = expand.grid(decay = c(0, .05, .1, .2),
-                          size = c(1, 3, 5, 10, 15))
+search.grid = expand.grid(decay = c(0, .1, .2),
+                          size = c(1, 5, 15, 30, 50, 75, 100))
 
 ## Limit the iterations and weights each model can run
-maxIt = 500; maxWt = 10000
+maxIt = 100; maxWt = 15000
 
-fit = train(Texting ~ . - Time, mdl.02.train, method = "nnet",
+fit = train(Texting ~ . - Time, mdl.08.train, method = "nnet",
             trControl = fit.control,
             tuneGrid = search.grid,
             MaxNWts = maxWt,
             maxit = maxIt)
 
-542550 samples, 12 predictors
+40053 samples, 11 predictors
 2 classes: '0', '1'
 
 Resampling: Cross-Validated (10 fold)
-Summary of sample sizes: 488295, 488296, 488295, 488294, 488296, 488295, ...
+Summary of sample sizes: 40053, 40052, 40052, 40053, 40052, 40053, ...
 Resampling results across tuning parameters:
 
-decay  size  Accuracy   Kappa
-0.00    1    0.6379560  0.2186901
-0.00    3    0.7090977  0.3627473
-0.00    5    0.7345479  0.4244812
-0.00   10    0.7685799  0.5083622
-0.00   15    0.7748299  0.5226515
-0.05    1    0.6509813  0.2211743
-0.05    3    0.7179190  0.3914567
-0.05    5    0.7422744  0.4481362
-0.05   10    0.7708690  0.5133975
-0.05   15    0.7827131  0.5405813 ** Best Model **
-0.10    1    0.6448476  0.2514474
-0.10    3    0.7161829  0.3820061
-0.10    5    0.7461580  0.4562864
-0.10   10    0.7715399  0.5151954
-0.10   15    0.7818469  0.5390179
-0.20    1    0.6503197  0.2436473
-0.20    3    0.7190932  0.3910539
-0.20    5    0.7449894  0.4524052
-0.20   10    0.7728504  0.5181559
-0.20   15    0.7821215  0.5392592
+  decay  size  Accuracy   Kappa
+  0.0      1   0.6862218  0.3201710
+  0.0      5   0.7484432  0.4673945
+  0.0     15   0.7996313  0.5822628
+  0.0     30   0.8178326  0.6214050
+  0.0     50   0.8266183  0.6403386
+  0.0     75   0.8251806  0.6368128
+  0.0    100   0.8280119  0.6437033
+  0.1      1   0.6843809  0.3225985
+  0.1      5   0.7756104  0.5279786
+  0.1     15   0.8121924  0.6082412
+  0.1     30   0.8212030  0.6276012
+  0.1     50   0.8267981  0.6394863
+  0.1     75   0.8290677  0.6442134
+  0.1    100   0.8292249  0.6447110 **Best Model**
+  0.2      1   0.6781336  0.3088442
+  0.2      5   0.7740603  0.5246459
+  0.2     15   0.8083948  0.5996885
+  0.2     30   0.8185739  0.6216010
+  0.2     50   0.8213152  0.6274478
+  0.2     75   0.8221691  0.6291242
+  0.2    100   0.8223039  0.6294092
 ```
-\newpage
 
 ```{r c, echo=FALSE, comment=NA}
-load("../R-Data/data-mdl-02.rda")
-load("../R-Models/mdl_02_nnet.rda")
+load("../R-Data/data-mdl-08.rda")
+load("../R-Models/mdl_08_nnet.rda")
 
-plot(mdl.02, main = "Model 2")
+plot(mdl.08, main = "Model 2")
 
-x = predict(mdl.02, mdl.02.train, type = "raw")
-y = predict(mdl.02, mdl.02.test, type = "raw")
+x = predict(mdl.08, mdl.08.train, type = "raw")
+y = predict(mdl.08, mdl.08.test, type = "raw")
 
 cat("------------------------------------------------------------------")
 cat("Neural Network Confusion Matrix")
 cat("-------------------------------------------------------------------")
-table(Actual = mdl.02.train$Texting, Predicted = x)
-cat("(Training Set) Overall Performance:", metric(table(Actual = mdl.02.train$Texting, Predicted = x)))
-table(Actual = mdl.02.test$Texting, Predicted = y)
-cat("(Testing Set) Neural Net Overall Performance", metric(table(Actual = mdl.02.test$Texting, Predicted = y)))
+table(Actual = mdl.08.train$Texting, Predicted = x)
+cat("(Training Set) Overall Performance:", metric(table(Actual = mdl.08.train$Texting, Predicted = x)))
+table(Actual = mdl.08.test$Texting, Predicted = y)
+cat("(Testing Set) Neural Net Overall Performance", metric(table(Actual = mdl.08.test$Texting, Predicted = y)))
 ```
+
+\newpage
+
 
 ## Plots
 
-The following 3 plots overlay the prediction for model 2 against the test sets for the first 3 subjects. Yellow dots represent predictions for Texting events and the black dots are no texting events. The blue curve is a loess curve for the probability prediction. It shows the overall trend for the predictions by time. It is encouraging that for Subject 001, the probability tends to peak during the periods of texting which are highlighted in gray in the background.
-
-Just as interesting though is the plot for Subject 002 where the model has a horrible fit overall and only predicts texting correctly about 60% of the time. Subject 003 has an excellent fit overall with a large majority of positive predictions occurring during the texting event window.
+The following 3 plots overlay the prediction for model 8 against the test sets for the first 3 subjects. Yellow dots represent predictions for texting events and the black dots are no texting events. The blue curve is a loess curve for the probability prediction. It shows the overall trend for the predictions by time. Compared to the model in the previous analysis, all 3 Subjects accuracy has increased.
 
 
 
-```{r d, echo=FALSE}
+```{r e, echo=FALSE}
 
-mdl.02.test$Predict = predict(mdl.02, mdl.02.test, type = "raw")
-y = predict(mdl.02, mdl.02.test, type = "prob")[2]
-mdl.02.test$Prob = y = as.numeric(y$`1`)
+mdl.08.test$Predict = predict(mdl.08, mdl.08.test, type = "raw")
+y = predict(mdl.08, mdl.08.test, type = "prob")[2]
+mdl.08.test$Prob = y = as.numeric(y$`1`)
 
 sub = 'T001'
-x = subset(mdl.02.test, Subject == sub)
+x = subset(mdl.08.test, Subject == sub)
 x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
 y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
 y1 = y[2,1]; y2 = y[2, 2]
@@ -152,13 +196,13 @@ g1 = ggplot(x, aes(x = Time, y = value)) +
   annotate(geom = "rect", xmin = y1, xmax = y2, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
   annotate(geom = "rect", xmin = y3, xmax = y4, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
   geom_smooth(aes(y = Prob), se = FALSE, size = .5) +
-  geom_point(alpha = .02, aes(color = Predict)) +
+  geom_point(alpha = .2, aes(color = Predict)) +
   scale_x_continuous("") +
   scale_y_continuous("Likelihood Centered on Baseline") +
   scale_color_manual("Prediction", values = c("black", "#f0b923")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Subject T001: Accuracy 78%")
+  ggtitle("Subject T001: Accuracy 80% (prior model 78%)")
 
 ggsave(filename = "../Plots/07_g1.png", plot = g1, width = 8, height = 5.25)
 
@@ -170,10 +214,10 @@ ggsave(filename = "../Plots/07_g1.png", plot = g1, width = 8, height = 5.25)
 
 \newpage
 
-```{r d2, echo=FALSE}
+```{r f, echo=FALSE}
 
 sub = 'T002'
-x = subset(mdl.02.test, Subject == sub)
+x = subset(mdl.08.test, Subject == sub)
 x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
 y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
 y1 = y[2,1]; y2 = y[2, 2]
@@ -183,18 +227,18 @@ g2 = ggplot(x, aes(x = Time, y = value)) +
   annotate(geom = "rect", xmin = y1, xmax = y2, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
   annotate(geom = "rect", xmin = y3, xmax = y4, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
   geom_smooth(aes(y = Prob), se = FALSE, size = .5) +
-  geom_point(alpha = .02, aes(color = Predict)) +
+  geom_point(alpha = .2, aes(color = Predict)) +
   scale_x_continuous("") +
   scale_y_continuous("Likelihood Centered on Baseline") +
   scale_color_manual("Prediction", values = c("black", "#f0b923")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Subject T002: Accuracy 60%")
+  ggtitle("Subject T002: Accuracy 71% (prior model 60%)")
 
 ggsave(filename = "../Plots/07_g2.png", plot = g2, width = 8, height = 5.25)
 
 sub = 'T003'
-x = subset(mdl.02.test, Subject == sub)
+x = subset(mdl.08.test, Subject == sub)
 x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
 y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
 y1 = y[2,1]; y2 = y[2, 2]
@@ -204,13 +248,13 @@ g3 = ggplot(x, aes(x = Time, y = value)) +
   annotate(geom = "rect", xmin = y1, xmax = y2, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
   annotate(geom = "rect", xmin = y3, xmax = y4, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
   geom_smooth(aes(y = Prob), se = FALSE, size = .5) +
-  geom_point(alpha = .02, aes(color = Predict)) +
+  geom_point(alpha = .2, aes(color = Predict)) +
   scale_x_continuous("") +
   scale_y_continuous("Likelihood Centered on Baseline") +
   scale_color_manual("Prediction", values = c("black", "#f0b923")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Subject T003: Accuracy 83%")
+  ggtitle("Subject T003: Accuracy 87% (prior model 83%)")
 
 ggsave(filename = "../Plots/07_g3.png", plot = g3, width = 8, height = 5.25)
 
@@ -224,17 +268,17 @@ ggsave(filename = "../Plots/07_g3.png", plot = g3, width = 8, height = 5.25)
 
 Accuracy by Subject:
 
-```{r e, echo=FALSE}
+```{r g, echo=FALSE}
 
-mdl.02.train$Predict = predict(mdl.02, mdl.02.train, type = "raw")
+mdl.08.train$Predict = predict(mdl.08, mdl.08.train, type = "raw")
 
-subject = as.character(unique(mdl.02.train$Subject))
+subject = as.character(unique(mdl.08.train$Subject))
 
 tab = data.frame()
 
 for (i in 1:59) {
-  y1 = subset(mdl.02.train, Subject == subject[i])
-  y2 = subset(mdl.02.test, Subject == subject[i])
+  y1 = subset(mdl.08.train, Subject == subject[i])
+  y2 = subset(mdl.08.test, Subject == subject[i])
 
   x1 = metric(table(Actual = y1$Texting, Predicted = y1$Predict))
   x2 = metric(table(Actual = y2$Texting, Predicted = y2$Predict))
@@ -259,4 +303,4 @@ pander(tab2, split.table = 90)
 
 ## Conclusions and Next Steps
 
-So far the neural net models have shown encouraging results in the ability to detect texting events for some subjects based on facial expressions alone. It clearly helps model performance to consider each individual separately. In my next few sessions I would like to finsih building and testing the performance for the rest of the modeling scenarios I have proposed. I would also like to look into some additional neural net models that have recursive features. So far in the models I have trained I have ignored the time component which might be valuable.
+So far the neural net models have shown encouraging results in the ability to detect texting events for subjects based on facial expressions. It clearly helps model performance to consider each individual separately. In my next session I will focus on trying to extract, interpret, and visualize model weights. I would also like to look into some additional neural net models that have recursive features and that can possibly handle the time variable.

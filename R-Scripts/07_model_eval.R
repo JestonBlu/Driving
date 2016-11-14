@@ -19,6 +19,9 @@ load("R-Models/mdl_07_nnet.rda")
 load("R-Models/mdl_08_nnet.rda")
 load("R-Models/mdl_09_nnet.rda")
 load("R-Models/mdl_10_nnet.rda")
+load("R-Models/mdl_11_nnet.rda")
+load("R-Models/mdl_12_nnet.rda")
+
 
 ## Load Data
 load("R-Data/data-mdl-01.rda")
@@ -31,6 +34,8 @@ load("R-Data/data-mdl-07.rda")
 load("R-Data/data-mdl-08.rda")
 load("R-Data/data-mdl-09.rda")
 load("R-Data/data-mdl-10.rda")
+load("R-Data/data-mdl-11.rda")
+load("R-Data/data-mdl-12.rda")
 
 
 ## Model Performance Metrics
@@ -47,6 +52,8 @@ perform = function(fit, train, test) {
   y = predict(fit, test, type = "raw")
 
   results = list (
+    "Max Iterations:" = fit$dots$maxit,
+    "Algorithm Converged" = fit$finalModel$convergence,
     "Confusion Matrix Training Set: " = table(Actual = train$Texting, Predicted = x),
     "Training Set Performance: " = metric(table(Actual = train$Texting, Predicted = x)),
     "Confusion Matrix: Testing Set: " = table(Actual = test$Texting, Predicted = y),
@@ -67,3 +74,5 @@ perform(fit = mdl.07, train = mdl.07.train, mdl.07.test)
 perform(fit = mdl.08, train = mdl.08.train, mdl.08.test)
 perform(fit = mdl.09, train = mdl.09.train, mdl.09.test)
 perform(fit = mdl.10, train = mdl.10.train, mdl.10.test)
+perform(fit = mdl.11, train = mdl.11.train, mdl.11.test)
+perform(fit = mdl.12, train = mdl.12.train, mdl.12.test)

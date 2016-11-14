@@ -351,3 +351,184 @@ mdl.10.test = ddply(mdl.08.test, .(Subject, Age_Old, Gender_Male, Texting), summ
 save(list = c("mdl.10.train", "mdl.10.test"), file = 'R-Data/data-mdl-10.rda')
 rm(mdl.10.train, mdl.10.test, mdl.08.train, mdl.08.test)
 
+##################################################################################
+## Model 11: Average values for each .5 secods
+##
+## Training and Testing split at the 365 second
+mdl.11.train = subset(texting.sim, Time <= 365)
+mdl.11.test = subset(texting.sim, Time > 365)
+
+mdl.11.train = ddply(mdl.11.train, .(Subject, Age_Old, Gender_Male, Texting, 
+                                     Time = round_any(Time, .5, f = floor)), summarise,
+                     Anger.mu    = mean(Anger),
+                     Anger.sd  = sd(Anger),
+                     Anger.min = min(Anger),
+                     Anger.max = max(Anger),
+                     Anger.med = median(Anger),
+                     Anger.iqr = IQR(Anger),
+                     Contempt.mu = mean(Contempt),
+                     Contempt.sd = sd(Contempt),
+                     Contempt.min = min(Contempt),
+                     Contempt.max = max(Contempt),
+                     Contempt.med = median(Contempt),
+                     Contempt.iqr = IQR(Contempt),
+                     Disgust.mu = mean(Disgust),
+                     Disgust.sd = sd(Disgust),
+                     Disgust.min = min(Disgust),
+                     Disgust.max = max(Disgust),
+                     Disgust.med = median(Disgust),
+                     Disgust.iqr = IQR(Disgust),
+                     Fear.mu = mean(Fear),
+                     Fear.sd = sd(Fear),
+                     Fear.min = min(Fear),
+                     Fear.max = max(Fear),
+                     Fear.med = median(Fear),
+                     Fear.iqr = IQR(Fear),
+                     Joy.mu = mean(Joy),
+                     Joy.sd = sd(Joy),
+                     Joy.min = min(Joy),
+                     Joy.max = max(Joy),
+                     Joy.med = median(Joy),
+                     Joy.iqr = IQR(Joy),
+                     Sad.mu = mean(Sad),
+                     Sad.sd = sd(Sad),
+                     Sad.min = min(Sad),
+                     Sad.max = max(Sad),
+                     Sad.med = median(Sad),
+                     Sad.iqr = IQR(Sad),
+                     Surprise.mu = mean(Surprise),
+                     Surprise.sd = sd(Surprise),
+                     Surprise.min = min(Surprise),
+                     Surprise.max = max(Surprise),
+                     Surprise.med = median(Surprise),
+                     Surprise.iqr = IQR(Surprise),
+                     Neutral.mu = mean(Neutral),
+                     Neutral.sd = sd(Neutral),
+                     Neutral.min = min(Neutral),
+                     Neutral.max = max(Neutral),
+                     Neutral.med = median(Neutral),
+                     Neutral.iqr = IQR(Neutral))
+
+mdl.11.test = ddply(mdl.11.test, .(Subject, Age_Old, Gender_Male, Texting, 
+                                   Time = round_any(Time, .5, f = floor)), summarise,
+                    Anger.mu    = mean(Anger),
+                    Anger.sd  = sd(Anger),
+                    Anger.min = min(Anger),
+                    Anger.max = max(Anger),
+                    Anger.med = median(Anger),
+                    Anger.iqr = IQR(Anger),
+                    Contempt.mu = mean(Contempt),
+                    Contempt.sd = sd(Contempt),
+                    Contempt.min = min(Contempt),
+                    Contempt.max = max(Contempt),
+                    Contempt.med = median(Contempt),
+                    Contempt.iqr = IQR(Contempt),
+                    Disgust.mu = mean(Disgust),
+                    Disgust.sd = sd(Disgust),
+                    Disgust.min = min(Disgust),
+                    Disgust.max = max(Disgust),
+                    Disgust.med = median(Disgust),
+                    Disgust.iqr = IQR(Disgust),
+                    Fear.mu = mean(Fear),
+                    Fear.sd = sd(Fear),
+                    Fear.min = min(Fear),
+                    Fear.max = max(Fear),
+                    Fear.med = median(Fear),
+                    Fear.iqr = IQR(Fear),
+                    Joy.mu = mean(Joy),
+                    Joy.sd = sd(Joy),
+                    Joy.min = min(Joy),
+                    Joy.max = max(Joy),
+                    Joy.med = median(Joy),
+                    Joy.iqr = IQR(Joy),
+                    Sad.mu = mean(Sad),
+                    Sad.sd = sd(Sad),
+                    Sad.min = min(Sad),
+                    Sad.max = max(Sad),
+                    Sad.med = median(Sad),
+                    Sad.iqr = IQR(Sad),
+                    Surprise.mu = mean(Surprise),
+                    Surprise.sd = sd(Surprise),
+                    Surprise.min = min(Surprise),
+                    Surprise.max = max(Surprise),
+                    Surprise.med = median(Surprise),
+                    Surprise.iqr = IQR(Surprise),
+                    Neutral.mu = mean(Neutral),
+                    Neutral.sd = sd(Neutral),
+                    Neutral.min = min(Neutral),
+                    Neutral.max = max(Neutral),
+                    Neutral.med = median(Neutral),
+                    Neutral.iqr = IQR(Neutral))
+
+mdl.11.train = na.omit(mdl.11.train)
+mdl.11.test = na.omit(mdl.11.test)
+
+save(list = c("mdl.11.train", "mdl.11.test"), file = 'R-Data/data-mdl-11.rda')
+rm(mdl.11.train, mdl.11.test)
+
+
+##################################################################################
+## Model 12: Average values for each .5 secods
+##
+## Training and Testing split at the 365 second
+mdl.12.train = ddply(texting.sim, .(Subject, Age_Old, Gender_Male, Texting, 
+                                     Time = round_any(Time, .5, f = floor)), summarise,
+                     Anger.mu    = mean(Anger),
+                     Anger.sd  = sd(Anger),
+                     Anger.min = min(Anger),
+                     Anger.max = max(Anger),
+                     Anger.med = median(Anger),
+                     Anger.iqr = IQR(Anger),
+                     Contempt.mu = mean(Contempt),
+                     Contempt.sd = sd(Contempt),
+                     Contempt.min = min(Contempt),
+                     Contempt.max = max(Contempt),
+                     Contempt.med = median(Contempt),
+                     Contempt.iqr = IQR(Contempt),
+                     Disgust.mu = mean(Disgust),
+                     Disgust.sd = sd(Disgust),
+                     Disgust.min = min(Disgust),
+                     Disgust.max = max(Disgust),
+                     Disgust.med = median(Disgust),
+                     Disgust.iqr = IQR(Disgust),
+                     Fear.mu = mean(Fear),
+                     Fear.sd = sd(Fear),
+                     Fear.min = min(Fear),
+                     Fear.max = max(Fear),
+                     Fear.med = median(Fear),
+                     Fear.iqr = IQR(Fear),
+                     Joy.mu = mean(Joy),
+                     Joy.sd = sd(Joy),
+                     Joy.min = min(Joy),
+                     Joy.max = max(Joy),
+                     Joy.med = median(Joy),
+                     Joy.iqr = IQR(Joy),
+                     Sad.mu = mean(Sad),
+                     Sad.sd = sd(Sad),
+                     Sad.min = min(Sad),
+                     Sad.max = max(Sad),
+                     Sad.med = median(Sad),
+                     Sad.iqr = IQR(Sad),
+                     Surprise.mu = mean(Surprise),
+                     Surprise.sd = sd(Surprise),
+                     Surprise.min = min(Surprise),
+                     Surprise.max = max(Surprise),
+                     Surprise.med = median(Surprise),
+                     Surprise.iqr = IQR(Surprise),
+                     Neutral.mu = mean(Neutral),
+                     Neutral.sd = sd(Neutral),
+                     Neutral.min = min(Neutral),
+                     Neutral.max = max(Neutral),
+                     Neutral.med = median(Neutral),
+                     Neutral.iqr = IQR(Neutral))
+
+mdl.12.train = na.omit(mdl.12.train)
+
+set.seed(1123)
+x = sample(nrow(mdl.12.train), nrow(mdl.12.train) / 2)
+
+mdl.12.test = mdl.12.train[-x, ]
+mdl.12.train = mdl.12.train[x, ]
+
+save(list = c("mdl.12.train", "mdl.12.test"), file = 'R-Data/data-mdl-12.rda')
+rm(mdl.12.train, mdl.12.test, x)
