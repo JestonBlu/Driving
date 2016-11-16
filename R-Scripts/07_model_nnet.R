@@ -372,3 +372,45 @@ mdl.12 = fit
 
 save("mdl.12", file = "R-Models/mdl_12_nnet.rda")
 rm(x, y, fit, mdl.12, mdl.12.train, mdl.12.test)
+
+
+
+
+#############################################################
+## Model 13: 
+##
+## Simplified Model for Relationship Diagnostics
+## 
+load("R-Data/data-mdl-08.rda")
+
+# ## Create combination of model parameters to train on
+# search.grid = expand.grid(decay = c(0, .1, .2), size = 1)
+# 
+# ## Limit the iterations and weights each model can run
+# maxIt = 1000; maxWt = 15000
+# 
+# 
+# fit = train(Texting ~ . - Time, mdl.08.train, method = "nnet", 
+#             trControl = fit.control, 
+#             tuneGrid = search.grid,
+#             MaxNWts = maxWt,
+#             maxit = maxIt)
+# 
+# fit
+
+fit = nnet(Texting ~ Subject + Age_Old * Gender_Male + Anger + Contempt + Disgust + 
+             Fear + Joy + Sad + Surprise + Neutral, 
+           mdl.08.train, size = 1, maxit = 1000)
+
+x = predict(fit, mdl.08.train, type = "class")
+table(Actual = mdl.08.train$Texting, Predicted = x)
+metric(table(Actual = mdl.08.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.08.test, type = "class")
+table(Actual = mdl.08.test$Texting, Predicted = y)
+metric(table(Actual = mdl.08.test$Texting, Predicted = y))
+
+mdl.13 = fit
+
+save("mdl.13", file = "R-Models/mdl_13_nnet.rda")
+rm(x, y, fit, mdl.13, mdl.08.train, mdl.08.test)
