@@ -54,9 +54,9 @@ The following sections describe the values in the model results table:
   * Original: Data in its original form. Variables are the 8 emotions measured at .03 second intervals.
   * Differencing: First order differening of each original observation.
   * Moving Avg: Running averages n=30 for all of the emotions.
-  * 30 Sec Cut: Time is cut into half second intervals with the average value of each emotion recorded over the interval.
-  * 30 Sec Diff: First order differncing of the 30 second cut data.
-  * 30 Sec Cut Stat: In addition to mean, sd, min, max, iqr, and median are calculated.
+  * 1/2 Sec Cut: Time is cut into half second intervals with the average value of each emotion recorded over the interval.
+  * 1/2 Sec Diff: First order differncing of the 1/2 second cut data.
+  * 1/2 Sec Cut Stat: In addition to mean, sd, min, max, iqr, and median are calculated.
 
 ##### Data Split:
   * 365 Split: The data are split at the 365 second of the simulation. This is approximately half way through the entire simulation and is in between texting events for all subjects.
@@ -76,20 +76,20 @@ The following sections describe the values in the model results table:
 
 ##### Model Results:
 
-| Model     | Data Processing | Data Split | MaxItr | Converged | Size | Decay | Training | Testing |
-|:----------|:----------------|:-----------|:-------|:----------|:-----|:------|:---------|:--------|
-| Model 1:  | Original        | 365 Split  | 500    | No        | 15   | .20   | .783     | .690    |
-| Model 2:  | Original        | Entire Sim | 500    | No        | 100  | .10   | .798     | .796    |
-| Model 3:  | Differencing    | 365 Split  | 500    | Yes       | 15   | .05   | .594     | .571    |
-| Model 4:  | Differencing    | Entire Sim | 500    | Yes       | 15   | .05   | .592     | .591    |
-| Model 5:  | Moving Avg      | 365 Split  | 500    | Yes       | 30   | .05   | .525     | .527    |
-| Model 6:  | Moving Avg      | Entire Sim | 500    | Yes       | 10   | .00   | .528     | .528    |
-| Model 7:  | 30 Sec Cut      | 365 Split  | 500    | Yes       | 100  | .00   | .884     | .722    |
-| Model 8:  | 30 Sec Cut      | Entire Sim | 500    | Yes       | 100  | .10   | .839     | .816    |
-| Model 9:  | 30 Sec Diff     | 365 Split  | 500    | Yes       | 100  | .10   | .716     | .647    |
-| Model 10: | 30 Sec Diff     | Entire Sim | 100    | Yes       | 100  | .10   | .687     | .625    |
-| Model 11: | 30 Sec Cut Stat | 365 Split  | 100    | Yes       | 100  | .00   | .849     | .717    |
-| Model 12: | 30 Sec Cut Stat | Entire Sim | 100    | Yes       | 75   | .10   | .826     | .809    |
+| Model     | Data Processing  | Data Split | MaxItr | Converged | Size | Decay | Training | Testing |
+|:----------|:-----------------|:-----------|:-------|:----------|:-----|:------|:---------|:--------|
+| Model 1:  | Original         | 365 Split  | 500    | No        | 15   | .20   | .783     | .690    |
+| Model 2:  | Original         | Entire Sim | 500    | No        | 100  | .10   | .798     | .796    |
+| Model 3:  | Differencing     | 365 Split  | 500    | Yes       | 15   | .05   | .594     | .571    |
+| Model 4:  | Differencing     | Entire Sim | 500    | Yes       | 15   | .05   | .592     | .591    |
+| Model 5:  | Moving Avg       | 365 Split  | 500    | Yes       | 30   | .05   | .525     | .527    |
+| Model 6:  | Moving Avg       | Entire Sim | 500    | Yes       | 10   | .00   | .528     | .528    |
+| Model 7:  | 1/2 Sec Cut      | 365 Split  | 500    | Yes       | 100  | .00   | .884     | .722    |
+| Model 8:  | 1/2 Sec Cut      | Entire Sim | 500    | Yes       | 100  | .10   | .839     | .816    |
+| Model 9:  | 1/2 Sec Diff     | 365 Split  | 500    | Yes       | 100  | .10   | .716     | .647    |
+| Model 10: | 1/2 Sec Diff     | Entire Sim | 100    | Yes       | 100  | .10   | .687     | .625    |
+| Model 11: | 1/2 Sec Cut Stat | 365 Split  | 100    | Yes       | 100  | .00   | .849     | .717    |
+| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 100    | Yes       | 75   | .10   | .826     | .809    |
 
 ##### Interesting Observations
   * Model 8 currently has the best overall performance.
