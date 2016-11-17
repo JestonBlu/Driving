@@ -398,19 +398,27 @@ load("R-Data/data-mdl-08.rda")
 # 
 # fit
 
-fit = nnet(Texting ~ Subject + Age_Old * Gender_Male + Anger + Contempt + Disgust + 
-             Fear + Joy + Sad + Surprise + Neutral, 
-           mdl.08.train, size = 1, maxit = 1000)
 
-x = predict(fit, mdl.08.train, type = "class")
-table(Actual = mdl.08.train$Texting, Predicted = x)
-metric(table(Actual = mdl.08.train$Texting, Predicted = x))
+dummies = model.matrix(~ mdl.08.train$Subject - 1)
+colnames(dummies) = sort(as.character(unique(mdl.08.train$Subject)))
+mdl.13.train = cbind(dummies, mdl.08.train[, c(2:4,6:13)])
 
-y = predict(fit, mdl.08.test, type = "class")
-table(Actual = mdl.08.test$Texting, Predicted = y)
-metric(table(Actual = mdl.08.test$Texting, Predicted = y))
+dummies = model.matrix(~ mdl.08.test$Subject - 1)
+colnames(dummies) = sort(as.character(unique(mdl.08.test$Subject)))
+mdl.13.test = cbind(dummies, mdl.08.test[, c(2:4,6:13)])
+
+fit = nnet(Texting ~  Age_Old*Gender_Male + ., mdl.13.train, size = 1, maxit = 1000, decay = .1)
+
+x = predict(fit, mdl.13.train, type = "class")
+table(Actual = mdl.13.train$Texting, Predicted = x)
+metric(table(Actual = mdl.13.train$Texting, Predicted = x))
+
+y = predict(fit, mdl.13.test, type = "class")
+table(Actual = mdl.13.test$Texting, Predicted = y)
+metric(table(Actual = mdl.13.test$Texting, Predicted = y))
 
 mdl.13 = fit
 
+save(list = c("mdl.13.train", "mdl.13.test"), file = "R-Data/data-mdl-13.rda")
 save("mdl.13", file = "R-Models/mdl_13_nnet.rda")
-rm(x, y, fit, mdl.13, mdl.08.train, mdl.08.test)
+rm(x, y, fit, mdl.13, mdl.08.train, mdl.08.test, mdl.13.train, mdl.13.test, dummies)
