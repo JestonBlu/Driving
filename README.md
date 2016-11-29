@@ -16,8 +16,11 @@ The data accompanying this project are too large to host on github. I have creat
   * The py scripts should produce 2 files in `Files/` (data-faces.csv, data-stimuli.csv).
   * Run `01_data_prep.R`, combines and cleans the 3 data files (`/Files/Other/data-demographics.csv` is the 3rd file)
   * Run `03_data_setup.R`, creates centered and summary level datasets
-  * Run `05_data_mdl_setup`, creates training/testing sets for `07_model_nnet.R`
+  * Run `06_data_mdl_setup`, creates training/testing sets
 
+**Reproduce my models**
+  * Run `07_model_nnet.R`, builds model objects saved to `R-Models`
+  
 **Reproduce my written analysis (produces .pdf reports)**
   * `02_processing_and_exploration.Rmd`, data processing and corrections
   * `04_propasal.Rmd`, initial analysis proposal
