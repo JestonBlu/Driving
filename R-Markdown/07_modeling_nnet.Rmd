@@ -271,6 +271,7 @@ Accuracy by Subject:
 ```{r g, echo=FALSE}
 
 mdl.08.train$Predict = predict(mdl.08, mdl.08.train, type = "raw")
+mdl.08.test$Predict = predict(mdl.08, mdl.08.test, type = "raw")
 
 subject = as.character(unique(mdl.08.train$Subject))
 

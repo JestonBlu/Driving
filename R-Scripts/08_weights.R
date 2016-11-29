@@ -7,60 +7,60 @@ library(MASS)
 library(devtools)
 library(gridExtra)
 
-f## Train single layer single node model repeatedly and Measure the relationship
+## Train single layer single node model repeatedly and Measure the relationship
 ## betwen Gender and Age
 
-load("R-Data/data-mdl-08.rda")
-
-dummies = model.matrix(~mdl.08.train$Subject - 1)
-colnames(dummies) = sort(as.character(unique(mdl.08.train$Subject)))
-mdl.13.train = cbind(dummies, mdl.08.train[, c(2:4, 6:13)])
-
-fun = function(x) 1/(1 + exp(-x))
-
-results = data.frame()
-
-for (i in 1:1000) {
-
-    fit = nnet(Texting ~ Age_Old * Gender_Male + ., data = mdl.13.train, range = 0.0,
-        size = 1, maxit = 100, decay = 0.1, trace = FALSE)
-
-    OM = fit$wts[1] + fit$wts[2] + fit$wts[3] + fit$wts[71]
-    YM = fit$wts[1] + fit$wts[3]
-    OF = fit$wts[1] + fit$wts[2]
-    YF = fit$wts[1]
-    OM.S = fun(OM)
-    YM.S = fun(YM)
-    OF.S = fun(OF)
-    YF.S = fun(YF)
-    OM.O = fun(OM.S * fit$wt[73] + fit$wt[72])
-    YM.O = fun(YM.S * fit$wt[73] + fit$wt[72])
-    OF.O = fun(OF.S * fit$wt[73] + fit$wt[72])
-    YF.O = fun(YF.S * fit$wt[73] + fit$wt[72])
-
-    results = rbind(results, data.frame(Trial = i, OM, YM, OF, YF,
-                                        OM.S, YM.S, OF.S, YF.S,
-                                        OM.O, YM.O, OF.O, YF.O))
-    print(i)
-
-}
-
-hist(results$OM, breaks = 20)
-hist(results$YM, breaks = 20)
-hist(results$OF, breaks = 20)
-hist(results$YF, breaks = 20)
-
-hist(abs(results$OM), breaks = 20)
-hist(abs(results$YM), breaks = 20)
-hist(abs(results$OF), breaks = 20)
-hist(abs(results$YF), breaks = 20)
-
-hist(results$OM / results$YM, breaks = 50, xlim = c(-5, 5))
-hist(results$OM / results$YF, breaks = 40, xlim = c(-5, 5))
-hist(results$OM / results$OF, breaks = 20)
-hist(results$YM / results$YF, breaks = 20)
-hist(results$YM / results$OF, breaks = 20)
-hist(results$OF / results$YF, breaks = 20)
+# load("R-Data/data-mdl-08.rda")
+# 
+# dummies = model.matrix(~mdl.08.train$Subject - 1)
+# colnames(dummies) = sort(as.character(unique(mdl.08.train$Subject)))
+# mdl.13.train = cbind(dummies, mdl.08.train[, c(2:4, 6:13)])
+# 
+# fun = function(x) 1/(1 + exp(-x))
+# 
+# results = data.frame()
+# 
+# for (i in 1:1000) {
+# 
+#     fit = nnet(Texting ~ Age_Old * Gender_Male + ., data = mdl.13.train, range = 0.0,
+#         size = 1, maxit = 100, decay = 0.1, trace = FALSE)
+# 
+#     OM = fit$wts[1] + fit$wts[2] + fit$wts[3] + fit$wts[71]
+#     YM = fit$wts[1] + fit$wts[3]
+#     OF = fit$wts[1] + fit$wts[2]
+#     YF = fit$wts[1]
+#     OM.S = fun(OM)
+#     YM.S = fun(YM)
+#     OF.S = fun(OF)
+#     YF.S = fun(YF)
+#     OM.O = fun(OM.S * fit$wt[73] + fit$wt[72])
+#     YM.O = fun(YM.S * fit$wt[73] + fit$wt[72])
+#     OF.O = fun(OF.S * fit$wt[73] + fit$wt[72])
+#     YF.O = fun(YF.S * fit$wt[73] + fit$wt[72])
+# 
+#     results = rbind(results, data.frame(Trial = i, OM, YM, OF, YF,
+#                                         OM.S, YM.S, OF.S, YF.S,
+#                                         OM.O, YM.O, OF.O, YF.O))
+#     print(i)
+# 
+# }
+# 
+# hist(results$OM, breaks = 20)
+# hist(results$YM, breaks = 20)
+# hist(results$OF, breaks = 20)
+# hist(results$YF, breaks = 20)
+# 
+# hist(abs(results$OM), breaks = 20)
+# hist(abs(results$YM), breaks = 20)
+# hist(abs(results$OF), breaks = 20)
+# hist(abs(results$YF), breaks = 20)
+# 
+# hist(results$OM / results$YM, breaks = 50, xlim = c(-5, 5))
+# hist(results$OM / results$YF, breaks = 40, xlim = c(-5, 5))
+# hist(results$OM / results$OF, breaks = 20)
+# hist(results$YM / results$YF, breaks = 20)
+# hist(results$YM / results$OF, breaks = 20)
+# hist(results$OF / results$YF, breaks = 20)
 
 
 ## Look at the best model
@@ -68,21 +68,65 @@ hist(results$OF / results$YF, breaks = 20)
 ## Look at the distribution of weights for Age and Gender_Male
 
 load("R-Models/mdl_08_nnet.rda")
+load("R-Data/data-mdl-08.rda")
 
+s1.pos = seq(from = 38, to = 6900, by = 69)
 s2.pos = seq(from = 2, to = 6900, by = 69)
+s3.pos = seq(from = 3, to = 6900, by = 69)
+s4.pos = seq(from = 22, to = 6900, by = 69)
+
+subject1 = mdl.08$finalModel$wts[s1.pos]
+subject2 = mdl.08$finalModel$wts[s2.pos]
+subject3 = mdl.08$finalModel$wts[s3.pos]
+subject4 = mdl.08$finalModel$wts[s4.pos]
+
+subjects = data.frame(subject1, subject2, subject3, subject4)
+
+
+g1 = ggplot(subjects) + 
+  geom_histogram(aes(x = subject1)) + 
+  scale_x_continuous("weights") +
+  ggtitle("Subject 38 (51% Accuracy)") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+g2 = ggplot(subjects) + 
+  geom_histogram(aes(x = subject2)) + 
+  scale_x_continuous("weights") + 
+  ggtitle("Subject 2 (71% Accuracy)") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+g3 = ggplot(subjects) + 
+  geom_histogram(aes(x = subject3)) + 
+  scale_x_continuous("weights") +
+  ggtitle("Subject 3 (88% Accuracy)") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+g4 = ggplot(subjects) + 
+  geom_histogram(aes(x = subject4)) + 
+  scale_x_continuous("weights") +
+  ggtitle("Subject 22 (97% Accuracy") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+grid.arrange(g1, g2, g3, g4, nrow = 2)
+
+
 ag.pos = seq(from = 60, to = 6900, by = 69)
 gn.pos = seq(from = 61, to = 6900, by = 69)
 
-subject2 = mdl.08$finalModel$wts[s2.pos]
 age = mdl.08$finalModel$wts[ag.pos]
 gender = mdl.08$finalModel$wts[gn.pos]
 
 
 hist(age, breaks = 20)
 hist(gender, breaks = 20)
-summary(subject2)
-sqrt(var(subject2))/sqrt(100)
 hist(age/gender)
+
+hist(subject2, breaks = 15)
+hist(subject3, breaks = 15)
+hist(subject4, breaks = 15)
+hist(subject5, breaks = 15)
+
+
 
 ## Sum up the weights from the subjects
 x = as.character(unique(mdl.08.train$Subject))
@@ -129,12 +173,12 @@ for (i in seq(-1, 1, 0.1)) {
 test.Neutral$predict = predict(mdl.08, test.Neutral, type = "prob")[, 2]
 
 ggplot(test.Neutral) +
-  geom_boxplot(aes(x = Neutral, y = predict, group = Neutral), alpha = 0.3) +
+  geom_boxplot(aes(x = Neutral, y = predict, group = Neutral), alpha = 0.7) +
   geom_smooth(aes(x = Neutral, y = predict))
 
 
 ggplot(test.Neutral) +
-  geom_boxplot(aes(x = Neutral, y = predict, group = Neutral), alpha = 0.3) +
+  geom_boxplot(aes(x = Neutral, y = predict, group = Neutral), alpha = 0.7) +
   geom_smooth(aes(x = Neutral, y = predict)) +
   facet_grid(Age_Old ~ Gender_Male)
 
@@ -372,8 +416,6 @@ summary(results$OF/results$YF); sd(results$OF/results$YF)/1000
 
 
 ## Relative Importance
-source_gist('6206737')
-
 gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
                   y.lab=NULL, wts.only = F){
   
@@ -590,8 +632,12 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
   
 }
 
+rel.imp = gar.fun(out.var = "Texting", mod.in = mdl.08$finalModel, bar.plot = FALSE)
+rel.imp$Subject = row.names(rel.imp)
+rel.imp$Subject = gsub(pattern = "Subject", replacement = "", x = rel.imp$Subject)
 
-rel.imp = gar.fun(out.var = "Texting", mod.in = mdl.08, bar.plot = FALSE)
+
+
 
 ## Look at relative importance by accuracy
 
@@ -599,36 +645,83 @@ rel.imp = gar.fun(out.var = "Texting", mod.in = mdl.08, bar.plot = FALSE)
 
 ## Presentation Plots
 x1 = ggplot(test.Anger) +
-  geom_boxplot(aes(x = Anger, y = predict, group = Anger), alpha = 0.3) +
-  geom_smooth(aes(x = Anger, y = predict))
+  geom_boxplot(aes(x = Anger, y = predict, group = Anger), alpha = 0.7) +
+  geom_smooth(aes(x = Anger, y = predict)) +
+  scale_y_continuous("Probability")
 
 x2 = ggplot(test.Contempt) +
-  geom_boxplot(aes(x = Contempt, y = predict, group = Contempt), alpha = 0.3) +
-  geom_smooth(aes(x = Contempt, y = predict))
+  geom_boxplot(aes(x = Contempt, y = predict, group = Contempt), alpha = 0.7) +
+  geom_smooth(aes(x = Contempt, y = predict)) +
+  scale_y_continuous("Probability")
 
 x3 = ggplot(test.Disgust) +
-  geom_boxplot(aes(x = Disgust, y = predict, group = Disgust), alpha = 0.3) +
-  geom_smooth(aes(x = Disgust, y = predict))
+  geom_boxplot(aes(x = Disgust, y = predict, group = Disgust), alpha = 0.7) +
+  geom_smooth(aes(x = Disgust, y = predict)) +
+  scale_y_continuous("Probability")
 
 x4 = ggplot(test.Fear) +
-  geom_boxplot(aes(x = Fear, y = predict, group = Fear), alpha = 0.3) +
-  geom_smooth(aes(x = Fear, y = predict))
+  geom_boxplot(aes(x = Fear, y = predict, group = Fear), alpha = 0.7) +
+  geom_smooth(aes(x = Fear, y = predict)) +
+  scale_y_continuous("Probability")
 
 x5 = ggplot(test.Joy) +
-  geom_boxplot(aes(x = Joy, y = predict, group = Joy), alpha = 0.3) +
-  geom_smooth(aes(x = Joy, y = predict))
+  geom_boxplot(aes(x = Joy, y = predict, group = Joy), alpha = 0.7) +
+  geom_smooth(aes(x = Joy, y = predict)) +
+  scale_y_continuous("Probability")
 
 x6 = ggplot(test.Sad) +
-  geom_boxplot(aes(x = Sad, y = predict, group = Sad), alpha = 0.3) +
-  geom_smooth(aes(x = Sad, y = predict))
+  geom_boxplot(aes(x = Sad, y = predict, group = Sad), alpha = 0.7) +
+  geom_smooth(aes(x = Sad, y = predict)) +
+  scale_y_continuous("Probability")
 
 x7 = ggplot(test.Surprise) +
-  geom_boxplot(aes(x = Surprise, y = predict, group = Surprise), alpha = 0.3) +
-  geom_smooth(aes(x = Surprise, y = predict))
+  geom_boxplot(aes(x = Surprise, y = predict, group = Surprise), alpha = 0.7) +
+  geom_smooth(aes(x = Surprise, y = predict)) +
+  scale_y_continuous("Probability")
 
 x8 = ggplot(test.Neutral) +
-  geom_boxplot(aes(x = Neutral, y = predict, group = Neutral), alpha = 0.3) +
-  geom_smooth(aes(x = Neutral, y = predict))
+  geom_boxplot(aes(x = Neutral, y = predict, group = Neutral), alpha = 0.7) +
+  geom_smooth(aes(x = Neutral, y = predict)) +
+  scale_y_continuous("Probability")
 
 
 grid.arrange(x1, x2, x3, x4, x5, x6, x7, x8, nrow = 4)
+
+
+
+
+######################################################################
+
+metric = function(confusion) {
+  sensitivity = confusion[4] / (confusion[2] + confusion[4])
+  specificity = confusion[1] / (confusion[1] + confusion[3])
+  score = (sensitivity + specificity) / 2
+  return(score)
+}
+
+mdl.08.train$Predict = predict(mdl.08, mdl.08.train, type = "raw")
+mdl.08.test$Predict = predict(mdl.08, mdl.08.test, type = "raw")
+
+subject = as.character(unique(mdl.08.train$Subject))
+
+tab = data.frame()
+
+for (i in 1:59) {
+  y1 = subset(mdl.08.train, Subject == subject[i])
+  y2 = subset(mdl.08.test, Subject == subject[i])
+  
+  x1 = metric(table(Actual = y1$Texting, Predicted = y1$Predict))
+  x2 = metric(table(Actual = y2$Texting, Predicted = y2$Predict))
+  
+  tab = rbind(tab, data.frame(Subject = subject[i], Train = x1, Test = x2))
+  
+}
+
+tab = arrange(tab, desc(Test))
+tab$Train = round(tab$Train, 3)
+tab$Test = round(tab$Test, 3)
+subject = as.character(tab$Subject)
+
+rel.imp2 = na.omit(join(rel.imp, tab))
+qplot(x = rel.imp, y = Train, data = rel.imp2) + geom_smooth(method = "lm", se = FALSE)
+cor(rel.imp2$Train, rel.imp2$rel.imp)
