@@ -1,0 +1,58 @@
+---
+title: "Distracted Driving Project Outline"
+author: "Joseph Blubaugh"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    highlight: pygments
+    toc: true
+mainfont: DejaVu Sans Mono
+sansfont: DejaVu Sans Mono
+fontsize: 11pt
+geometry: margin=1in
+---
+
+# Data Extraction, Preparation, and Project Management
+
+## Data Extraction
+
+1) Simulation Files
+  a) blah blah blah
+2) Event Files
+3) Demographics
+
+## Data Preparation
+
+### Merging
+
+## Project Management
+
+### Version Control
+### File Organization
+
+
+# Exploratory Analysis and Model Proposal
+
+## Exploratory Analysis
+
+## Model Proposal
+
+  *
+
+
+# Initial Modeling
+
+## Establishing a Baseline
+
+##
+
+##
+
+# Neural Net Basics
+
+
+# Neural Net Modeling
+
+
+# Best Model Analysis
