@@ -390,14 +390,21 @@ The Neutral emotion has the highest importance, followed by Surprise, Anger, and
 It is also worth looking at the relative importance of the Subject variable since model performance increased significantly when it was added. The importance of Subject is broken out into each factor level. Relative Importance ranges from -.39 to .25. I was interested in seeing how realtive importance and model accuracy are related. There apprears to be some weak correlation between the two.
 
 ```{r f, echo=FALSE, comment=NA, warning=FALSE, message=FALSE, fig.height=3}
+rel.imp3 = arrange(rel.imp2, rel.imp)
+rel.imp3 = rel.imp3[-c(1, 2, 4, 37, 56, 58), ]
+
 ggplot(rel.imp2, aes(x = rel.imp, y = Test)) +
-  geom_point() +
+  geom_point(color = "red") +
+  geom_point(aes(x = rel.imp, y = Test), color = "black", data = rel.imp3) +
   geom_smooth(se = FALSE, method = "lm", color = "black", size = .25) +
-  annotate(x = -.35, y = .5, geom = "text", label = "Correlation: -.25") +
+  stat_ellipse(lty = 2) +
+  annotate(x = -.35, y = .50, geom = "text", label = "Correlation (All Points): -.25", hjust = 0) +
+  annotate(x = -.35, y = .45, geom = "text", label = "Correlation (No Red):   -.16", hjust = 0) +
   scale_x_continuous("Relative Imporance") +
   scale_y_continuous("Testing Set Accuracy") +
-  ggtitle("Relative Importance vs Model Accuracy by Subject") +
+  ggtitle("Relative Importance vs Model Accuracy by Subject\n(--- 95% Confidence Ellipse)") +
   theme(plot.title = element_text(hjust = .5))
+
 ```
 
 \newpage

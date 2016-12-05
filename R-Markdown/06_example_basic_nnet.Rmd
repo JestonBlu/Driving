@@ -24,6 +24,8 @@ The following diagrams are an example of a basic neural net with 2 predictor var
 
 Neural networks require an activation function to transform the input into the appropriate output. In the case of this analysis I am trying to predict texting events so I only want predictions between 0 and 1. An appropriate activation function for this is sigmoid (S(x)).
 
+\newpage
+
 Weights are initially chosen randomly so neural nets have an iterative process to minimize error by feeding the training error back through the model. The change for each iteration is calculated by multiplying the first derivative of the activation function by the most recent training error.
 
 The following steps complete the update for a single training iteration:
@@ -51,4 +53,3 @@ The following steps complete the update for a single training iteration:
 The diagram below shows the updated neural net for one iteration of the training cycle. It shows that the updated error is slightly smaller than the original training error using random weights.
 
 ![Hidden Weights](../Plots/07_basic_diag3.png)
-

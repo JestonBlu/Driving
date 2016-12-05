@@ -10,57 +10,163 @@ library(gridExtra)
 ## Train single layer single node model repeatedly and Measure the relationship
 ## betwen Gender and Age
 
-# load("R-Data/data-mdl-08.rda")
-# 
-# dummies = model.matrix(~mdl.08.train$Subject - 1)
-# colnames(dummies) = sort(as.character(unique(mdl.08.train$Subject)))
-# mdl.13.train = cbind(dummies, mdl.08.train[, c(2:4, 6:13)])
-# 
-# fun = function(x) 1/(1 + exp(-x))
-# 
-# results = data.frame()
-# 
-# for (i in 1:1000) {
-# 
-#     fit = nnet(Texting ~ Age_Old * Gender_Male + ., data = mdl.13.train, range = 0.0,
-#         size = 1, maxit = 100, decay = 0.1, trace = FALSE)
-# 
-#     OM = fit$wts[1] + fit$wts[2] + fit$wts[3] + fit$wts[71]
-#     YM = fit$wts[1] + fit$wts[3]
-#     OF = fit$wts[1] + fit$wts[2]
-#     YF = fit$wts[1]
-#     OM.S = fun(OM)
-#     YM.S = fun(YM)
-#     OF.S = fun(OF)
-#     YF.S = fun(YF)
-#     OM.O = fun(OM.S * fit$wt[73] + fit$wt[72])
-#     YM.O = fun(YM.S * fit$wt[73] + fit$wt[72])
-#     OF.O = fun(OF.S * fit$wt[73] + fit$wt[72])
-#     YF.O = fun(YF.S * fit$wt[73] + fit$wt[72])
-# 
-#     results = rbind(results, data.frame(Trial = i, OM, YM, OF, YF,
-#                                         OM.S, YM.S, OF.S, YF.S,
-#                                         OM.O, YM.O, OF.O, YF.O))
-#     print(i)
-# 
-# }
-# 
-# hist(results$OM, breaks = 20)
-# hist(results$YM, breaks = 20)
-# hist(results$OF, breaks = 20)
-# hist(results$YF, breaks = 20)
-# 
-# hist(abs(results$OM), breaks = 20)
-# hist(abs(results$YM), breaks = 20)
-# hist(abs(results$OF), breaks = 20)
-# hist(abs(results$YF), breaks = 20)
-# 
-# hist(results$OM / results$YM, breaks = 50, xlim = c(-5, 5))
-# hist(results$OM / results$YF, breaks = 40, xlim = c(-5, 5))
-# hist(results$OM / results$OF, breaks = 20)
-# hist(results$YM / results$YF, breaks = 20)
-# hist(results$YM / results$OF, breaks = 20)
-# hist(results$OF / results$YF, breaks = 20)
+load("R-Data/data-mdl-08.rda")
+
+dummies = model.matrix(~mdl.08.train$Subject - 1)
+colnames(dummies) = sort(as.character(unique(mdl.08.train$Subject)))
+mdl.13.train = cbind(dummies, mdl.08.train[, c(2:4, 6:13)])
+
+fun = function(x) 1/(1 + exp(-x))
+
+results = data.frame()
+
+for (i in 1:1000) {
+
+    fit = nnet(Texting ~ Age_Old * Gender_Male + Age_Old + Gender_Male, data = mdl.13.train, 
+               size = 1, maxit = 100, trace = FALSE)
+    
+    OM = fit$wts[2] + fit$wts[3] + fit$wts[4]
+    YM = fit$wts[3]
+    OF = fit$wts[2]
+    YF = fit$wts[1]
+    OM.S = fun(OM)
+    YM.S = fun(YM)
+    OF.S = fun(OF)
+    YF.S = fun(YF)
+    OM.O = fun(OM.S * fit$wt[6] + fit$wt[5])
+    YM.O = fun(YM.S * fit$wt[6] + fit$wt[5])
+    OF.O = fun(OF.S * fit$wt[6] + fit$wt[5])
+    YF.O = fun(YF.S * fit$wt[6] + fit$wt[5])
+
+    results = rbind(results, data.frame(Trial = i, OM, YM, OF, YF,
+                                        OM.S, YM.S, OF.S, YF.S,
+                                        OM.O, YM.O, OF.O, YF.O))
+    print(i)
+
+}
+
+hist(results$OM, breaks = 20)
+hist(results$YM, breaks = 20)
+hist(results$OF, breaks = 20)
+hist(results$YF, breaks = 20)
+
+hist(results$OM / results$YM, breaks = 200, xlim = c(-15, 15))
+hist(results$OM / results$YF, breaks = 200, xlim = c(-15, 15))
+hist(results$OM / results$OF, breaks = 200, xlim = c(-15, 15))
+hist(results$YM / results$YF, breaks = 200, xlim = c(-15, 15))
+hist(results$YM / results$OF, breaks = 200, xlim = c(-15, 15))
+hist(results$OF / results$YF, breaks = 200, xlim = c(-15, 15))
+
+summary(results$OM / results$YM)
+summary(results$OM / results$YF)
+summary(results$OM / results$OF)
+summary(results$YM / results$YF)
+summary(results$YM / results$OF)
+summary(results$OF / results$YF)
+
+x = with(results, OM/YM)
+x = sample(x, size = 10000, replace = TRUE)
+hist(x)
+
+length(which(x > 1))/10000
+
+
+####################################################################################3
+
+## Cauchy Test
+x = sort(with(results, OM/YM))
+fitdistr(x, densfun = "cauchy")
+loc = .716; scl = .376
+
+plot(x = x, y = x)
+ks.test(x = x, y = pcauchy, location = loc, scale = scl)
+
+par(mfrow = c(2,2))
+qqplot(qcauchy(ppoints(1000), location = loc, scale = scl), x, main = "QQ Plot")
+qqline(x, distribution = function(p) qcauchy(p, location = loc, scale = scl))
+boxplot(x, main = "Boxplot")
+hist(x, freq = FALSE, main = "Histogram with Density Curve")
+lines(density(x))
+plot(ecdf(x), main = "Empiracle CDF")
+
+## Cauchy Test
+x = sort(with(results, OM/YF))
+fitdistr(x, densfun = "cauchy")
+loc = .716; scl = .376
+
+plot(x = x, y = x)
+ks.test(x = x, y = pcauchy, location = loc, scale = scl)
+
+par(mfrow = c(2,2))
+qqplot(qcauchy(ppoints(1000), location = loc, scale = scl), x, main = "QQ Plot")
+qqline(x, distribution = function(p) qcauchy(p, location = loc, scale = scl))
+boxplot(x, main = "Boxplot")
+plot(density(x), main = "Kernel Density")
+plot(ecdf(x), main = "Empiracle CDF")
+
+## Cauchy Test
+x = sort(with(results, OM/OF))
+fitdistr(x, densfun = "cauchy")
+loc = .716; scl = .376
+
+plot(x = x, y = x)
+ks.test(x = x, y = pcauchy, location = loc, scale = scl)
+
+par(mfrow = c(2,2))
+qqplot(qcauchy(ppoints(1000), location = loc, scale = scl), x, main = "QQ Plot")
+qqline(x, distribution = function(p) qcauchy(p, location = loc, scale = scl))
+boxplot(x, main = "Boxplot")
+plot(density(x), main = "Kernel Density")
+plot(ecdf(x), main = "Empiracle CDF")
+
+## Cauchy Test
+x = sort(with(results, YM/YF))
+fitdistr(x, densfun = "cauchy")
+loc = .716; scl = .376
+
+plot(x = x, y = x)
+ks.test(x = x, y = pcauchy, location = loc, scale = scl)
+
+par(mfrow = c(2,2))
+qqplot(qcauchy(ppoints(1000), location = loc, scale = scl), x, main = "QQ Plot")
+qqline(x, distribution = function(p) qcauchy(p, location = loc, scale = scl))
+boxplot(x, main = "Boxplot")
+plot(density(x), main = "Kernel Density")
+plot(ecdf(x), main = "Empiracle CDF")
+
+
+## Cauchy Test
+x = sort(with(results, YM/OF))
+fitdistr(x, densfun = "cauchy")
+loc = .716; scl = .376
+
+plot(x = x, y = x)
+ks.test(x = x, y = pcauchy, location = loc, scale = scl)
+
+par(mfrow = c(2,2))
+qqplot(qcauchy(ppoints(1000), location = loc, scale = scl), x, main = "QQ Plot")
+qqline(x, distribution = function(p) qcauchy(p, location = loc, scale = scl))
+boxplot(x, main = "Boxplot")
+plot(density(x), main = "Kernel Density")
+plot(ecdf(x), main = "Empiracle CDF")
+
+## Cauchy Test
+x = sort(with(results, OF/YF))
+fitdistr(x, densfun = "cauchy")
+loc = .716; scl = .376
+
+plot(x = x, y = x)
+ks.test(x = x, y = pcauchy, location = loc, scale = scl)
+
+par(mfrow = c(2,2))
+qqplot(qcauchy(ppoints(1000), location = loc, scale = scl), x, main = "QQ Plot")
+qqline(x, distribution = function(p) qcauchy(p, location = loc, scale = scl))
+boxplot(x, main = "Boxplot")
+plot(density(x), main = "Kernel Density")
+plot(ecdf(x), main = "Empiracle CDF")
+
+
+########################################################################################
 
 
 ## Look at the best model
@@ -372,6 +478,50 @@ ggplot(test.Surprise) +
 ggplot(test.Surprise) + geom_boxplot(aes(x = Surprise, y = predict, group = Surprise),
     alpha = 0.3) + geom_smooth(aes(x = Surprise, y = predict)) + facet_grid(Age_Old ~
     Gender_Male)
+
+
+#############################
+## combine all of the tests
+
+test.Sad$Pred = 0
+test.Sad$Pred[test.Sad$predict > .5] = 1
+test.Surprise$Pred = 0
+test.Surprise$Pred[test.Surprise$predict > .5] = 1
+test.Joy$Pred = 0
+test.Joy$Pred[test.Joy$predict > .5] = 1
+test.Fear$Pred = 0
+test.Fear$Pred[test.Fear$predict > .5] = 1
+test.Disgust$Pred = 0
+test.Disgust$Pred[test.Disgust$predict > .5] = 1
+test.Contempt$Pred = 0
+test.Contempt$Pred[test.Contempt$predict > .5] = 1
+test.Anger$Pred = 0
+test.Anger$Pred[test.Anger$predict > .5] = 1
+test.Neutral$Pred = 0
+test.Neutral$Pred[test.Neutral$predict > .5] = 1
+
+mdl.Sad = glm(Pred ~ Age_Old * Gender_Male * Sad, data = test.Sad, family = binomial())
+mdl.Surprise = glm(Pred ~ Age_Old * Gender_Male * Surprise, data = test.Surprise, family = binomial())
+mdl.Joy = glm(Pred ~ Age_Old * Gender_Male * Joy, data = test.Joy, family = binomial())
+mdl.Fear = glm(Pred ~ Age_Old * Gender_Male * Fear, data = test.Fear, family = binomial())
+mdl.Disgust = glm(Pred ~ Age_Old * Gender_Male * Disgust, data = test.Disgust, family = binomial())
+mdl.Contempt = glm(Pred ~ Age_Old * Gender_Male * Contempt, data = test.Contempt, family = binomial())
+mdl.Anger = glm(Pred ~ Age_Old * Gender_Male * Anger, data = test.Anger, family = binomial())
+mdl.Neutral = glm(Pred ~ Age_Old * Gender_Male * Neutral, data = test.Neutral, family = binomial())
+
+summary(aov(mdl.Neutral))
+summary(aov(mdl.Surprise))
+summary(aov(mdl.Anger))
+summary(aov(mdl.Disgust))
+summary(aov(mdl.Fear))
+summary(aov(mdl.Sad))
+summary(aov(mdl.Joy))
+summary(aov(mdl.Contempt))
+
+
+
+  
+#############################
 
 
 

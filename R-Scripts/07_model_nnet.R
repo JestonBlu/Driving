@@ -26,10 +26,10 @@ fit.control = trainControl(method = "cv", number = 10)
 
 ## Create combination of model parameters to train on
 search.grid = expand.grid(decay = c(0, .1, .2),
-                          size = c(1, 5, 15, 30, 50, 75, 100))
+                          size = c(50, 75, 100))
 
 ## Limit the iterations and weights each model can run
-maxIt = 100; maxWt = 15000
+maxIt = 500; maxWt = 150000
 
 
 
