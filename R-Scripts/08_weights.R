@@ -173,18 +173,18 @@ plot(ecdf(x), main = "Empiracle CDF")
 ## Treat each node as an individual regresion model
 ## Look at the distribution of weights for Age and Gender_Male
 
-load("R-Models/mdl_08_nnet.rda")
-load("R-Data/data-mdl-08.rda")
+load("R-Models/mdl_12_nnet.rda")
+load("R-Data/data-mdl-12.rda")
 
-s1.pos = seq(from = 38, to = 6900, by = 69)
-s2.pos = seq(from = 2, to = 6900, by = 69)
-s3.pos = seq(from = 3, to = 6900, by = 69)
-s4.pos = seq(from = 22, to = 6900, by = 69)
+s1.pos = seq(from = 38, to = 10892, by = 109)
+s2.pos = seq(from = 2, to = 10892, by = 109)
+s3.pos = seq(from = 3, to = 10892, by = 109)
+s4.pos = seq(from = 22, to = 10892, by = 109)
 
-subject1 = mdl.08$finalModel$wts[s1.pos]
-subject2 = mdl.08$finalModel$wts[s2.pos]
-subject3 = mdl.08$finalModel$wts[s3.pos]
-subject4 = mdl.08$finalModel$wts[s4.pos]
+subject1 = mdl.12$finalModel$wts[s1.pos]
+subject2 = mdl.12$finalModel$wts[s2.pos]
+subject3 = mdl.12$finalModel$wts[s3.pos]
+subject4 = mdl.12$finalModel$wts[s4.pos]
 
 subjects = data.frame(subject1, subject2, subject3, subject4)
 
@@ -262,7 +262,7 @@ load("R-Data/data-mdl-08.rda")
 
 ## Neutral
 
-x = unique(mdl.08.train[, c("Subject", "Age_Old", "Gender_Male")])
+x = unique(mdl.12.train[, c("Subject", "Age_Old", "Gender_Male")])
 dta = cbind(x, data.frame(Time = 0, Anger = 0, Contempt = 0, Disgust = 0, Fear = 0,
     Joy = 0, Sad = 0, Surprise = 0))
 
@@ -276,7 +276,7 @@ for (i in seq(-1, 1, 0.1)) {
     test.Neutral = rbind(test.Neutral, x)
 }
 
-test.Neutral$predict = predict(mdl.08, test.Neutral, type = "prob")[, 2]
+test.Neutral$predict = predict(mdl.12, test.Neutral, type = "prob")[, 2]
 
 ggplot(test.Neutral) +
   geom_boxplot(aes(x = Neutral, y = predict, group = Neutral), alpha = 0.7) +
@@ -782,12 +782,15 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
   
 }
 
-rel.imp = gar.fun(out.var = "Texting", mod.in = mdl.08$finalModel, bar.plot = FALSE)
+rel.imp = gar.fun(out.var = "Texting", mod.in = mdl.12$finalModel, bar.plot = FALSE)
 rel.imp$Subject = row.names(rel.imp)
 rel.imp$Subject = gsub(pattern = "Subject", replacement = "", x = rel.imp$Subject)
 
+rel.imp = rel.imp[-(grep("T", rel.imp$Subject)), ]
 
-
+ggplot(rel.imp, aes(x = reorder(Subject, rel.imp), y = rel.imp)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
 
 ## Look at relative importance by accuracy
 
