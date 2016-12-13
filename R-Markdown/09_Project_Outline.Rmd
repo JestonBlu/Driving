@@ -202,21 +202,26 @@ In order to assess how the probability of a texting event changes conditional on
     3) Fear, Anger, and Disgust, while not the most important variables, exibit a smoother relationship to the probability of texting events as their values change. The median prediction of digust tends to increase away from the baseline. As fear increases, the probabiliy of texting events diminishes to 0. As anger moves away from the baseline, the variation in predictions increase although for the most part the median prediction remains low except for the low point of the interval. All three emotions show a lot of variability in the predictions which may indicate why the variable importance scores are not very big.
     4) Surprise and Neutral are the two most important variables. As their values increase the probability of texting events increases. The variation in predictions is less than the other emotions as well. Surprise has more outlier predictions than Neutral which may indicate why its variable importance score is lower than Neutral.
 
+\newpage
+
 ## Demographic Effects
 
-To assess the significance of the demographics data I used the output of the neural net predictions to run an analysis of variance to see if gender and age had an effect on the probability of texting events when emotions changed. All emotions except one were held constant during the predictions so I expected all of the emotions to test as being significant individually. The following interpretations are relevant to prediction effects only.
+To assess the significance of the demographics data I used the output of the best model to run an analysis of variance in order see if gender and age had an effect on the probability of texting events when emotions changed. All emotions except one were held constant during the predictions so I expected all of the emotions to test as being significant individually therefore emotion is redundant and not in the table below as a variable. Each column represents the significance of each variable when the emotion in question changes with all other emotions held constant. The following interpretations are relevant to prediction effects only. Emotions are listed in the order of their relative importance.
 
-| Variable             | Neutral | Surprise | Anger | Disgust | Fear | Sad | Joy | Contempt |
-|:---------------------|:-------:|:--------:|:-----:|:-------:|:----:|:---:|:---:|:--------:|
-| Age                  |    .    |    **    |  ***  |   ***   | ***  |     | *** |    *     |
-| Gender               |   ***   |   ***    |       |         |  **  |     | *** |    .     |
-| Age*Gender           |   ***   |          |  ***  |    *    |      |     |  .  |   ***    |
-| Emotion              |   ***   |   ***    |  ***  |   ***   | ***  | *** | *** |   ***    |
-| Emotion*Age          |         |    **    |   .   |   ***   | ***  | *** | *** |    **    |
-| Emotion*Gender       |   ***   |          |       |         | ***  | *** |  *  |          |
-| Emotion\*Age\*Gender |    *    |          |   *   |   ***   | ***  | *** |     |    **    |
+| Variable              | Neutral | Surprise | Anger | Disgust | Fear | Sad | Joy | Contempt |
+|:----------------------|:-------:|:--------:|:-----:|:-------:|:----:|:---:|:---:|:--------:|
+| Age                   |    .    |    **    |  ***  |   ***   | ***  |     | *** |    *     |
+| Gender                |   ***   |   ***    |       |         |  **  |     | *** |    .     |
+| Age\*Gender           |   ***   |          |  ***  |    *    |      |     |  .  |   ***    |
+| Emotion\*Age          |         |    **    |   .   |   ***   | ***  | *** | *** |    **    |
+| Emotion\*Gender       |   ***   |          |       |         | ***  | *** |  *  |          |
+| Emotion\*Age\*Gender  |    *    |          |   *   |   ***   | ***  | *** |     |    **    |
 
-**Significance**: [. border line] [* mildly significant] [** significant] [*** very signficant]
+**Significance**: [. p-value < .1] [* p-value <.05] [** p-value < .01] [*** p-value < .001]
 
   * **Takeaways**:
-    1) Age had a significant effect
+    1) The main effect of age is significant for 5 of the 8 emotions
+    2) The main effect of gender is significant for 4 of the 8 emotions
+    3) There is a significant 2-way interaction between age and gender for 4 of the 8 emotions
+    4) Between Neutral and Surprise, all of the variables and interactions are significant
+    5) There tends to be more significant variables for the emotions that are less important. Fear, Sad, Joy, and Contempt have a lot of overlapping variables that are significant. This might imply a reason that the neural net sees these variables as less important. They could have a similar effects.
