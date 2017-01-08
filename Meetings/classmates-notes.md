@@ -1,0 +1,13 @@
+Michael:
+
+Michael is using Bayesian Logistic Regression to detect whether an event is occuring based on standard deviation calculations for each emotion. I dont entirely understand where the N=761 is coming from. Im assuming he is calculating the standard deviation grouped by event for 6 of the trials, but he does not specify that in his outline. It looks like he has an upcoming section for this, but it would be nice to see some visual diagnostics of the MCMC so he can make statements about whether there is good mixing and evaluate if there is correlation in the monte carlo chain. Since he is also showing a frequentist approach it might be worth spending some time comparing the two outputs. Overall I understand what he is doing and it makes sense, I dont have any other recommendations as this time.
+
+
+Tempus:
+
+Tempus' outline is easy to read and understand. She is using multinomial regression, grouping emotions as her response variable and using demographics and events as her predictor variables. She doesn't specify exactly how she is getting the data down to 602 rows. I am a little confused on what she means by "time interval" in the first paragraph of "Subsetting the data". I would like to hear her elaborate on how she got to her modeling data set. Also the reference level section of her outline confused me. Im not sure what she was communicating there. I wonder if the poor model accuracy says something about the difference in means of the emotions after they are grouped into positive, negative and neutral categories. The 2 positive emotions, joy and surprise have some of the lowest values of all of the emotions. I would like to see a table that shows the relative proportions of positive, negative, and neutral emotions from both the training and testing sets. If the two sets are very different it might explain the poor testing accuracy.
+
+
+Zac:
+
+I like what Zac has done up to this point with principle components to explain the variance makeup in the dataset. His outline makes sense but it may be too broad. He has sections for linear regression and time series modeling in his outline. I would probably recommend doing one instead of both since it will probably take a lot of time. Im also confused on if he is planning on using the principle components in his modeling. He has comments in his outline about issues with data correlation and one of the nice things about pricipal components is that they are independent of one another so he could use principal components as his predictor variables. It is unclear to me what his response variable is. At this point of would recommend not doing the time series analysis and sticking to some sort of pricipal component regression.

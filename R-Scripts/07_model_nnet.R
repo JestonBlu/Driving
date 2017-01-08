@@ -30,7 +30,7 @@ search.grid = expand.grid(decay = c(0, .1, .2),
                           size = c(1, 10, 25, 50))
 
 ## Limit the iterations and weights each model can run
-maxIt = 100; maxWt = 150000
+maxIt = 500; maxWt = 150000
 
 
 
@@ -310,7 +310,7 @@ metric(table(Actual = mdl.10.test$Texting, Predicted = y))
 
 mdl.10 = fit
 
-save("mdl.10", file = "R-Models/mdl_09_nnet.rda")
+save("mdl.10", file = "R-Models/mdl_10_nnet.rda")
 rm(x, y, fit, mdl.10, mdl.10.train, mdl.10.test) 
 
 

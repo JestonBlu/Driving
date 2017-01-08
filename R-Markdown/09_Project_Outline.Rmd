@@ -135,21 +135,32 @@ In order to standardize the results of my analysis, I have elected to use the R 
 
 | Model     | Data Processing  | Data Split | MaxItr | Converged | Size | Decay | Training | Testing |
 |:----------|:-----------------|:-----------|:-------|:----------|:-----|:------|:---------|:--------|
-| Model 1:  | Original         | 365 Split  | 500    | No        | 15   | .20   | .783     | .690    |
-| Model 2:  | Original         | Entire Sim | 500    | No        | 100  | .10   | .798     | .796    |
-| Model 3:  | Differencing     | 365 Split  | 500    | Yes       | 15   | .05   | .594     | .571    |
-| Model 4:  | Differencing     | Entire Sim | 500    | Yes       | 15   | .05   | .592     | .591    |
-| Model 5:  | Moving Avg       | 365 Split  | 500    | Yes       | 30   | .05   | .525     | .527    |
-| Model 6:  | Moving Avg       | Entire Sim | 500    | Yes       | 10   | .00   | .528     | .528    |
-| Model 7:  | 1/2 Sec Cut      | 365 Split  | 500    | Yes       | 100  | .00   | .884     | .722    |
-| Model 8:  | 1/2 Sec Cut      | Entire Sim | 500    | Yes       | 100  | .10   | .839     | .816    |
-| Model 9:  | 1/2 Sec Diff     | 365 Split  | 500    | Yes       | 100  | .10   | .716     | .647    |
-| Model 10: | 1/2 Sec Diff     | Entire Sim | 100    | Yes       | 100  | .10   | .687     | .625    |
-| Model 11: | 1/2 Sec Cut Stat | 365 Split  | 100    | Yes       | 100  | .00   | .849     | .717    |
-| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 100    | Yes       | 75   | .10   | .826     | .809    |
+| Model 1:  | Original         | 365 Split  | 100    | No        | 50   | .20   | .760     | .676    |
+| Model 2:  | Original         | Entire Sim | 100    | No        | 50   | .20   | .754     | .754    |
+| Model 3:  | Differencing     | 365 Split  | 100    | Yes       | 10   | .00   | .518     | .516    |
+| Model 4:  | Differencing     | Entire Sim | 100    | Yes       | 25   | .10   | .572     | .571    |
+| Model 5:  | Moving Avg       | 365 Split  | 100    | Yes       | 10   | .00   | .503     | .502    |
+| Model 6:  | Moving Avg       | Entire Sim | 100    | Yes       | 10   | .00   | .528     | .528    |
+| Model 7:  | 1/2 Sec Cut      | 365 Split  | 100    | Yes       | 50   | .10   | .820     | .698    |
+| Model 8:  | 1/2 Sec Cut      | Entire Sim | 100    | Yes       | 50   | .20   | .788     | .779    |
+| Model 9:  | 1/2 Sec Diff     | 365 Split  | 100    | Yes       | 50   | .10   | .716     | .647    |
+| Model 10: | 1/2 Sec Diff     | Entire Sim | 100    | Yes       | 50   | .20   | .682     | .622    |
+| Model 11: | 1/2 Sec Cut Stat | 365 Split  | 100    | Yes       | 50   | .10   | .846     | .716    |
+| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 100    | Yes       | 50   | .20   | .820     | .803    |
+
+## Further Training Best Models
+
+| Model     | Data Processing  | Data Split | MaxItr | Converged | Size | Decay | Training | Testing |
+|:----------|:-----------------|:-----------|:-------|:----------|:-----|:------|:---------|:--------|
+| Model 2:  | Original         | Entire Sim | 250    | No        | 50   | .10   | .782     | .781    |
+| Model 2:  | Original         | Entire Sim | 500    | No        | 50   | .00   | .796     | .794    |
+| Model 8:  | 1/2 Sec Cut      | Entire Sim | 250    | Yes       | 50   | .10   | .816     | .804    |
+| Model 8:  | 1/2 Sec Cut      | Entire Sim | 500    | Yes       | 50   | .10   | .828     | .810    |
+| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 250    | Yes       | 50   | .10   | .858     | .823    |
+| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 500    | Yes       | 50   | .20   | .864     | .823    |
 
   * **Takeaways**:
-    1) Model 8 currently has the best overall performance.
+    1) Model 12 currently has the best overall performance.
     2) Overall the models trained over the entire simulation fair better than models trained on the time split data sets. This suggests that there are could be distinct differences between two texting segments.
     3) Model 2 took 3 days to train on 6 cpus. Its interesting that it still did not converge during this time and would have continued improving if given more iterations. The testing and training scores are virtually even so Model 2 could probably be given more iterations.
     4) Overall the models built on data that was differenced perform the worst. The differnced models using the 30 second intervals is much improved over the the original differencing models.
@@ -208,14 +219,14 @@ In order to assess how the probability of a texting event changes conditional on
 
 To assess the significance of the demographics data I used the output of the best model to run an analysis of variance in order see if gender and age had an effect on the probability of texting events when emotions changed. All emotions except one were held constant during the predictions so I expected all of the emotions to test as being significant individually therefore emotion is redundant and not in the table below as a variable. Each column represents the significance of each variable when the emotion in question changes with all other emotions held constant. The following interpretations are relevant to prediction effects only. Emotions are listed in the order of their relative importance.
 
-| Variable              | Neutral | Surprise | Anger | Disgust | Fear | Sad | Joy | Contempt |
-|:----------------------|:-------:|:--------:|:-----:|:-------:|:----:|:---:|:---:|:--------:|
-| Age                   |    .    |    **    |  ***  |   ***   | ***  |     | *** |    *     |
-| Gender                |   ***   |   ***    |       |         |  **  |     | *** |    .     |
-| Age\*Gender           |   ***   |          |  ***  |    *    |      |     |  .  |   ***    |
-| Emotion\*Age          |         |    **    |   .   |   ***   | ***  | *** | *** |    **    |
-| Emotion\*Gender       |   ***   |          |       |         | ***  | *** |  *  |          |
-| Emotion\*Age\*Gender  |    *    |          |   *   |   ***   | ***  | *** |     |    **    |
+| Variable             | Neutral | Surprise | Anger | Disgust | Fear | Sad | Joy | Contempt |
+|:---------------------|:-------:|:--------:|:-----:|:-------:|:----:|:---:|:---:|:--------:|
+| Age                  |    .    |    **    |  ***  |   ***   | ***  |     | *** |    *     |
+| Gender               |   ***   |   ***    |       |         |  **  |     | *** |    .     |
+| Age\*Gender          |   ***   |          |  ***  |    *    |      |     |  .  |   ***    |
+| Emotion\*Age         |         |    **    |   .   |   ***   | ***  | *** | *** |    **    |
+| Emotion\*Gender      |   ***   |          |       |         | ***  | *** |  *  |          |
+| Emotion\*Age\*Gender |    *    |          |   *   |   ***   | ***  | *** |     |    **    |
 
 **Significance**: [. p-value < .1] [* p-value <.05] [** p-value < .01] [*** p-value < .001]
 
