@@ -70,6 +70,10 @@ pander(x, style = "rmarkdown", split.table = 120, caption = "Model 12 Data", jus
 
 ```
 
+* Model 08 (Previous Best Model) contained 11 predictor variables
+* Model 12 (Final Model) contained 50 predictor variables
+
+
 \newpage
 
 # Final Model
@@ -312,6 +316,7 @@ plot(mdl.12)
 * Increasing node size (Hidden Units) increases model accuracy with diminishing return
 * The increase in accuracy after 50 nodes is very small and takes a long time to compute
 * A positive decay (coefficient penalty) helps model accuracy, but the difference in decay of .1 and .2 is neglible
+* More complex models benefit from having a decay parameter
 
 
 \newpage
@@ -374,11 +379,23 @@ grid.arrange(g3, g2, g1, ncol = 2)
 ## Variable Importance
 
 * As the nnet continues to train it finds fewer variables are important
-  * 100 Iterations: 26 variables have relative importance > 0
-  * 250 Iterations: 25 variables have relative importance > 0
-  * 500 Iterations: 18 variables have relative importance > 0
-*
+  - 100 Iterations: 26 variables have relative importance > 0
+  - 250 Iterations: 25 variables have relative importance > 0
+  - 500 Iterations: 18 variables have relative importance > 0
 
+* Table: Variables with importance score > 0 (emotions ordered by variables importance from Model 08 (simplified model))
+
+
+| Measure | Neutral | Surprise | Anger | Disgust | Fear | Sad | Joy | Contempt |
+|:--------|:-------:|:--------:|:-----:|:-------:|:----:|:---:|:---:|:--------:|
+| mean    |    *    |    *     |   *   |    *    |      |     |     |          |
+| sd      |    *    |          |       |         |  *   |     |  *  |    *     |
+| min     |         |    *     |       |         |      |     |     |          |
+| max     |    *    |    *     |   *   |    *    |      |     |     |          |
+| med     |    *    |    *     |       |         |      |     |     |          |
+| iqr     |    *    |    *     |       |         |      |     |     |          |
+
+* The number of predictor variables related to the overall emotions is pretty consistent with the variable importance of the previous simplified model.
 
 # Demographic Effects (Model 08)
 
@@ -392,3 +409,7 @@ grid.arrange(g3, g2, g1, ncol = 2)
 | Emotion\*Age\*Gender |    *    |          |   *   |   ***   | ***  | *** |     |    **    |
 
 **Significance**: [. p-value < .1] [* p-value <.05] [** p-value < .01] [*** p-value < .001]
+
+### To do:
+
+  * THis is a table of estimated effects from the previous simplified model. The new final model is much more complex so I dont think I will be able to do a recreation of the same table. I think I will pick the top predictor variables in terms of variable importance and produce this same table.
