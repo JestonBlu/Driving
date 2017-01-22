@@ -15,6 +15,13 @@ geometry: margin=1in
 
 # Model Training Update
 
+* Reorganized Model table into 3 rounds of iterations: 100, 250, 500
+* Limited model search grid to Size = 50 (significantly longer training times and little performance impact > 50)
+* Took the best 3 models from the 100 Iteration run and increased the iterations to 250 and 500.
+* Selected model 12 as the best model which topped out at 82% accuracy for 250 Iteractions, increasing to 500 iterations did not improve the accuracy for the testing set
+
+## Round 1, 100 Iterations
+
 | Model     | Data Processing  | Data Split | MaxItr | Converged | Size | Decay | Training | Testing |
 |:----------|:-----------------|:-----------|:-------|:----------|:-----|:------|:---------|:--------|
 | Model 1:  | Original         | 365 Split  | 100    | No        | 50   | .20   | .760     | .676    |
@@ -42,33 +49,62 @@ geometry: margin=1in
 | Model 12: | 1/2 Sec Cut Stat | Entire Sim | 500    | Yes       | 50   | .20   | .864     | .823    |
 
 
-# Variable Importance
 
-```{r a, echo=FALSE, fig.height=9, warning=FALSE, message=FALSE}
+# Sample Data (first 3 rows)
+
+```{r c, echo=FALSE, comment=NA}
+
+library(pander)
+
+load("../R-Data/data-mdl-08.rda")
+x = head(mdl.08.train, 3)
+x[, 6:13] = apply(x[, 6:13], 2, function(x) round(x, 3))
+row.names(x) = NULL
+pander(x, style = "rmarkdown", split.table = 120, caption = "Model 08 Data", justify = "right")
+
+load("../R-Data/data-mdl-12.rda")
+x = head(mdl.12.train, 3)
+x[, 6:53] = apply(x[, 6:53], 2, function(x) round(x, 3))
+row.names(x) = NULL
+pander(x, style = "rmarkdown", split.table = 120, caption = "Model 12 Data", justify = "right")
+
+```
+
+* Model 08 (Previous Best Model) contained 11 predictor variables
+* Model 12 (Final Model) contained 50 predictor variables
+
+
+\newpage
+
+# Final Model
+
+```{r a, echo=FALSE, warning=FALSE, message=FALSE, comment=NA}
 library(nnet)
 library(ggplot2)
 library(plyr)
 library(MASS)
 library(devtools)
+library(reshape)
+library(reshape2)
 library(gridExtra)
 
 
 ## Relative Importance
 gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
                   y.lab=NULL, wts.only = F){
-  
+
   require(ggplot2)
   require(plyr)
-  
+
   # function works with neural networks from neuralnet, nnet, and RSNNS package
   # manual input vector of weights also okay
-  
+
   #sanity checks
   if('numeric' %in% class(mod.in)){
     if(is.null(struct)) stop('Three-element vector required for struct')
     if(length(mod.in) != ((struct[1]*struct[2]+struct[2]*struct[3])+(struct[3]+struct[2])))
       stop('Incorrect length of weight matrix for given network structure')
-    if(substr(out.var,1,1) != 'Y' | 
+    if(substr(out.var,1,1) != 'Y' |
        class(as.numeric(gsub('^[A-Z]','', out.var))) != 'numeric')
       stop('out.var must be of form "Y1", "Y2", etc.')
   }
@@ -79,19 +115,19 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
     }
     else stop('Only nnet method can be used with train object')
   }
-  
+
   #gets weights for neural network, output is list
   #if rescaled argument is true, weights are returned but rescaled based on abs value
   nnet.vals<-function(mod.in,nid,rel.rsc,struct.out=struct){
-    
+
     require(scales)
     require(reshape)
-    
+
     if('numeric' %in% class(mod.in)){
       struct.out<-struct
       wts<-mod.in
     }
-    
+
     #neuralnet package
     if('nn' %in% class(mod.in)){
       struct.out<-unlist(lapply(mod.in$weights[[1]],ncol))
@@ -100,22 +136,22 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
         length(mod.in$model.list$variables),
         struct.out,
         length(mod.in$model.list$response)
-      )      	
-      wts<-unlist(mod.in$weights[[1]])   
+      )
+      wts<-unlist(mod.in$weights[[1]])
     }
-    
+
     #nnet package
     if('nnet' %in% class(mod.in)){
       struct.out<-mod.in$n
       wts<-mod.in$wts
     }
-    
+
     #RSNNS package
     if('mlp' %in% class(mod.in)){
       struct.out<-c(mod.in$nInputs,mod.in$archParams$size,mod.in$nOutputs)
       hid.num<-length(struct.out)-2
       wts<-mod.in$snnsObject$getCompleteWeightMatrix()
-      
+
       #get all input-hidden and hidden-hidden wts
       inps<-wts[grep('Input',row.names(wts)),grep('Hidden_2',colnames(wts)),drop=F]
       inps<-melt(rbind(rep(NA,ncol(inps)),inps))$value
@@ -125,19 +161,19 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
         tmp<-wts[grep(uni.hids[i],rownames(wts)),grep(uni.hids[i+1],colnames(wts)),drop=F]
         inps<-c(inps,melt(rbind(rep(NA,ncol(tmp)),tmp))$value)
       }
-      
+
       #get connections from last hidden to output layers
       outs<-wts[grep(paste0('Hidden_',hid.num+1),row.names(wts)),grep('Output',colnames(wts)),drop=F]
       outs<-rbind(rep(NA,ncol(outs)),outs)
-      
+
       #weight vector for all
       wts<-c(inps,melt(outs)$value)
       assign('bias',F,envir=environment(nnet.vals))
     }
-    
+
     if(nid) wts<-rescale(abs(wts),c(1,rel.rsc))
-    
-    #convert wts to list with appropriate names 
+
+    #convert wts to list with appropriate names
     hid.struct<-struct.out[-c(length(struct.out))]
     row.nms<-NULL
     for(i in 1:length(hid.struct)){
@@ -151,19 +187,19 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
     out.ls<-data.frame(wts,row.nms)
     out.ls$row.nms<-factor(row.nms,levels=unique(row.nms),labels=unique(row.nms))
     out.ls<-split(out.ls$wts,f=out.ls$row.nms)
-    
+
     assign('struct',struct.out,envir=environment(nnet.vals))
-    
+
     out.ls
-    
+
   }
-  
+
   # get model weights
   best.wts<-nnet.vals(mod.in,nid=F,rel.rsc=5,struct.out=NULL)
-  
+
   # weights only if T
   if(wts.only) return(best.wts)
-  
+
   #get variable names from mod.in object
   #change to user input if supplied
   if('numeric' %in% class(mod.in)){
@@ -196,17 +232,17 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
       y.check<-mod.in$fitted
       if(ncol(y.check)>1) y.names<-colnames(y.check)
       else y.names<-as.character(forms)[2]
-    } 
+    }
   }
-  
+
   # get index value for response variable to measure
   if('numeric' %in% class(mod.in)){
     out.ind <-  as.numeric(gsub('^[A-Z]','',out.var))
   } else {
     out.ind<- grep(out.var, y.names)
   }
-  
-  #change variables names to user sub 
+
+  #change variables names to user sub
   if(!is.null(x.lab)){
     if(length(x.names) != length(x.lab)) stop('x.lab length not equal to number of input variables')
     else x.names<-x.lab
@@ -216,62 +252,76 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
   } else {
     y.names <- y.names[grep(out.var, y.names)]
   }
-  
+
   # organize hidden layer weights for matrix mult
   inp.hid <- best.wts[grep('hidden', names(best.wts))]
   split_vals <- substr(names(inp.hid), 1, 8)
   inp.hid <- split(inp.hid, split_vals)
   inp.hid <- lapply(inp.hid, function(x) t(do.call('rbind', x))[-1, ])
-  
+
   # final layer weights for output
   hid.out<-best.wts[[grep(paste('out',out.ind),names(best.wts))]][-1]
-  
+
   # matrix multiplication of output layer with connecting hidden layer
   max_i <- length(inp.hid)
   sum_in <- as.matrix(inp.hid[[max_i]]) %*% matrix(hid.out)
-  
+
   # recursive matrix multiplication for all remaining hidden layers
   # only for multiple hidden layers
-  if(max_i != 1){ 
-    
+  if(max_i != 1){
+
     for(i in (max_i - 1):1) sum_in <- as.matrix(inp.hid[[i]]) %*% sum_in
-    
+
     # final contribution vector for all inputs
-    inp.cont <- sum_in    
-    
-  } else {
-    
     inp.cont <- sum_in
-    
+
+  } else {
+
+    inp.cont <- sum_in
+
   }
-  
+
   #get relative contribution
   #inp.cont/sum(inp.cont)
   rel.imp<-{
     signs<-sign(inp.cont)
     signs*rescale(abs(inp.cont),c(0,1))
   }
-  
+
   if(!bar.plot){
     out <- data.frame(rel.imp)
     row.names(out) <- x.names
     return(out)
   }
-  
+
   to_plo <- data.frame(rel.imp,x.names)[order(rel.imp),,drop = F]
   to_plo$x.names <- factor(x.names[order(rel.imp)], levels = x.names[order(rel.imp)])
   out_plo <- ggplot(to_plo, aes(x = x.names, y = rel.imp, fill = rel.imp,
-                                colour = rel.imp)) + 
-    geom_bar(stat = 'identity') + 
+                                colour = rel.imp)) +
+    geom_bar(stat = 'identity') +
     scale_x_discrete(element_blank()) +
     scale_y_continuous(y.names)
-  
+
   return(out_plo)
-  
+
 }
 
 load("../R-Models/Itr_100/mdl_12_nnet.rda")
 
+mdl.12
+plot(mdl.12)
+
+```
+
+* Increasing node size (Hidden Units) increases model accuracy with diminishing return
+* The increase in accuracy after 50 nodes is very small and takes a long time to compute
+* A positive decay (coefficient penalty) helps model accuracy, but the difference in decay of .1 and .2 is neglible
+* More complex models benefit from having a decay parameter
+
+
+\newpage
+
+```{r a2, echo=FALSE, fig.height=9, warning=FALSE, message=FALSE}
 rel.imp = gar.fun(out.var = "Texting", mod.in = mdl.12$finalModel, bar.plot = FALSE)
 rel.imp$Subject = row.names(rel.imp)
 rel.imp$Subject = gsub(pattern = "Subject", replacement = "", x = rel.imp$Subject)
@@ -324,47 +374,42 @@ grid.arrange(g3, g2, g1, ncol = 2)
 
 ```
 
-
-# Training Plot
-
-```{r b, echo=FALSE}
-plot(mdl.12)
-
-```
-
-
-# Data
-
-```{r c, echo=FALSE, comment=NA}
-
-load("../R-Data/data-mdl-08.rda")
-cat("Model 08 Data")
-colnames(mdl.08.train)
-
-load("../R-Data/data-mdl-12.rda")
-cat("Model 12 Data")
-colnames(mdl.12.train)
-```
-
 \newpage
 
+## Variable Importance
+
+* As the nnet continues to train it finds fewer variables are important
+  - 100 Iterations: 26 variables have relative importance > 0
+  - 250 Iterations: 25 variables have relative importance > 0
+  - 500 Iterations: 18 variables have relative importance > 0
+
+* Table: Variables with importance score > 0 (emotions ordered by variables importance from Model 08 (simplified model))
+
+
+| Measure | Neutral | Surprise | Anger | Disgust | Fear | Sad | Joy | Contempt |
+|:--------|:-------:|:--------:|:-----:|:-------:|:----:|:---:|:---:|:--------:|
+| mean    |    *    |    *     |   *   |    *    |      |     |     |          |
+| sd      |    *    |          |       |         |  *   |     |  *  |    *     |
+| min     |         |    *     |       |         |      |     |     |          |
+| max     |    *    |    *     |   *   |    *    |      |     |     |          |
+| med     |    *    |    *     |       |         |      |     |     |          |
+| iqr     |    *    |    *     |       |         |      |     |     |          |
+
+* The number of predictor variables related to the overall emotions is pretty consistent with the variable importance of the previous simplified model.
+
 # Demographic Effects (Model 08)
- 
-| Variable             | Neutral | Surprise | Anger | Disgust | Fear | Sad | Joy | Contempt |  
-|:---------------------|:-------:|:--------:|:-----:|:-------:|:----:|:---:|:---:|:--------:|  
-| Age                  |    .    |    **    |  ***  |   ***   | ***  |     | *** |    *     |  
-| Gender               |   ***   |   ***    |       |         |  **  |     | *** |    .     |  
-| Age\*Gender          |   ***   |          |  ***  |    *    |      |     |  .  |   ***    |  
-| Emotion\*Age         |         |    **    |   .   |   ***   | ***  | *** | *** |    **    |  
-| Emotion\*Gender      |   ***   |          |       |         | ***  | *** |  *  |          |  
-| Emotion\*Age\*Gender |    *    |          |   *   |   ***   | ***  | *** |     |    **    |    
 
+| Variable             | Neutral | Surprise | Anger | Disgust | Fear | Sad | Joy | Contempt |
+|:---------------------|:-------:|:--------:|:-----:|:-------:|:----:|:---:|:---:|:--------:|
+| Age                  |    .    |    **    |  ***  |   ***   | ***  |     | *** |    *     |
+| Gender               |   ***   |   ***    |       |         |  **  |     | *** |    .     |
+| Age\*Gender          |   ***   |          |  ***  |    *    |      |     |  .  |   ***    |
+| Emotion\*Age         |         |    **    |   .   |   ***   | ***  | *** | *** |    **    |
+| Emotion\*Gender      |   ***   |          |       |         | ***  | *** |  *  |          |
+| Emotion\*Age\*Gender |    *    |          |   *   |   ***   | ***  | *** |     |    **    |
 
-  
 **Significance**: [. p-value < .1] [* p-value <.05] [** p-value < .01] [*** p-value < .001]
 
+### To do:
 
-
-
-
-
+  * THis is a table of estimated effects from the previous simplified model. The new final model is much more complex so I dont think I will be able to do a recreation of the same table. I think I will pick the top predictor variables in terms of variable importance and produce this same table.
