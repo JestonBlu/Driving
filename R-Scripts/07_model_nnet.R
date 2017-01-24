@@ -30,7 +30,7 @@ search.grid = expand.grid(decay = c(0, .1, .2),
                           size = c(1, 10, 25, 50))
 
 ## Limit the iterations and weights each model can run
-maxIt = 100; maxWt = 150000
+maxIt = 1000; maxWt = 150000
 
 
 
@@ -373,44 +373,4 @@ mdl.12 = fit
 
 save("mdl.12", file = "R-Models/mdl_12_nnet.rda")
 rm(x, y, fit, mdl.12, mdl.12.train, mdl.12.test)
-
-
-
-
-#############################################################
-## Model 13: Rearranged Model Matrix
-##
-## Data Set:   
-## Specifics:  Train First Half, Test Second Half
-## 
-load("R-Data/data-mdl-12.rda")
-
-dummies = model.matrix(~mdl.12.train$Subject - 1)
-colnames(dummies) = sort(as.character(unique(mdl.12.train$Subject)))
-mdl.13.train = cbind(dummies, mdl.12.train[, c(2:4, 6:53)])
-
-dummies = model.matrix(~mdl.12.test$Subject - 1)
-colnames(dummies) = sort(as.character(unique(mdl.12.test$Subject)))
-mdl.13.test = cbind(dummies, mdl.12.test[, c(2:4, 6:53)])
-
-fit = train(Texting ~ ., mdl.13.train, method = "nnet", 
-            trControl = fit.control, 
-            tuneGrid = search.grid,
-            MaxNWts = maxWt,
-            maxit = maxIt)
-
-fit
-
-x = predict(fit, mdl.13.train, type = "raw")
-table(Actual = mdl.13.train$Texting, Predicted = x)
-metric(table(Actual = mdl.13.train$Texting, Predicted = x))
-
-y = predict(fit, mdl.13.test, type = "raw")
-table(Actual = mdl.13.test$Texting, Predicted = y)
-metric(table(Actual = mdl.13.test$Texting, Predicted = y))
-
-mdl.13 = fit
-
-save("mdl.13", file = "R-Models/mdl_13_nnet.rda")
-rm(x, y, fit, mdl.13, mdl.13.train, mdl.13.test, mdl.12.train, mdl.12.test)
 
