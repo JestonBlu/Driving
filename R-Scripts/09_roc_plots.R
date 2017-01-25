@@ -152,6 +152,30 @@ auc.scores = rbind(auc.scores, y2)
 
 
 ###########################################################################
+## MODEL 10
+load("R-Models/Itr_100/mdl_10_nnet.rda")
+load("R-Data/data-mdl-10.rda")
+
+pred = as.numeric(predict(mdl.10, mdl.10.test, type = "prob")[,2])
+clss = as.numeric(mdl.10.test$Texting)
+
+x1 = prediction(pred, clss)
+x2 = performance(x1, "tpr", "fpr")
+x2a = x2@x.values[[1]]
+x2b = x2@y.values[[1]]
+x3 = performance(x1, "auc")
+(x3 = x3@y.values[[1]])
+
+y1 = data.frame(Model = "Model 10", x = x2a, y = x2b)
+y2 = data.frame(Model = "Model 10", auc = x3)
+
+
+### COMBINE
+roc.curves = rbind(roc.curves, y1)
+auc.scores = rbind(auc.scores, y2)
+
+
+###########################################################################
 ## MODEL 09
 load("R-Models/Itr_100/mdl_09_nnet.rda")
 load("R-Data/data-mdl-09.rda")
@@ -174,28 +198,6 @@ y2 = data.frame(Model = "Model 09", auc = x3)
 roc.curves = rbind(roc.curves, y1)
 auc.scores = rbind(auc.scores, y2)
 
-###########################################################################
-## MODEL 10
-load("R-Models/Itr_100/mdl_10_nnet.rda")
-load("R-Data/data-mdl-10.rda")
-
-pred = as.numeric(predict(mdl.10, mdl.10.test, type = "prob")[,2])
-clss = as.numeric(mdl.10.test$Texting)
-
-x1 = prediction(pred, clss)
-x2 = performance(x1, "tpr", "fpr")
-x2a = x2@x.values[[1]]
-x2b = x2@y.values[[1]]
-x3 = performance(x1, "auc")
-(x3 = x3@y.values[[1]])
-
-y1 = data.frame(Model = "Model 10", x = x2a, y = x2b)
-y2 = data.frame(Model = "Model 10", auc = x3)
-
-
-### COMBINE
-roc.curves = rbind(roc.curves, y1)
-auc.scores = rbind(auc.scores, y2)
 
 ###########################################################################
 ## MODEL 04
@@ -297,6 +299,54 @@ auc.scores = rbind(auc.scores, y2)
 
 roc.curves.long = data.frame()
 auc.scores.long = data.frame()
+
+###########################################################################
+## MODEL 08 -- 250
+load("R-Models/Itr_250/mdl_08_nnet.rda")
+load("R-Data/data-mdl-08.rda")
+
+pred = as.numeric(predict(mdl.08, mdl.08.test, type = "prob")[,2])
+clss = as.numeric(mdl.08.test$Texting)
+
+x1 = prediction(pred, clss)
+x2 = performance(x1, "tpr", "fpr")
+x2a = x2@x.values[[1]]
+x2b = x2@y.values[[1]]
+x3 = performance(x1, "auc")
+(x3 = x3@y.values[[1]])
+
+y1 = data.frame(Model = "Model 08 250 Itr", x = x2a, y = x2b)
+y2 = data.frame(Model = "Model 08 250 Itr", auc = x3)
+
+
+### COMBINE
+roc.curves.long = rbind(roc.curves.long, y1)
+auc.scores.long = rbind(auc.scores.long, y2)
+
+
+
+##########################################################################
+## MODEL 12 -- 500
+load("R-Models/Itr_250/mdl_12_nnet.rda")
+load("R-Data/data-mdl-12.rda")
+
+pred = as.numeric(predict(mdl.12, mdl.12.test, type = "prob")[,2])
+clss = as.numeric(mdl.12.test$Texting)
+
+x1 = prediction(pred, clss)
+x2 = performance(x1, "tpr", "fpr")
+x2a = x2@x.values[[1]]
+x2b = x2@y.values[[1]]
+x3 = performance(x1, "auc")
+(x3 = x3@y.values[[1]])
+
+y1 = data.frame(Model = "Model 12 250 Itr", x = x2a, y = x2b)
+y2 = data.frame(Model = "Model 12 250 Itr", auc = x3)
+
+### COMBINE
+roc.curves.long = rbind(roc.curves.long, y1)
+auc.scores.long = rbind(auc.scores.long, y2)
+
 
 ###########################################################################
 ## MODEL 08 -- 500
@@ -416,24 +466,16 @@ g1 = ggplot(roc.curves, aes(x = x, y = y, color = Model)) +
   ggtitle("Area Under Curve\n100 Iteration Models") +
   theme(plot.title = element_text(hjust = .5))
 
-g2 = ggplot(roc.curves.long, aes(x = x, y = y, color = Model)) +
-  geom_line() +
-  geom_abline(slope = 1, intercept = 0, lty = 2, size = .5) +
-  scale_x_continuous("False Positive Rate", labels = percent) +
-  scale_y_continuous("True Positive Rate", labels = percent) +
-  ggtitle("Area Under Curve\n100 Iteration Models") +
-  theme(plot.title = element_text(hjust = .5))
-
-grid.arrange(g1, g2, nrow = 1)
+ggsave(filename = "Presentation/Plots/ROC1.png", plot = g1, width = 7, height = 5)
 
 roc.curves.best = rbind(subset(roc.curves, Model %in% c("Model 08", "Model 12")), roc.curves.long)
 
-g3 = ggplot(roc.curves.best, aes(x = x, y = y, color = Model)) +
+g2 = ggplot(roc.curves.best, aes(x = x, y = y, color = Model)) +
   geom_line() +
   geom_abline(slope = 1, intercept = 0, lty = 2, size = .5) +
   scale_x_continuous("False Positive Rate", labels = percent) +
   scale_y_continuous("True Positive Rate", labels = percent) +
-  ggtitle("Area Under Curve\n100 Iteration Models") +
+  ggtitle("Area Under Curve\nBest Models") +
   theme(plot.title = element_text(hjust = .5))
 
-
+ggsave(filename = "Presentation/Plots/ROC2.png", plot = g2, width = 7, height = 5)

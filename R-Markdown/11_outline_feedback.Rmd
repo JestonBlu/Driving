@@ -1,26 +1,26 @@
 ---
-title: "Response to Outline Feedback"
+title: "Response to Feedback"
 author: "Joseph Blubaugh"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   pdf_document:
-    latex_engine: xelatex
+    fig_height: 3.5
     highlight: pygments
-    toc: true
-    toc_depth: 2
+    latex_engine: xelatex
 mainfont: DejaVu Sans Mono
 sansfont: DejaVu Sans Mono
 fontsize: 11pt
 geometry: margin=1in
 ---
 
-\newpage
-
-**Why not use ROC curves to graphically compare model performance?**
+#### **Why not use ROC curves to graphically compare model performance?**
 
 I did not think about this at all, but I think its a great idea.
 
-## Model Performance
+![ROC Plot 1](../Presentation/Plots/ROC1.png)
+![ROC Plot 2](../Presentation/Plots/ROC2.png)
+
+##### Model Performance
 
 | Model     | Data Processing  | Data Split | MaxItr | Size | Decay | Training | Testing | AUC  |
 |:----------|:-----------------|:-----------|:-------|:-----|:------|:---------|:--------|:-----|
@@ -32,18 +32,57 @@ I did not think about this at all, but I think its a great idea.
 | Model 6:  | Moving Avg       | Entire Sim | 100    | 10   | .00   | .528     | .528    | .544 |
 | Model 7:  | 1/2 Sec Cut      | 365 Split  | 100    | 50   | .10   | .820     | .698    | .761 |
 | Model 8:  | 1/2 Sec Cut      | Entire Sim | 100    | 50   | .20   | .788     | .779    | .868 |
-| Model 9:  | 1/2 Sec Diff     | 365 Split  | 100    | 50   | .10   | .716     | .647    |      |
-| Model 10: | 1/2 Sec Diff     | Entire Sim | 100    | 50   | .20   | .682     | .622    |      |
+| Model 9:  | 1/2 Sec Diff     | 365 Split  | 100    | 50   | .10   | .633     | .602    | .650 |
+| Model 10: | 1/2 Sec Diff     | Entire Sim | 100    | 50   | .20   | .682     | .622    | .681 |
 | Model 11: | 1/2 Sec Cut Stat | 365 Split  | 100    | 50   | .10   | .846     | .716    | .781 |
 | Model 12: | 1/2 Sec Cut Stat | Entire Sim | 100    | 50   | .20   | .820     | .803    | .891 |
 
-## Further Training Best Models
+\newpage
+
+##### Further Training Best Models
 
 | Model     | Data Processing  | Data Split | MaxItr | Size | Decay | Training | Testing | AUC  |
 |:----------|:-----------------|:-----------|:-------|:-----|:------|:---------|:--------|:-----|
-| Model 8:  | 1/2 Sec Cut      | Entire Sim | 250    | 50   | .10   | .816     | .804    |      |
+| Model 8:  | 1/2 Sec Cut      | Entire Sim | 250    | 50   | .10   | .816     | .804    | .893 |
 | Model 8:  | 1/2 Sec Cut      | Entire Sim | 500    | 50   | .10   | .828     | .810    | .899 |
-| Model 8:  | 1/2 Sec Cut      | Entire Sim | 1000   | 50   | .10   | .828     | .810    |      |
-| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 250    | 50   | .10   | .858     | .823    |      |
-| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 500    | 50   | .20   | .864     | .823    | .908 |
-| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 1000   | 50   | .10   | .858     | .823    | .907 |
+| Model 8:  | 1/2 Sec Cut      | Entire Sim | 1000   | 50   | .10   | .842     | .820    | .906 |
+| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 250    | 50   | .10   | .858     | .823    | .906 |
+| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 500    | 50   | .20   | .864     | .823    | .907 |
+| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 1000   | 50   | .10   | .871     | .824    | .908 |
+
+#### **Are you trying to detect whether texting occurred during a given interval or a single observation?**
+
+Initially I was looking at individual observations, but as I tried different approaches I ended up aggregating the data and found those models to be the best performing.
+
+#### **Baselining: What is the purpose?**
+
+My goal was to remove the effect of the simulation from the texting trial. The simulations involved active traffic and a detour which each driver had to navigate. Since trial 4 was identical to trials 5, 6, and 7 minus the events that took place, it seemed like the natural choice.
+
+#### **Why do you say there was evidence that one size fits all model will not work?**
+
+At this stage I was aggregating data at the subject level by event and I think the range of values were all over the place which prevented the models I tried from being any good. I proposed that adding a factor variable for subject would allow me to model individuals driving behavior that might be more successful at detecting texting.
+
+#### **On Time omission -- why not include lagged variables?**
+
+In retrospect this probably would have been a good thing to try. The farthest I went looking into time series was trying differencing which ended up being the worst of all of the methods I experimented with.
+
+#### **Does including age and gender as well as Subject in the model cause problems due to collinerity?**
+
+I mainly included included age and gender so that there were parameters availble to account for universal age and gender effects, if there were any. I dont think there is an issue with collinerity because Im not inferring anything about the weights (coefficients).
+
+#### **Exmplain (sens+spec)/2**
+
+I presented this in a more complicated way than was neccessary. It turns out that the formula is equivalent to the "total percentage correct". I initially set it up that way incase I wanted to penalize false positives or negatives more. I had a multivariate course last year that did this. I never ended up doing that so I will eliminate that metric and just represent it as percentage correct.
+
+#### **Why move 60/40 to 50/50?**
+
+Only because the initial aggregate data I created had very few observations so I was just trying to have more data to train on. There was no real scientific reason for this. I may cut this exploratory section out entirely.
+
+#### **Less on interpreting nnet weights**
+
+Agreed. I have pretty much concluded that trying to extract and interpret weights on large nueral nets is very tricky and not very helpful.
+
+
+#### **Reduce or cut material on initial analysis and aggregated data**?
+
+Agreed.

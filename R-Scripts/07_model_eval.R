@@ -8,13 +8,11 @@ rm(list = ls())
 
 
 ## Load Models
-load("R-Models/Itr_500/mdl_02_nnet.rda")
-load("R-Models/Itr_500/mdl_08_nnet.rda")
-load("R-Models/Itr_500/mdl_12_nnet.rda")
+load("R-Models/Itr_1000/mdl_08_nnet.rda")
+load("R-Models/Itr_1000/mdl_12_nnet.rda")
 
 
 ## Load Data
-load("R-Data/data-mdl-02.rda")
 load("R-Data/data-mdl-08.rda")
 load("R-Data/data-mdl-12.rda")
 
@@ -44,6 +42,5 @@ perform = function(fit, train, test) {
 }
 
 
-perform(fit = mdl.02, train = mdl.02.train, mdl.02.test)
 perform(fit = mdl.08, train = mdl.08.train, mdl.08.test)
 perform(fit = mdl.12, train = mdl.12.train, mdl.12.test)

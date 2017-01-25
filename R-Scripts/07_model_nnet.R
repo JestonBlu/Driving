@@ -30,7 +30,7 @@ search.grid = expand.grid(decay = c(0, .1, .2),
                           size = c(1, 10, 25, 50))
 
 ## Limit the iterations and weights each model can run
-maxIt = 1000; maxWt = 150000
+maxIt = 100; maxWt = 150000
 
 
 
