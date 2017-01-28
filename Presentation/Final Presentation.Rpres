@@ -1,0 +1,79 @@
+Distracted Driving: Detecting Texting with Neural Networks
+========================================================
+author: Joseph Blubaugh
+date: 29 March 2017
+autosize: true
+font-family: "DejaVu Sans Mono"
+width: 2100
+height: 1400
+css: custom.css
+
+```{r setup, echo=FALSE}
+library(knitr)
+library(pander)
+
+options(width = 120)
+
+```
+
+Contents
+========================================================
+
+<br>
+
+## 1) Data Extraction, Preparation, and Project Management
+
+## 2) Exploratory Analysis and Model Proposal
+
+## 3) Understanding Basic Neural Nets
+
+## 4) Model Training and Selection
+
+## 5) Exploring Model Effects
+
+Data Introduction, Preparation, and Project Management
+========================================================
+class: section
+
+Data Introduction
+========================================================
+
+  * The data in this project are of 8 driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation. 
+  * Every simulation observation contains likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds. 
+  * Stimuli data which records targetted events introduced into each simulation and basic demographic data on each subject are also available.
+  * There are over 6.7 million observations in the entire dataset spread accross 777 files. 
+
+The data set used in this project was originally collected and analyzed in [Dissecting Driver Behaviors Under Cognitive, Emotional, Sensorimotor, and Mixed Stressors](http://www.nature.com/articles/srep25651), Scientific Reports 6, Article number: 25651 (2016).
+
+
+**Simulation Data T001-001.xlsx**
+
+```{r a1, echo=FALSE, comment=NA}
+faces = read.csv("../Files/data-faces.csv", nrows = 10)
+faces[,2:10] = apply(faces[,2:10], 2, function(x) round(x, 4))
+
+kable(head(faces))
+#head(faces)
+```
+
+**Sample of Stimuli File**
+
+```{r a2, echo=FALSE, comment=NA}
+stimuli = read.csv("../Files/data-stimuli.csv")
+kable(head(stimuli), split.table=Inf)
+#head(stimuli)
+```
+
+
+Data Introduction, Preparation, and Project Management
+========================================================
+
+### File Desriptions
+  * **Simulation Files**: 509 excel files ranging from 3,000 to 30,000 observations her file. (750MB)
+  * **Stimuli Files**: 267 
+  * Each simulation includes likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds
+  * Stimuli data which records targetted events introduced into some of the simulations and basic demographic data on each subject were also available
+  * The entire data set was originally stored in 777 individual data files
+
+---
+
