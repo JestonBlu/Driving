@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Distracted Driving: Detecting Texting with Neural Networks</title>
+  <title></title>
     
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -559,22 +559,365 @@ body {
   font-family: "DejaVu Sans Mono", Impact, sans-serif;
 }
 
-<style>
-	.demo {
-		border:1px solid #C0C0C0;
-		border-collapse:collapse;
-		padding:5px;
-	}
-	.demo th {
-		border:1px solid #C0C0C0;
-		padding:5px;
-		background:#F0F0F0;
-	}
-	.demo td {
-		border:1px solid #C0C0C0;
-		padding:5px;
-	}
-</style>
+.reveal h1 {
+  font-size: 2.5em;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+   margin-bottom: .6em;
+}
+
+.reveal p,
+.reveal table {
+   margin-bottom: 1em;
+}
+
+.reveal li {
+   margin-bottom: .4em;
+}
+
+.reveal ul ul,
+.reveal ul ol,
+.reveal ol ol,
+.reveal ol ul {
+	margin-top: .4em;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal small {
+	font-size: 0.85em;
+}
+
+.reveal pre {
+  margin-top: 0;
+  max-width: 95%;
+  border: 1px solid #ccc;
+  white-space: pre-wrap;
+  margin-bottom: 1em;
+}
+
+.reveal pre code {
+  display: block; padding: 0.5em;
+  font-size: 1.6em;
+  line-height: 1.1em;
+  background-color: white;
+  overflow: visible;
+  max-height: none;
+  word-wrap: normal;
+}
+
+.reveal code {
+  overflow: visible;
+  max-height: none;
+}
+
+.reveal code.r {
+  background-color: #F8F8F8;
+}
+
+.reveal code.cpp {
+  background-color: #F8F8F8;
+}
+
+.reveal section del {
+   text-decoration: none;
+   color: #AAB1BA;
+}
+
+.reveal section img {
+   border: none;
+}
+
+.reveal section .fieldError {
+  margin-bottom: 25px;
+}
+
+.reveal section .fieldError span {
+  color: red;
+}
+
+.prompt .reveal .state-background {
+   background: #C6D7DC;
+}
+
+.quiz-multichoice .reveal .state-background {
+  background: rgba(254,220,179,1);
+}
+
+.quiz-multichoice .reveal ul {
+  list-style-type: none;
+  margin-bottom: 30px;
+}
+
+.quiz-multichoice .reveal li {
+  margin-top: 15px;
+}
+
+.quiz-multichoice .reveal .quizFeedback {
+  margin-bottom: 30px;
+}
+
+.quiz-multichoice .reveal .quizFeedback img {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  float: left;
+  margin-top: -15px;
+}
+
+.quiz-multichoice .reveal .quizFeedback span {
+  font-size: 1.4em;
+  margin-left: 12px;
+}
+
+.section .reveal .state-background {
+   background: #96A2B6;
+}
+
+.section .reveal h1,
+.section .reveal h2,
+.section .reveal p {
+   color: white;
+   margin-top: 50px;
+}
+
+.sub-section .reveal .state-background {
+  background: #E7E8EA
+}
+
+.sub-section .reveal h2,
+.sub-section .reveal p {
+  color: #63717B;
+  margin-top: 50px;
+}
+
+.reveal strong {
+  color: #25679E;
+}
+
+.reveal .controls {
+  right: -20px;
+  bottom: 5px;
+}
+
+.reveal .controls div.navigate-left {
+  top: 75px;
+}
+
+.reveal .controls div.navigate-right {
+  left: 54px;
+  top: 75px;
+}
+
+
+.reveal .controls div.navigate-up {
+  display: none;
+}
+
+.reveal .controls div.navigate-down {
+  display: none;
+}
+
+/*********************************************
+ * NAVIGATION CONTROLS
+ *********************************************/
+
+.reveal .controls div.navigate-left,
+.reveal .controls div.navigate-left.enabled {
+  border-right-color: #25679E;
+}
+
+.reveal .controls div.navigate-right,
+.reveal .controls div.navigate-right.enabled {
+  border-left-color: #25679E;
+}
+
+.reveal .controls div.navigate-up,
+.reveal .controls div.navigate-up.enabled {
+  border-bottom-color: #25679E;
+}
+
+.reveal .controls div.navigate-down,
+.reveal .controls div.navigate-down.enabled {
+  border-top-color: #25679E;
+}
+
+.reveal .controls div.navigate-left.enabled:hover {
+  border-right-color: #267EC8;
+}
+
+.reveal .controls div.navigate-right.enabled:hover {
+  border-left-color: #267EC8;
+}
+
+.reveal .controls div.navigate-up.enabled:hover {
+  border-bottom-color: #267EC8;
+}
+
+.reveal .controls div.navigate-down.enabled:hover {
+  border-top-color: #267EC8;
+}
+
+.reveal .progress span {
+  background: #25679E;
+}
+
+.reveal .slides>section,
+.reveal .slides>section>section {
+  padding: 0px 0px;
+}
+
+/*********************************************
+ * CUSTOM CSS
+ *********************************************/
+
+.reveal table {
+  border-width: 1px;
+  border-spacing: 2px;
+  border-style: solid;;
+  border-color: gray;
+  border-collapse: collapse;
+  font-size: 0.7em;
+}
+
+.reveal table th {
+  border-width: 1px;
+  padding-left: 10px;
+  padding-right: 25px;
+  font-weight: bold;
+  border-style: dotted;
+  border-color: gray;
+}
+
+.reveal table td {
+  border-width: 1px;
+  padding-left: 10px;
+  padding-right: 25px;
+  border-style: double;;
+  border-color: gray;
+}
+
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 90%;
+  margin: 5px auto;
+  padding: 5px;
+
+  font-style: normal;
+  background: #C6D7DC;
+  border: 1px solid #C6D7DC;
+  box-shadow: none;
+}
+
+.reveal blockquote p:first-child,
+.reveal blockquote p:last-child {
+  display: block;
+}
+
+.reveal blockquote:before {
+  content: '';
+}
+
+.reveal blockquote:after {
+    content: '';
+}
+
+
+.reveal ol,
+.reveal ul {
+	margin: 0 0 .5em 1.2em;
+}
+
+.reveal .slides section {
+   height: 100%;
+}
+
+.reveal .slides section .slideContent h2 {
+   font-size: 1.3em;
+   font-weight: bold;
+}
+
+.reveal .slides section .slideContent h3 {
+   font-size: 1.1em;
+   font-weight: bold;
+}
+
+.reveal .slides section .column {
+   position: fixed;
+   width: 48%;
+   top: 2.5em;
+   bottom: 0;
+}
+
+.reveal .slides section .column1 {
+   left: 0;
+}
+
+.reveal .slides section .column2 {
+   right: 0;
+}
+
+.reveal .slides section .column img {
+   max-width: 95%;
+   max-height: 95%;
+   height: auto;
+}
+
+.reveal .slides section .mediaOnly {
+   position: absolute;
+   width: 100%;
+   top: 2.5em;
+   bottom: 0;
+}
+
+.reveal .slides section .mediaOnly img {
+   max-width: 90%;
+   max-height: 90%;
+   height: auto;
+}
+
+.reveal .slides section .mediaInline img {
+   max-width: 90%;
+   max-height: 50%;
+   width: auto;
+}
+
+.reveal .slides section .mediaOnly video {
+   height: 90%;
+   width: 90%;
+}
+
+.reveal .slides section .mediaInline video {
+   height: 50%;
+   width: 90%;
+}
+
+.reveal .slides section .noTitle {
+   top: 0;
+}
+
+.reveal .header {
+    color: black;
+    background: #FFFFFF;
+    position: fixed;;
+    top: 5%;
+    text-align:left;
+    width:100%;
+    list-style-type: circle;
+}
+
+.small-code pre code {
+  font-size: 1em;
+}
 
 
   </style>
@@ -800,9 +1143,14 @@ hljs.initHighlightingOnLoad();
   <div class="slides">
 
 <section data-state="section" data-transition="linear" data-transition-speed="default">
-<h1>Distracted Driving: Detecting Texting with Neural Networks</h1><p>Joseph Blubaugh<br/>29 March 2017</p>
+<h1></h1><p></p>
 
-<div class="slideContent" >
+<div class="slideContent noTitle" >
+<p><h1><center>Distracted Driving:<br>Detecting Texting with Neural Networks</center></h1><br></p>
+
+<style color='#FFFFFF'></style>
+
+<h3 style="color:white" font-family: "DejaVu Sans Mono"><center>Joseph Blubaugh<br><br>29 March 2017</center></h3>
 
 </div>
 
@@ -814,43 +1162,50 @@ hljs.initHighlightingOnLoad();
 
 <h2>1) Data Extraction, Preparation, and Project Management</h2>
 
-<p><br></p>
-
 <h2>2) Exploratory Analysis and Model Proposal</h2>
-
-<p><br></p>
 
 <h2>3) Understanding Basic Neural Nets</h2>
 
-<p><br></p>
-
 <h2>4) Model Training and Selection</h2>
-
-<p><br></p>
 
 <h2>5) Exploring Model Effects</h2>
 
 </div>
 
 </section>
+<section data-state="section" data-transition="linear" data-transition-speed="default">
+
+<div class="slideContent noTitle" >
+<p><h1><center>Data Introduction<br><br>Data Extraction and Preparation<br><br>Project Management</center></h1><br></p>
+
+</div>
+
+</section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Data Introduction, Preparation, and Project Management</h3>
-<div class="slideContent" >
-<p><br></p>
-
 <h3>Data Introduction</h3>
-
+<div class="slideContent" >
 <ul>
-<li>The data in this project are of 8 driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation. </li>
-<li>Every simulation observation contains likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds. </li>
-<li>Stimuli data which records targetted events introduced into each simulation and basic demographic data on each subject are also available.</li>
-<li>There are over 6.7 million observations in the entire dataset spread accross 777 files. </li>
+<li><small>The data in this project are of 8 driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation.</small></li>
+<li><small>Every simulation observation contains likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds.</small></li>
+<li><small>Stimuli data which records targetted events introduced into each simulation and basic demographic data on each subject are also available.</small></li>
+<li><small>There are over 6.7 million observations in the entire dataset spread accross 777 files.</small></li>
 </ul>
 
-<p>The data set used in this project was originally collected and analyzed in <a href="http://www.nature.com/articles/srep25651">Dissecting Driver Behaviors Under Cognitive, Emotional, Sensorimotor, and Mixed Stressors</a>, Scientific Reports 6, Article number: 25651 (2016).</p>
+<p><center><strong>T001-001.xlsx (Subject 01, Simulation 01)</strong><br>
+<img src="/home/jeston/Projects/driving/Presentation/Screens/faces.png" alt="Drawing" style="width: 1300px;"/>
+</center></p>
 
-<pre><code>Simulation Data T001-001.xlsx
-</code></pre>
+<p><br> </p>
+
+<p><small>The data set used in this project was originally collected and analyzed in <a href="http://www.nature.com/articles/srep25651">Dissecting Driver Behaviors Under Cognitive, Emotional, Sensorimotor, and Mixed Stressors</a>, Scientific Reports 6, Article number: 25651 (2016).</small></p>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
+<h3>Data Introduction</h3>
+<div class="slideContent" >
+<p><center><strong>Simulation Data T001-001.xlsx</strong></p>
 
 <table><thead>
 <tr>
@@ -947,8 +1302,9 @@ hljs.initHighlightingOnLoad();
 </tr>
 </tbody></table>
 
-<pre><code>Sample of Stimuli File
-</code></pre>
+<p></center></p>
+
+<p><center><strong>Sample of Stimuli File</strong></p>
 
 <table><thead>
 <tr>
@@ -1009,6 +1365,51 @@ hljs.initHighlightingOnLoad();
 <td align="left">T001-007</td>
 </tr>
 </tbody></table>
+
+<p></center></p>
+
+<p><center><strong>Sample of Demographics</strong></p>
+
+<table><thead>
+<tr>
+<th align="left">Subject</th>
+<th align="left">Age</th>
+<th align="left">Gender</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">T001</td>
+<td align="left">Y</td>
+<td align="left">M</td>
+</tr>
+<tr>
+<td align="left">T002</td>
+<td align="left">Y</td>
+<td align="left">F</td>
+</tr>
+<tr>
+<td align="left">T003</td>
+<td align="left">Y</td>
+<td align="left">M</td>
+</tr>
+<tr>
+<td align="left">T004</td>
+<td align="left">Y</td>
+<td align="left">F</td>
+</tr>
+<tr>
+<td align="left">T005</td>
+<td align="left">Y</td>
+<td align="left">M</td>
+</tr>
+<tr>
+<td align="left">T006</td>
+<td align="left">Y</td>
+<td align="left">F</td>
+</tr>
+</tbody></table>
+
+<p></center></p>
 
 </div>
 
