@@ -81,7 +81,7 @@ Data Extraction
 
 <center>
 * <small>**[Python scripts](https://github.com/JestonBlu/Driving/tree/master/Files)** were used to extract and combine the 509 driving simulation files and 267 stimuli files into combined data sets.</small>
-* <small>The subject-simulation identifier was the name of the file. A column labeled ID was created based on the file name to identify the original data set.</small>
+* <small>The subject-simulation identifier was the name of each file. A column labeled ID was created based on the file name to identify the original data set.</small>
 </center>
 
 <center>**Sample of data-faces.csv**
@@ -89,9 +89,8 @@ Data Extraction
 ```{r a1, echo=FALSE, comment=NA}
 faces = read.csv("../Files/data-faces.csv", nrows = 10)
 faces[,2:10] = apply(faces[,2:10], 2, function(x) round(x, 4))
-
+colnames(faces)[1] = "Frame"
 kable(head(faces))
-#head(faces)
 ```
 
 </center>
@@ -100,7 +99,7 @@ kable(head(faces))
 
 ```{r a2, echo=FALSE, comment=NA}
 stimuli = read.csv("../Files/data-stimuli.csv")
-colnames(stimuli)[3:5] = c("EventSwitch", "ActionType", "QuestionNumber")
+colnames(stimuli) = c("Start", "End", "Event.Switch", "Event.Type", "Event", "ID")
 kable(head(stimuli), split.table=Inf)
 
 ```

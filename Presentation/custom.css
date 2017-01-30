@@ -235,6 +235,7 @@
   border-style: solid;
   border-bottom-width: 1px;
   border-color: gray;
+  text-align: center;
 }
 
 .reveal table td {

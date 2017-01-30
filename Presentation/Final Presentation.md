@@ -75,34 +75,34 @@ Data Extraction
 
 <center>
 * <small>**[Python scripts](https://github.com/JestonBlu/Driving/tree/master/Files)** were used to extract and combine the 509 driving simulation files and 267 stimuli files into combined data sets.</small>
-* <small>The subject-simulation identifier was the name of the file. A column labeled ID was created based on the file name to identify the original data set.</small>
+* <small>The subject-simulation identifier was the name of each file. A column labeled ID was created based on the file name to identify the original data set.</small>
 </center>
 
 <center>**Sample of data-faces.csv**
 
 
-| Frame.|   Time|  Anger| Contempt| Disgust|   Fear|    Joy|    Sad| Surprise| Neutral|ID       |
-|------:|------:|------:|--------:|-------:|------:|------:|------:|--------:|-------:|:--------|
-|      0| 0.0000| 0.0101|   0.0218|  0.0043| 0.0541| 0.5260| 0.0959|   0.0010|  0.2868|T001-001 |
-|      1| 0.0333| 0.0101|   0.0218|  0.0043| 0.0541| 0.5260| 0.0959|   0.0010|  0.2868|T001-001 |
-|      2| 0.0667| 0.0101|   0.0218|  0.0043| 0.0541| 0.5260| 0.0959|   0.0010|  0.2868|T001-001 |
-|      3| 0.1000| 0.0080|   0.0187|  0.0032| 0.0375| 0.5353| 0.1050|   0.0011|  0.2911|T001-001 |
-|      4| 0.1333| 0.0091|   0.0380|  0.0158| 0.0036| 0.6902| 0.0177|   0.0004|  0.2252|T001-001 |
-|      5| 0.1667| 0.0104|   0.0450|  0.0139| 0.0030| 0.7157| 0.0162|   0.0003|  0.1955|T001-001 |
+| Frame|   Time|  Anger| Contempt| Disgust|   Fear|    Joy|    Sad| Surprise| Neutral|ID       |
+|-----:|------:|------:|--------:|-------:|------:|------:|------:|--------:|-------:|:--------|
+|     0| 0.0000| 0.0101|   0.0218|  0.0043| 0.0541| 0.5260| 0.0959|   0.0010|  0.2868|T001-001 |
+|     1| 0.0333| 0.0101|   0.0218|  0.0043| 0.0541| 0.5260| 0.0959|   0.0010|  0.2868|T001-001 |
+|     2| 0.0667| 0.0101|   0.0218|  0.0043| 0.0541| 0.5260| 0.0959|   0.0010|  0.2868|T001-001 |
+|     3| 0.1000| 0.0080|   0.0187|  0.0032| 0.0375| 0.5353| 0.1050|   0.0011|  0.2911|T001-001 |
+|     4| 0.1333| 0.0091|   0.0380|  0.0158| 0.0036| 0.6902| 0.0177|   0.0004|  0.2252|T001-001 |
+|     5| 0.1667| 0.0104|   0.0450|  0.0139| 0.0030| 0.7157| 0.0162|   0.0003|  0.1955|T001-001 |
 
 </center>
 
 <center>**Sample of data-stimuli.csv**
 
 
-| StartTime| EndTime| EventSwitch| ActionType|QuestionNumber         |ID       |
-|---------:|-------:|-----------:|----------:|:----------------------|:--------|
-|      86.5|  246.50|           1|          1|Analytical Questions   |T001-005 |
-|     508.5|  657.50|           1|          2|Mathematical Questions |T001-005 |
-|     107.5|  269.25|           1|          3|Emotional Questions    |T001-006 |
-|     521.0|  674.75|           1|          3|Emotional Questions    |T001-006 |
-|      81.0|  240.00|           1|          4|Texting                |T001-007 |
-|     510.0|  671.00|           1|          4|Texting                |T001-007 |
+| Start|    End| Event.Switch| Event.Type|Event                  |ID       |
+|-----:|------:|------------:|----------:|:----------------------|:--------|
+|  86.5| 246.50|            1|          1|Analytical Questions   |T001-005 |
+| 508.5| 657.50|            1|          2|Mathematical Questions |T001-005 |
+| 107.5| 269.25|            1|          3|Emotional Questions    |T001-006 |
+| 521.0| 674.75|            1|          3|Emotional Questions    |T001-006 |
+|  81.0| 240.00|            1|          4|Texting                |T001-007 |
+| 510.0| 671.00|            1|          4|Texting                |T001-007 |
 
 </center>
 
