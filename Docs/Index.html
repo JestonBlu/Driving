@@ -782,26 +782,28 @@ body {
 .reveal table {
   border-width: 1px;
   border-spacing: 2px;
-  border-style: solid;;
-  border-color: gray;
+  border-style: none;
+  border-color: black;
   border-collapse: collapse;
   font-size: 0.7em;
 }
 
 .reveal table th {
-  border-width: 1px;
+  border-width: 0px;
   padding-left: 10px;
   padding-right: 25px;
   font-weight: bold;
-  border-style: dotted;
+  border-style: solid;
+  border-bottom-width: 1px;
   border-color: gray;
+  text-align: center;
 }
 
 .reveal table td {
   border-width: 1px;
   padding-left: 10px;
   padding-right: 25px;
-  border-style: double;;
+  border-style: none;
   border-color: gray;
 }
 
@@ -905,7 +907,7 @@ body {
    top: 0;
 }
 
-.reveal .header {
+.header {
     color: black;
     background: #FFFFFF;
     position: fixed;;
@@ -917,6 +919,14 @@ body {
 
 .small-code pre code {
   font-size: 1em;
+}
+
+.note {
+  color: #a74646;
+  background: #d1d0cf;
+  border-radius: 25px;
+  width: 70%;
+  padding-top: 5px;
 }
 
 
@@ -1146,7 +1156,7 @@ hljs.initHighlightingOnLoad();
 <h1></h1><p></p>
 
 <div class="slideContent noTitle" >
-<p><h1><center>Distracted Driving:<br>Detecting Texting with Neural Networks</center></h1><br></p>
+<p><h1><center>Distracted Driving:<br><br>Detecting Texting with<br><br>Neural Networks</center></h1><br></p>
 
 <style color='#FFFFFF'></style>
 
@@ -1160,15 +1170,13 @@ hljs.initHighlightingOnLoad();
 <div class="slideContent" >
 <p><br></p>
 
-<h2>1) Data Extraction, Preparation, and Project Management</h2>
-
-<h2>2) Exploratory Analysis and Model Proposal</h2>
-
-<h2>3) Understanding Basic Neural Nets</h2>
-
-<h2>4) Model Training and Selection</h2>
-
-<h2>5) Exploring Model Effects</h2>
+<ul>
+<li>Data Extraction, Preparation, and Project Management</li>
+<li>Exploratory Analysis and Model Proposal</li>
+<li>Understanding Basic Neural Nets</li>
+<li>Model Training and Selection</li>
+<li>Exploring Model Effects</li>
+</ul>
 
 </div>
 
@@ -1184,11 +1192,14 @@ hljs.initHighlightingOnLoad();
 <section data-transition="linear" data-transition-speed="default">
 <h3>Data Introduction</h3>
 <div class="slideContent" >
+<p><center></p>
+
 <ul>
 <li><small>The data in this project are of 8 driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation.</small></li>
 <li><small>Every simulation observation contains likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds.</small></li>
 <li><small>Stimuli data which records targetted events introduced into each simulation and basic demographic data on each subject are also available.</small></li>
-<li><small>There are over 6.7 million observations in the entire dataset spread accross 777 files.</small></li>
+<li><small>There are over 6.7 million observations in the entire dataset spread accross 777 files.</small>
+</center></li>
 </ul>
 
 <p><center><strong>T001-001.xlsx (Subject 01, Simulation 01)</strong><br>
@@ -1197,19 +1208,32 @@ hljs.initHighlightingOnLoad();
 
 <p><br> </p>
 
-<p><small>The data set used in this project was originally collected and analyzed in <a href="http://www.nature.com/articles/srep25651">Dissecting Driver Behaviors Under Cognitive, Emotional, Sensorimotor, and Mixed Stressors</a>, Scientific Reports 6, Article number: 25651 (2016).</small></p>
+<p><center></p>
+
+<ul>
+<li><small>The data set used in this project was originally collected and analyzed in <strong><a href="http://www.nature.com/articles/srep25651">Dissecting Driver Behaviors Under Cognitive, Emotional, Sensorimotor, and Mixed Stressors</a></strong>, Scientific Reports 6, Article number: 25651 (2016).</small>
+</center></li>
+</ul>
 
 </div>
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Data Introduction</h3>
+<h3>Data Extraction</h3>
 <div class="slideContent" >
-<p><center><strong>Simulation Data T001-001.xlsx</strong></p>
+<p><center></p>
+
+<ul>
+<li><small><strong><a href="https://github.com/JestonBlu/Driving/tree/master/Files">Python scripts</a></strong> were used to extract and combine the 509 driving simulation files and 267 stimuli files into combined data sets.</small></li>
+<li><small>The subject-simulation identifier was the name of each file. A column labeled ID was created based on the file name to identify the original data set.</small>
+</center></li>
+</ul>
+
+<p><center><strong>Sample of data-faces.csv</strong></p>
 
 <table><thead>
 <tr>
-<th align="right">Frame.</th>
+<th align="right">Frame</th>
 <th align="right">Time</th>
 <th align="right">Anger</th>
 <th align="right">Contempt</th>
@@ -1304,15 +1328,15 @@ hljs.initHighlightingOnLoad();
 
 <p></center></p>
 
-<p><center><strong>Sample of Stimuli File</strong></p>
+<p><center><strong>Sample of data-stimuli.csv</strong></p>
 
 <table><thead>
 <tr>
-<th align="right">StartTime</th>
-<th align="right">EndTime</th>
+<th align="right">Start</th>
+<th align="right">End</th>
 <th align="right">Event.Switch</th>
-<th align="right">Action.Type</th>
-<th align="left">Question.Number</th>
+<th align="right">Event.Type</th>
+<th align="left">Event</th>
 <th align="left">ID</th>
 </tr>
 </thead><tbody>
@@ -1368,48 +1392,33 @@ hljs.initHighlightingOnLoad();
 
 <p></center></p>
 
-<p><center><strong>Sample of Demographics</strong></p>
+<p><center>
+<left><div class="note"></p>
 
-<table><thead>
-<tr>
-<th align="left">Subject</th>
-<th align="left">Age</th>
-<th align="left">Gender</th>
-</tr>
-</thead><tbody>
-<tr>
-<td align="left">T001</td>
-<td align="left">Y</td>
-<td align="left">M</td>
-</tr>
-<tr>
-<td align="left">T002</td>
-<td align="left">Y</td>
-<td align="left">F</td>
-</tr>
-<tr>
-<td align="left">T003</td>
-<td align="left">Y</td>
-<td align="left">M</td>
-</tr>
-<tr>
-<td align="left">T004</td>
-<td align="left">Y</td>
-<td align="left">F</td>
-</tr>
-<tr>
-<td align="left">T005</td>
-<td align="left">Y</td>
-<td align="left">M</td>
-</tr>
-<tr>
-<td align="left">T006</td>
-<td align="left">Y</td>
-<td align="left">F</td>
-</tr>
-</tbody></table>
+<ul>
+<li><small>NOTE: 2 simulation files started on different rows than the rest of the 507 files and had to be manually corrected.</small>
 
-<p></center></p>
+<ul>
+<li><small>T034-005.xlsx: header starts on row 8 </small></li>
+<li><small>T009-006.xlsx: header starts on row 10 </small>
+</div>
+</center></li>
+</ul></li>
+</ul>
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
+<h3>Data Preparation</h3>
+<div class="slideContent" >
+
+</div>
+
+</section>
+<section data-transition="linear" data-transition-speed="default">
+<h3>Data Preparation</h3>
+<div class="slideContent" >
 
 </div>
 
@@ -1421,7 +1430,7 @@ hljs.initHighlightingOnLoad();
 
 <ul>
 <li><strong>Simulation Files</strong>: 509 excel files ranging from 3,000 to 30,000 observations her file. (750MB)</li>
-<li><strong>Stimuli Files</strong>: 267 </li>
+<li><strong>Stimuli Files</strong>: 267 .stm files </li>
 <li>Each simulation includes likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds</li>
 <li>Stimuli data which records targetted events introduced into some of the simulations and basic demographic data on each subject were also available</li>
 <li>The entire data set was originally stored in 777 individual data files</li>
