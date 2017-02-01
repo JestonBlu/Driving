@@ -116,37 +116,3 @@ Data Extraction
 </center>
 
 
-Data Preparation
-========================================================
-
-
-
-
-
-
-
-
-Data Preparation
-========================================================
-
-
-
-
-
-
-
-
-
-
-Data Introduction, Preparation, and Project Management
-========================================================
-
-### File Desriptions
-  * **Simulation Files**: 509 excel files ranging from 3,000 to 30,000 observations her file. (750MB)
-  * **Stimuli Files**: 267 .stm files 
-  * Each simulation includes likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds
-  * Stimuli data which records targetted events introduced into some of the simulations and basic demographic data on each subject were also available
-  * The entire data set was originally stored in 777 individual data files
-
----
-
