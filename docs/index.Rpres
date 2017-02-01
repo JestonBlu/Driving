@@ -123,15 +123,15 @@ Data Preparation
 Project Management
 ========================================================
 
+* Github Project: [https://github.com/jestonblu/driving](https://github.com/jestonblu/driving)
+* Hosted Presentation: [https://jestonblu.github.io/Driving](https://jestonblu.github.io/Driving)
+
+
 Exploratory Analysis and Model Proposal
 ========================================================
 type: section
 title: false
 
 <h1><center>Exploratory Analysis<br><br>and<br><br>Model Proposal</center></h1><br>
-
-* Github Project: [https://github.com/jestonblu/driving](https://github.com/jestonblu/driving)
-* Hosted Presentation: [https://jestonblu.github.io/Driving](https://jestonblu.github.io/Driving)
-
 
 
