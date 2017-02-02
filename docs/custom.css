@@ -225,6 +225,7 @@
   border-color: black;
   border-collapse: collapse;
   font-size: 0.7em;
+  white-space: nowrap;
 }
 
 .reveal table th {
@@ -236,6 +237,7 @@
   border-bottom-width: 1px;
   border-color: gray;
   text-align: center;
+  white-space: nowrap;
 }
 
 .reveal table td {
@@ -244,6 +246,7 @@
   padding-right: 25px;
   border-style: none;
   border-color: gray;
+  white-space: nowrap;
 }
 
 .reveal blockquote {

@@ -786,6 +786,7 @@ body {
   border-color: black;
   border-collapse: collapse;
   font-size: 0.7em;
+  white-space: nowrap;
 }
 
 .reveal table th {
@@ -797,6 +798,7 @@ body {
   border-bottom-width: 1px;
   border-color: gray;
   text-align: center;
+  white-space: nowrap;
 }
 
 .reveal table td {
@@ -805,6 +807,7 @@ body {
   padding-right: 25px;
   border-style: none;
   border-color: gray;
+  white-space: nowrap;
 }
 
 .reveal blockquote {
@@ -1171,7 +1174,7 @@ hljs.initHighlightingOnLoad();
 <p><br></p>
 
 <ul>
-<li>Data Extraction, Preparation, and Project Management</li>
+<li>Data Introduction, Preparation, and Project Management</li>
 <li>Exploratory Analysis and Model Proposal</li>
 <li>Understanding Basic Neural Nets</li>
 <li>Model Training and Selection</li>
@@ -1412,6 +1415,173 @@ hljs.initHighlightingOnLoad();
 <section data-transition="linear" data-transition-speed="default">
 <h3>Data Preparation</h3>
 <div class="slideContent" >
+<p><center></p>
+
+<ul>
+<li><small>The event data captured the starting and ending times of events only.</small></li>
+<li><small>A loop function was written to go through each record and compare time between the simulation and the starting/ending time of the event.</small></li>
+<li><small>If the simulation time fell within the starting/ending time interval in the event data, then all of the records in the time interval were coded with that event (ie: <strong>Texting</strong>)</small></li>
+<li><small>All observations outside of the event time interval were coded as <strong>No Event</strong>.</small></li>
+</ul>
+
+<p><br></p>
+
+<p><strong>Sample of Cleaned Data Showing an Event Transition</strong></p>
+
+<table><thead>
+<tr>
+<th align="left">Subject</th>
+<th align="left">Trial</th>
+<th align="left">Age</th>
+<th align="left">Gender</th>
+<th align="right">Frame</th>
+<th align="right">Time</th>
+<th align="right">Event.Switch</th>
+<th align="left">Event</th>
+<th align="right">Action</th>
+<th align="right">Anger</th>
+<th align="right">Contempt</th>
+<th align="right">Disgust</th>
+<th align="right">Fear</th>
+<th align="right">Joy</th>
+<th align="right">Sad</th>
+<th align="right">Surprise</th>
+<th align="right">Neutral</th>
+<th align="left">Texting</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">T001</td>
+<td align="left">007</td>
+<td align="left">Y</td>
+<td align="left">M</td>
+<td align="right">2427</td>
+<td align="right">80.900</td>
+<td align="right">0</td>
+<td align="left">No Event</td>
+<td align="right">0</td>
+<td align="right">0.0909</td>
+<td align="right">0.0575</td>
+<td align="right">0.4205</td>
+<td align="right">3e-04</td>
+<td align="right">0.0011</td>
+<td align="right">0.1343</td>
+<td align="right">0</td>
+<td align="right">0.2954</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">T001</td>
+<td align="left">007</td>
+<td align="left">Y</td>
+<td align="left">M</td>
+<td align="right">2428</td>
+<td align="right">80.933</td>
+<td align="right">0</td>
+<td align="left">No Event</td>
+<td align="right">0</td>
+<td align="right">0.0612</td>
+<td align="right">0.0397</td>
+<td align="right">0.4293</td>
+<td align="right">4e-04</td>
+<td align="right">0.0011</td>
+<td align="right">0.1630</td>
+<td align="right">0</td>
+<td align="right">0.3052</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">T001</td>
+<td align="left">007</td>
+<td align="left">Y</td>
+<td align="left">M</td>
+<td align="right">2429</td>
+<td align="right">80.967</td>
+<td align="right">0</td>
+<td align="left">No Event</td>
+<td align="right">0</td>
+<td align="right">0.1034</td>
+<td align="right">0.0963</td>
+<td align="right">0.3186</td>
+<td align="right">2e-04</td>
+<td align="right">0.0013</td>
+<td align="right">0.0856</td>
+<td align="right">0</td>
+<td align="right">0.3946</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">T001</td>
+<td align="left">007</td>
+<td align="left">Y</td>
+<td align="left">M</td>
+<td align="right">2430</td>
+<td align="right">81.000</td>
+<td align="right">1</td>
+<td align="left">Texting</td>
+<td align="right">4</td>
+<td align="right">0.0363</td>
+<td align="right">0.4976</td>
+<td align="right">0.0171</td>
+<td align="right">1e-04</td>
+<td align="right">0.0024</td>
+<td align="right">0.0069</td>
+<td align="right">0</td>
+<td align="right">0.4396</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">T001</td>
+<td align="left">007</td>
+<td align="left">Y</td>
+<td align="left">M</td>
+<td align="right">2431</td>
+<td align="right">81.033</td>
+<td align="right">1</td>
+<td align="left">Texting</td>
+<td align="right">4</td>
+<td align="right">0.0059</td>
+<td align="right">0.7285</td>
+<td align="right">0.0027</td>
+<td align="right">4e-04</td>
+<td align="right">0.0068</td>
+<td align="right">0.0063</td>
+<td align="right">0</td>
+<td align="right">0.2493</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">T001</td>
+<td align="left">007</td>
+<td align="left">Y</td>
+<td align="left">M</td>
+<td align="right">2432</td>
+<td align="right">81.067</td>
+<td align="right">1</td>
+<td align="left">Texting</td>
+<td align="right">4</td>
+<td align="right">0.0058</td>
+<td align="right">0.6890</td>
+<td align="right">0.0035</td>
+<td align="right">4e-04</td>
+<td align="right">0.0077</td>
+<td align="right">0.0068</td>
+<td align="right">0</td>
+<td align="right">0.2868</td>
+<td align="left">1</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p><left><div class="note"></p>
+
+<ul>
+<li><small>NOTE: The average texting event lasted 2.5 minutes, but we dont really know what occurred during the event time interval. Was there one long texting action or was the event made up of a series of sending and receiving texts?</small>
+</div></li>
+</ul>
+
+<p></center></p>
 
 </div>
 

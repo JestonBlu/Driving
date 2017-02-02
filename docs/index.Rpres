@@ -28,7 +28,7 @@ Contents
 title: true
 <br>
 
-* Data Extraction, Preparation, and Project Management
+* Data Introduction, Preparation, and Project Management
 * Exploratory Analysis and Model Proposal
 * Understanding Basic Neural Nets
 * Model Training and Selection
@@ -87,9 +87,16 @@ Data Extraction
 <center>**Sample of data-faces.csv**
 
 ```{r a1, echo=FALSE, comment=NA}
+## Import faces
 faces = read.csv("../Files/data-faces.csv", nrows = 10)
+
+## Apply Rounding for better visual
 faces[,2:10] = apply(faces[,2:10], 2, function(x) round(x, 4))
+
+## Adjust column name
 colnames(faces)[1] = "Frame"
+
+## Print table
 kable(head(faces))
 ```
 
@@ -98,10 +105,16 @@ kable(head(faces))
 <center>**Sample of data-stimuli.csv**
 
 ```{r a2, echo=FALSE, comment=NA}
+## Import stimuli
 stimuli = read.csv("../Files/data-stimuli.csv")
+
+## Adjust column names
 colnames(stimuli) = c("Start", "End", "Event.Switch", "Event.Type", "Event", "ID")
+
+## Print table
 kable(head(stimuli), split.table=Inf)
 
+rm(list = ls())
 ```
 
 </center>
@@ -118,6 +131,45 @@ kable(head(stimuli), split.table=Inf)
 
 Data Preparation
 ========================================================
+
+<center>
+
+* <small>The event data captured the starting and ending times of events only.</small>
+* <small>A loop function was written to go through each record and compare time between the simulation and the starting/ending time of the event.</small>
+* <small>If the simulation time fell within the starting/ending time interval in the event data, then all of the records in the time interval were coded with that event (ie: **Texting**)</small>
+* <small>All observations outside of the event time interval were coded as **No Event**.</small>
+
+<br>
+
+**Sample of Cleaned Data Showing an Event Transition**
+
+```{r a3, echo=FALSE, comment=NA}
+## Import combined data
+load("../R-Data/faces.rda")
+
+## Subset the data to show a texting event switch
+faces = subset(faces, ID == 'T001-007' & Time >= 80.9 & Time < 81.1)
+
+## Apply rounding for better visual
+faces$Time = round(faces$Time, 3)
+faces[, 11:18] = apply(X = faces[, 11:18], MARGIN = 2, FUN = function(x) round(x, 4))
+faces = faces[, -1]
+
+## Hack to hide row names
+row.names(faces) = NULL
+
+## Print table
+kable(faces, split.table = Inf)
+
+```
+
+<br>
+
+<left><div class="note">
+  - <small>NOTE: The average texting event lasted 2.5 minutes, but we dont really know what occurred during the event time interval. Was there one long texting action or was the event made up of a series of sending and receiving texts?</small>
+</div>
+
+</center>
 
 
 Project Management

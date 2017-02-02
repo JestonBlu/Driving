@@ -22,7 +22,7 @@ Contents
 title: true
 <br>
 
-* Data Extraction, Preparation, and Project Management
+* Data Introduction, Preparation, and Project Management
 * Exploratory Analysis and Model Proposal
 * Understanding Basic Neural Nets
 * Model Training and Selection
@@ -118,6 +118,35 @@ Data Extraction
 
 Data Preparation
 ========================================================
+
+<center>
+
+* <small>The event data captured the starting and ending times of events only.</small>
+* <small>A loop function was written to go through each record and compare time between the simulation and the starting/ending time of the event.</small>
+* <small>If the simulation time fell within the starting/ending time interval in the event data, then all of the records in the time interval were coded with that event (ie: **Texting**)</small>
+* <small>All observations outside of the event time interval were coded as **No Event**.</small>
+
+<br>
+
+**Sample of Cleaned Data Showing an Event Transition**
+
+
+|Subject |Trial |Age |Gender | Frame|   Time| Event.Switch|Event    | Action|  Anger| Contempt| Disgust|  Fear|    Joy|    Sad| Surprise| Neutral|Texting |
+|:-------|:-----|:---|:------|-----:|------:|------------:|:--------|------:|------:|--------:|-------:|-----:|------:|------:|--------:|-------:|:-------|
+|T001    |007   |Y   |M      |  2427| 80.900|            0|No Event |      0| 0.0909|   0.0575|  0.4205| 3e-04| 0.0011| 0.1343|        0|  0.2954|0       |
+|T001    |007   |Y   |M      |  2428| 80.933|            0|No Event |      0| 0.0612|   0.0397|  0.4293| 4e-04| 0.0011| 0.1630|        0|  0.3052|0       |
+|T001    |007   |Y   |M      |  2429| 80.967|            0|No Event |      0| 0.1034|   0.0963|  0.3186| 2e-04| 0.0013| 0.0856|        0|  0.3946|0       |
+|T001    |007   |Y   |M      |  2430| 81.000|            1|Texting  |      4| 0.0363|   0.4976|  0.0171| 1e-04| 0.0024| 0.0069|        0|  0.4396|1       |
+|T001    |007   |Y   |M      |  2431| 81.033|            1|Texting  |      4| 0.0059|   0.7285|  0.0027| 4e-04| 0.0068| 0.0063|        0|  0.2493|1       |
+|T001    |007   |Y   |M      |  2432| 81.067|            1|Texting  |      4| 0.0058|   0.6890|  0.0035| 4e-04| 0.0077| 0.0068|        0|  0.2868|1       |
+
+<br>
+
+<left><div class="note">
+  - <small>NOTE: The average texting event lasted 2.5 minutes, but we dont really know what occurred during the event time interval. Was there one long texting action or was the event made up of a series of sending and receiving texts?</small>
+</div>
+
+</center>
 
 
 Project Management
