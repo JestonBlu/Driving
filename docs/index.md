@@ -144,7 +144,7 @@ Data Preparation
 
 <left><div class="note">
   - <small>NOTE: The average texting event lasted 2.5 minutes, but we dont really know what occurred during the event time interval. Was there one long texting action or was the event made up of a series of sending and receiving texts?</small>
-</div>
+</div></left>
 
 </center>
 
@@ -152,8 +152,31 @@ Data Preparation
 Project Management
 ========================================================
 
-* Github Project: [https://github.com/jestonblu/driving](https://github.com/jestonblu/driving)
-* Hosted Presentation: [https://jestonblu.github.io/Driving](https://jestonblu.github.io/Driving)
+<br>
+
+**Reproducible Research**
+
+* <small>Code, plots, and this presentation are organized and hosted in a github repository.</small>
+* <small>The main page includes steps to reproduce the data set and models</small>
+* <small>The data is too large to be hosted and would need to be retrieved elsewhere</small>
+
+
+<left><div class="note">
+<center><small>NOTE: Github Project: [https://github.com/jestonblu/driving](https://github.com/jestonblu/driving)</small></center>
+</div>
+</left>
+
+
+***
+
+<center>
+**Github Project Page**
+<img src="Screens/github.png" alt="Drawing" style="width: 1400px;"/>
+</center>
+
+
+
+
 
 
 Exploratory Analysis and Model Proposal
