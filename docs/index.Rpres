@@ -184,8 +184,10 @@ Project Management
 * <small>The data is too large to be hosted and would need to be retrieved elsewhere</small>
 
 
+<br>
+
 <left><div class="note">
-<center><small>NOTE: Github Project: [https://github.com/jestonblu/driving](https://github.com/jestonblu/driving)</small></center>
+<center><small>Github Project: [https://github.com/jestonblu/driving](https://github.com/jestonblu/driving)</small></center>
 </div>
 </left>
 
@@ -210,3 +212,26 @@ title: false
 <h1><center>Exploratory Analysis<br><br>and<br><br>Model Proposal</center></h1><br>
 
 
+
+
+
+
+Exploratory Analysis
+========================================================
+
+<center>
+<img src="Plots/Texting_vs_Baseline_01.png" alt="Drawing" style="width: 2500px;"/>
+</center>
+
+* <small></small>
+
+
+
+
+
+Exploratory Analysis
+========================================================
+
+<center>
+<img src="Plots/Texting_vs_Baseline_all.png" alt="Drawing" style="width: 2500px;"/>
+</center>
