@@ -200,10 +200,32 @@ Exploratory Analysis
 <img src="Plots/Texting_vs_Baseline_01.png" alt="Drawing" style="width: 2500px;"/>
 </center>
 
-* <small></small>
+* <small>The yellow and gray points represent events during the trials</small> 
+* <small>The baseline trial has no events and is gray throughout.</small>
+* <small>**LOESS (Local Polynomial Regression)** lines display the moving average over the entire simulation</small>
+* <small>Many subjects displayed visual differences between the texting simulation and the baseline simulation</small>
 
 
+Exploratory Analysis
+========================================================
 
+<center>
+<img src="Plots/Texting_vs_Baseline_02.png" alt="Drawing" style="width: 3000px;"/>
+</center>
+
+<center>
+<img src="Plots/Texting_vs_Baseline_03.png" alt="Drawing" style="width: 3000px;"/>
+</center>
+
+*****
+
+<center>
+<img src="Plots/Texting_vs_Baseline_22_best.png" alt="Drawing" style="width: 3000px;"/>
+</center>
+
+<center>
+<img src="Plots/Texting_vs_Baseline_38_worst.png" alt="Drawing" style="width: 3000px;"/>
+</center>
 
 
 Exploratory Analysis
@@ -212,3 +234,51 @@ Exploratory Analysis
 <center>
 <img src="Plots/Texting_vs_Baseline_all.png" alt="Drawing" style="width: 2500px;"/>
 </center>
+
+* <small>The same LOESS lines were used to show all 59 subjects on a single plot</small>
+* <small>All observations were centered on the overall average of the baseline simulation</small>
+* <small>Anger, Contempt, Disgust, and Neutral displayed more variation than the other emotions for both trials</small>
+
+
+
+
+
+
+
+Model Proposal
+========================================================
+
+<center>
+<img src="Plots/Boxplots_Variance_by_Trial.png" alt="Drawing" style="width: 1400px;"/>
+</center>
+
+********
+
+<br> 
+
+**Takeaways**
+
+* <small>Differences in variation between the trials suggest that it may be possible to build a model capable of predicting a texting event</small>
+
+* <small>Subject specific plots are unique enough that a individual subjects variables may be needed in modeling</small>
+
+* <small>**Baseline Trial**: Trial 4 was used as a baseline trial because the conditions were identical to the Texting Trial (dense traffic with detour)</small>
+
+<br>
+
+**Model Proposal**: 
+
+* <small>Train Neural Networks using emotional likelihoods and demographics to predict when a subject is texting</small>
+  * <small>Well suited for large data sets of continuous variables</small>
+  * <small>Analogous to logistic regression and appropriate for predicting probabilities</small>
+
+
+
+
+
+
+
+
+
+
+
