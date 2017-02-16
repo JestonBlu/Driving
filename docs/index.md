@@ -6,6 +6,7 @@ width: 2100
 height: 1400
 css: custom.css
 
+<br><br>
 <h1><center>Distracted Driving:<br><br>Detecting Texting with<br><br>Neural Networks</center></h1><br>
 <style color='#FFFFFF'></style>
 <h3 style="color:white" font-family: "DejaVu Sans Mono"><center>Joseph Blubaugh<br><br>29 March 2017</center></h3>
@@ -186,6 +187,7 @@ Exploratory Analysis and Model Proposal
 type: section
 title: false
 
+<br><br>
 <h1><center>Exploratory Analysis<br><br>and<br><br>Model Proposal</center></h1><br>
 
 
@@ -279,6 +281,167 @@ Model Proposal
 
 
 
+Basic Nueral Networks
+========================================================
+type: section
+title: false
+
+<br><br>
+<h1><center>Understanding Basic<br><br>Neural Networks</center></h1><br>
 
 
 
+
+
+
+Neural Network Basics
+========================================================
+
+<br>
+
+
+**Feed-Forward Neural Networks**
+* <small>Class of Statistical Learning model</small>
+* <small>Similar to logistic regression</small>
+* <small>Typically displayed as a diagram of connected nodes</small>
+
+<br>
+
+**Nnet Components**
+* <small>**Nodes:**</small>
+  * <small>Input Nodes: Input values of the predictor variables</small>
+  * <small>Hidden and Output Nodes: Value are the sumproduct of the connected weights</small>
+* <small>**Weights:** Represent the transformation that takes place between nodes</small>
+* <small>**Activation Function:** Transforms the output into an appropriate scale</small>
+  * <small>For logistic regression, the sigmoid function: $S(x) = \frac{1}{1 + \exp(-x)}$</small>
+
+*******
+
+<center>
+**Basic Neural Network**
+<img src="Screens/nnet_basic.png" alt="Drawing" style="width: 1400px;"/><br>
+</center>
+
+<center>**General Model Form**</center>
+<br>
+$$nnet(O1 \sim X1 + X2, size = 3)$$
+
+
+
+
+Neural Network Basics
+========================================================
+
+**Step 1:** Initialize Model Weights are Random
+
+<br>
+
+**Step 2:** Calculate Hidden Weights and Output Node Prediction
+
+* <small>Hidden Node values are the sum product of the connected weights</small>
+
+
+<center><small>
+$$
+\begin{align}
+  H1 = & (1)(.2) + (1)(.4) = .6, S(.6) = .645 \\
+  H2 = & (1)(.1) + (1)(.6) = .7, S(.7) = .668 \\
+  H3 = & (1)(.7) + (1)(.3) = 1, \text{ }  S(1) \text{ } = .645 \\
+\end{align}
+$$
+</small></center>
+
+* <small>Output Node Prediction</small>
+
+<center><small>
+$$
+  O1 = (.645)(.3) + (.668)(.5) + (.731)(.7) = 1.049 \\
+  S(1.049) = .7406
+$$
+</small></center>
+
+* <small>Model Error: **.7406**</small>
+
+<center><div class="note">
+NOTE: Activation Function
+$$
+\begin{align}
+S(x) = & \frac{1}{1 + \exp(-x)}
+\end{align}
+$$
+</div></center>
+
+*******
+
+<center>
+**First Iteration of a Basic Neural Network**
+<img src="Screens/nnet_full1.png" alt="Drawing" style="width: 1200px;"/><br>
+</center>
+
+<center>
+<div class="note">NOTE: Grayed values did not change from previous step</div>
+</center>
+
+
+
+
+Neural Network Basics
+========================================================
+
+**Step 3:** Update Weights Based on Error
+
+* <small>Update Weights between Hidden Layer and Output Node</small>
+
+<center><small>
+$$
+\begin{align}
+  Delta = & S'(-.7406) = -.1619 \\
+  DeltaChange = & (-.1619) / [.645, .608, .731] \\
+               = &[-.251, -.242, -.221] \\
+               \\
+  w_7 = & .645 - .251 = .394 \\
+  w_8 = & .668 - .242 = .426 \\
+  w_9 = & .731 - .221 = .51 \\
+\end{align}
+$$
+</small></center>
+
+* <small>Update Weights between Input Node and Hidden Layer</small>
+
+
+<center><small>
+$$
+\begin{align}
+  DeltaWeights = & Delta / [.3, .5, .7] * S'([.6, .7, 1]) \\
+               = & [-.1234, -.0717, -.0454] \\
+  DeltaChange  = & [-.1234, -.0717, -.0454] / [1, 1] \\
+               = & [-.1234, -.0717, -.0454, \\
+                 &  -.1234, -.0717, -.0454] \\
+               \\
+  w_1 = & .2 - .123 = .077 \\
+  w_2 = & .1 - .071 = .029 \\
+  w_3 = & .7 - .045 = .655 \\
+  w_4 = & .4 - .123 = .277 \\
+  w_5 = & .6 - .071 = .529 \\
+  w_6 = & .3 - .045 = .255 \\
+\end{align}
+$$
+</small></center>
+
+
+*******
+
+**Step 4**: Repeat Steps 2-3 to update the hidden and output node values
+* <small>S(.551) = .634, Error = **.634** vs previous **.740**</small>
+
+<center>
+**First Iteration of a Basic Neural Network**
+<img src="Screens/nnet_full2.png" alt="Drawing" style="width: 1200px;"/><br>
+</center>
+
+<center>
+<left><div class="note">
+* <small>Grayed values did not change from previous step</small>
+* <small>$S'(x) = S(x)(1 - S(x))$</small>
+</div></left>
+</center>
