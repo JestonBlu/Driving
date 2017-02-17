@@ -297,6 +297,20 @@ title: false
 Neural Network Basics
 ========================================================
 
+
+
+<center>
+**Basic Neural Network Example**
+<img src="Screens/nnet_basic.png" alt="Drawing" style="width: 1400px;"/><br>
+</center>
+
+<center>**General Model Form**</center>
+<br>
+$$nnet(O1 \sim X1 + X2, size = 3)$$
+
+
+*******
+
 <br>
 
 
@@ -307,25 +321,13 @@ Neural Network Basics
 
 <br>
 
-**Nnet Components**
+**Neural Network Components**
 * <small>**Nodes:**</small>
   * <small>Input Nodes: Input values of the predictor variables</small>
   * <small>Hidden and Output Nodes: Value are the sumproduct of the connected weights</small>
-* <small>**Weights:** Represent the transformation that takes place between nodes</small>
+* <small>**Weights:** Represents the transformation that takes place between nodes</small>
 * <small>**Activation Function:** Transforms the output into an appropriate scale</small>
   * <small>For logistic regression, the sigmoid function: $S(x) = \frac{1}{1 + \exp(-x)}$</small>
-
-*******
-
-<center>
-**Basic Neural Network**
-<img src="Screens/nnet_basic.png" alt="Drawing" style="width: 1400px;"/><br>
-</center>
-
-<center>**General Model Form**</center>
-<br>
-$$nnet(O1 \sim X1 + X2, size = 3)$$
-
 
 
 
@@ -338,15 +340,15 @@ Neural Network Basics
 
 **Step 2:** Calculate Hidden Weights and Output Node Prediction
 
-* <small>Hidden Node values are the sum product of the connected weights</small>
+* <small>Hidden Node values are the sum product of the connected weights and input nodes</small>
 
 
 <center><small>
 $$
 \begin{align}
-  H1 = & (1)(.2) + (1)(.4) = .6, S(.6) = .645 \\
-  H2 = & (1)(.1) + (1)(.6) = .7, S(.7) = .668 \\
-  H3 = & (1)(.7) + (1)(.3) = 1, \text{ }  S(1) \text{ } = .645 \\
+  H1 = & (1)(.2) + (1)(.4) = 0.6, \text{  } S(0.6) = .645 \\
+  H2 = & (1)(.1) + (1)(.6) = 0.7, \text{  }S(0.7) = .668 \\
+  H3 = & (1)(.7) + (1)(.3) = 1.0, \text{  }S(1.0) = .731 \\
 \end{align}
 $$
 </small></center>
@@ -355,12 +357,12 @@ $$
 
 <center><small>
 $$
-  O1 = (.645)(.3) + (.668)(.5) + (.731)(.7) = 1.049 \\
-  S(1.049) = .7406
+  O1 = (.645)(.3) + (.668)(.5) + (.731)(.7) = 1.039 \\
+  S(1.039) = .739
 $$
 </small></center>
 
-* <small>Model Error: **.7406**</small>
+* <small>Model Error: **.739**</small>
 
 <center><div class="note">
 NOTE: Activation Function
@@ -395,13 +397,13 @@ Neural Network Basics
 <center><small>
 $$
 \begin{align}
-  Delta = & S'(-.7406) = -.1619 \\
-  DeltaChange = & (-.1619) / [.645, .608, .731] \\
-               = &[-.251, -.242, -.221] \\
-               \\
-  w_7 = & .645 - .251 = .394 \\
-  w_8 = & .668 - .242 = .426 \\
-  w_9 = & .731 - .221 = .51 \\
+  Delta = & S'(.739) = .2187 \\
+  \\
+  DeltaChange = & (.2187) / [.645, .668, .731] = [.339, .327, .299] \\
+  \\
+  w_7 = & .645 - .339 = .306 \\
+  w_8 = & .668 - .327 = .341 \\
+  w_9 = & .731 - .299 = .432 \\
 \end{align}
 $$
 </small></center>
@@ -413,17 +415,17 @@ $$
 $$
 \begin{align}
   DeltaWeights = & Delta / [.3, .5, .7] * S'([.6, .7, 1]) \\
-               = & [-.1234, -.0717, -.0454] \\
-  DeltaChange  = & [-.1234, -.0717, -.0454] / [1, 1] \\
-               = & [-.1234, -.0717, -.0454, \\
-                 &  -.1234, -.0717, -.0454] \\
+               = & [.1667, .0969, .0614] \\
                \\
-  w_1 = & .2 - .123 = .077 \\
-  w_2 = & .1 - .071 = .029 \\
-  w_3 = & .7 - .045 = .655 \\
-  w_4 = & .4 - .123 = .277 \\
-  w_5 = & .6 - .071 = .529 \\
-  w_6 = & .3 - .045 = .255 \\
+  DeltaChange  = & DeltaWeights / [1, 1] \\
+               = & [.167, .097, .061, .167, .097, .061] \\
+               \\
+  w_1 = & .2 - .167 = .033 \\
+  w_2 = & .1 - .097 = .003 \\
+  w_3 = & .7 - .061 = .639 \\
+  w_4 = & .4 - .167 = .233 \\
+  w_5 = & .6 - .097 = .503 \\
+  w_6 = & .3 - .061 = .239 \\
 \end{align}
 $$
 </small></center>
@@ -432,7 +434,7 @@ $$
 *******
 
 **Step 4**: Repeat Steps 2-3 to update the hidden and output node values
-* <small>S(.551) = .634, Error = **.634** vs previous **.740**</small>
+* <small>S(.633) = .653, Error = **.653** vs previous **.739**</small>
 
 <center>
 **First Iteration of a Basic Neural Network**
@@ -445,3 +447,18 @@ $$
 * <small>$S'(x) = S(x)(1 - S(x))$</small>
 </div></left>
 </center>
+
+
+
+
+
+
+
+Model Fitting and Selection
+========================================================
+type: section
+title: false
+
+<br><br>
+<h1><center>Model Fitting and Selection</center></h1><br>
+
