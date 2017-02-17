@@ -357,7 +357,7 @@ $$nnet(O1 \sim X1 + X2, size = 3)$$
 Neural Network Basics
 ========================================================
 
-**Step 1:** Initialize Model Weights are Random
+**Step 1:** Model is Initialized with Random Weights
 
 <br>
 
@@ -387,14 +387,14 @@ $$
 
 * <small>Model Error: **.739**</small>
 
-<center><div class="note">
+<center><small><div class="note">
 NOTE: Activation Function
 $$
 \begin{align}
 S(x) = & \frac{1}{1 + \exp(-x)}
 \end{align}
 $$
-</div></center>
+</div></small></center>
 
 *******
 
@@ -404,7 +404,9 @@ $$
 </center>
 
 <center>
+<small>
 <div class="note">NOTE: Grayed values did not change from previous step</div>
+</small>
 </center>
 
 
