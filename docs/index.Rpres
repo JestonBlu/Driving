@@ -440,7 +440,7 @@ $$
 $$
 \begin{align}
   DeltaWeights = & Delta / [.3, .5, .7] * S'([.6, .7, 1]) \\
-               = & [.1667, .0969, .0614] \\
+               = & [.167, .097, .061] \\
                \\
   DeltaChange  = & DeltaWeights / [1, 1] \\
                = & [.167, .097, .061, .167, .097, .061] \\
@@ -458,7 +458,7 @@ $$
 
 *******
 
-**Step 4**: Repeat Steps 2-3 to update the hidden and output node values
+**Step 4**: Repeat steps 2-3 to update node values
 * <small>S(.633) = .653, Error = **.653** vs previous **.739**</small>
 
 <center>
