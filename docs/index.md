@@ -316,6 +316,7 @@ $$nnet(O1 \sim X1 + X2, size = 3)$$
 
 **Feed-Forward Neural Networks**
 * <small>Class of Statistical Learning model</small>
+* <small>Uses a training set for tuning the model and a testing set for measuring performance</small>
 * <small>Similar to logistic regression</small>
 * <small>Typically displayed as a diagram of connected nodes</small>
 
@@ -334,7 +335,7 @@ $$nnet(O1 \sim X1 + X2, size = 3)$$
 Neural Network Basics
 ========================================================
 
-**Step 1:** Initialize Model Weights are Random
+**Step 1:** Model is Initialized with Random Weights
 
 <br>
 
@@ -364,14 +365,18 @@ $$
 
 * <small>Model Error: **.739**</small>
 
-<center><div class="note">
-NOTE: Activation Function
+<center>
+<div class="note">
+NOTE: Activation Function <br>
+<small>
 $$
 \begin{align}
 S(x) = & \frac{1}{1 + \exp(-x)}
 \end{align}
 $$
-</div></center>
+</small>
+</div>
+</center>
 
 *******
 
@@ -381,7 +386,9 @@ $$
 </center>
 
 <center>
+<small>
 <div class="note">NOTE: Grayed values did not change from previous step</div>
+</small>
 </center>
 
 
@@ -415,7 +422,7 @@ $$
 $$
 \begin{align}
   DeltaWeights = & Delta / [.3, .5, .7] * S'([.6, .7, 1]) \\
-               = & [.1667, .0969, .0614] \\
+               = & [.167, .097, .061] \\
                \\
   DeltaChange  = & DeltaWeights / [1, 1] \\
                = & [.167, .097, .061, .167, .097, .061] \\
@@ -433,7 +440,7 @@ $$
 
 *******
 
-**Step 4**: Repeat Steps 2-3 to update the hidden and output node values
+**Step 4**: Repeat steps 2-3 to update node values
 * <small>S(.633) = .653, Error = **.653** vs previous **.739**</small>
 
 <center>
@@ -461,4 +468,48 @@ title: false
 
 <br><br>
 <h1><center>Model Fitting and Selection</center></h1><br>
+
+
+
+
+
+
+Model Fitting
+========================================================
+left: 70%
+
+**General Model Form**
+<small>
+$$
+\begin{align*}
+  nnet(Texting = & \text{ } Subject + Age + Gender + Anger + Contempt \text{ } + \\
+  & \text{ } Digust + Fear + Joy + Sad + Surprise + Neutral)\\
+\end{align*}
+$$
+</small>
+
+<small>
+**Training Strategy**
+  * Train the same model on various slices of the data to see what works best
+  * **Data Processing**:
+    * **Original**:
+    * **Differencing**:
+    * **Moving Avg**:
+    * **1/2 Sec Cut**:
+    * **1/2 Sec Diff**:
+    * **1/2 Sec Cut Stat**:
+  * **Data Split**
+    * **365 Split**
+    * **Entire Sim**
+</small>
+
+
+*******
+
+<center>
+**Neural Network Model Design**<br>
+<img src="Screens/nnet_design.png" alt="Drawing" style="height: 1200px; width: 600px;"/><br>
+</center>
+
+
 

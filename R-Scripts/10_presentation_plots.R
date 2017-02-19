@@ -8,10 +8,8 @@ load("R-Data/faces.rda")
 load("R-Data/faces_cen.rda")
 
 
-##
 ## SUBJECT 001: Control vs Texting Events... intended to show differences between the trials
 ## particularly during the texting even window
-##
 
 ## Compare regular drive to the texting drive
 x = subset(faces, Trial == '007' | Trial == '004')
@@ -216,8 +214,9 @@ ggsave(filename = "docs/Plots/Boxplots_Variance_Texting_Trial.png", plot = g11, 
 
 
 
-
-
+##
+## Model Fitting
+##
 
 
 

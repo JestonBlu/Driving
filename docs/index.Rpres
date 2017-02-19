@@ -339,6 +339,7 @@ $$nnet(O1 \sim X1 + X2, size = 3)$$
 
 **Feed-Forward Neural Networks**
 * <small>Class of Statistical Learning model</small>
+* <small>Uses a training set for tuning the model and a testing set for measuring performance</small>
 * <small>Similar to logistic regression</small>
 * <small>Typically displayed as a diagram of connected nodes</small>
 
@@ -387,14 +388,18 @@ $$
 
 * <small>Model Error: **.739**</small>
 
-<center><small><div class="note">
-NOTE: Activation Function
+<center>
+<div class="note">
+NOTE: Activation Function <br>
+<small>
 $$
 \begin{align}
 S(x) = & \frac{1}{1 + \exp(-x)}
 \end{align}
 $$
-</div></small></center>
+</small>
+</div>
+</center>
 
 *******
 
@@ -486,4 +491,48 @@ title: false
 
 <br><br>
 <h1><center>Model Fitting and Selection</center></h1><br>
+
+
+
+
+
+
+Model Fitting
+========================================================
+left: 70%
+
+**General Model Form**
+<small>
+$$
+\begin{align*}
+  nnet(Texting = & \text{ } Subject + Age + Gender + Anger + Contempt \text{ } + \\
+  & \text{ } Digust + Fear + Joy + Sad + Surprise + Neutral)\\
+\end{align*}
+$$
+</small>
+
+<small>
+**Training Strategy**
+  * Train the same model on various slices of the data to see what works best
+  * **Data Processing**:
+    * **Original**:
+    * **Differencing**:
+    * **Moving Avg**:
+    * **1/2 Sec Cut**:
+    * **1/2 Sec Diff**:
+    * **1/2 Sec Cut Stat**:
+  * **Data Split**
+    * **365 Split**
+    * **Entire Sim**
+</small>
+
+
+*******
+
+<center>
+**Neural Network Model Design**<br>
+<img src="Screens/nnet_design.png" alt="Drawing" style="height: 1200px; width: 600px;"/><br>
+</center>
+
+
 
