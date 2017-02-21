@@ -514,16 +514,20 @@ $$
 <small>
 **Training Strategy**
   * Train the same model on various slices of the data to see what works best
+  
+  * 12 data sets are created in total
+  
   * **Data Processing**:
-    * **Original**:
-    * **Differencing**:
-    * **Moving Avg**:
-    * **1/2 Sec Cut**:
-    * **1/2 Sec Diff**:
-    * **1/2 Sec Cut Stat**:
+    * **Original**: Emotions in the original form measured in .03 second intervals.
+    * **Differencing**: First order differening of the original observations.
+    * **Moving Avg**: Moving averages n=30 for all of the emotions.
+    * **1/2 Sec Cut**: Time cut into 1/2 second intervals with the average value recorded.
+    * **1/2 Sec Diff**: First order differncing of the 1/2 second cut data.
+    * **1/2 Sec Cut Stat**: 1/2 Sec Cut with additional sd, min, max, iqr, and median.
+
   * **Data Split**
-    * **365 Split**
-    * **Entire Sim**
+    * **365 Split**: The data are split at the 365 second, approximately half way through the texting simulation.
+    * **Entire Sim**: The training set is randomly selected from the entire simulation.
 </small>
 
 
