@@ -499,31 +499,38 @@ title: false
 
 Model Fitting
 ========================================================
-left: 70%
+left: 30%
 
-**General Model Form**
 <small>
+<center>
+**Neural Network Model Design**
+<img src="Screens/nnet_design.png" alt="Drawing" style="height: 1200px; width: 600px;"/>
+</center>
+
+*******
+
+<br><br>
+**General Model Form**
+
 $$
 \begin{align*}
   nnet(Texting = & \text{ } Subject + Age + Gender + Anger + Contempt \text{ } + \\
   & \text{ } Digust + Fear + Joy + Sad + Surprise + Neutral)\\
 \end{align*}
 $$
-</small>
 
-<small>
-**Training Strategy**
-  * Train the same model on various slices of the data to see what works best
+**Modeling Strategy**
+  * Train the same general model on various slices of the data to see what works best
   
-  * 12 data sets are created in total
+  * 12 total training/testing data sets created from the combination of Data Processing and Data Split methods
   
-  * **Data Processing**:
+  * **Data Processing**
     * **Original**: Emotions in the original form measured in .03 second intervals.
     * **Differencing**: First order differening of the original observations.
     * **Moving Avg**: Moving averages n=30 for all of the emotions.
     * **1/2 Sec Cut**: Time cut into 1/2 second intervals with the average value recorded.
     * **1/2 Sec Diff**: First order differncing of the 1/2 second cut data.
-    * **1/2 Sec Cut Stat**: 1/2 Sec Cut with additional sd, min, max, iqr, and median.
+    * **1/2 Sec Cut Stat**: 1/2 Sec Cut with additional sd, min, max, iqr, and median.<br><br>
 
   * **Data Split**
     * **365 Split**: The data are split at the 365 second, approximately half way through the texting simulation.
@@ -531,12 +538,113 @@ $$
 </small>
 
 
-*******
 
-<center>
-**Neural Network Model Design**<br>
-<img src="Screens/nnet_design.png" alt="Drawing" style="height: 1200px; width: 600px;"/><br>
-</center>
+
+
+
+
+
+
+Model Fitting
+========================================================
+
+<small>
+
+**Statistical Software**
+
+* R's **[nnet](https://cran.r-project.org/web/packages/nnet/index.html)** package for feed-forward neural networks
+
+* **The Caret Package**
+  * **[Caret](http://topepo.github.io/caret/index.html)** is a modeling framework for training and testing classification and regression models
+  * Uses models from other packages and offers a rich set of validation test and diagnostic plots
+  * Can implement parallel processing of cross validation tasks<br><br>
+  
+**Performance and Validation Testing**
+  * k=10 cross validation for training sets
+  * AUC (Area Under Curve) and total accuracy<br><br>
+
+**Model Search Parameters**
+  * **Max Iterations**: The number of iterations allowed for training
+    * 100
+  * **Size**: The number of nodes in the hidden layer. Increases training time exponentially
+    * [1, 10, 25, 50]
+  * **Decay**: A penality applied to weights after each iteration. Moves weights that dont update towards zero.
+    * [0, .1, .2] <br><br>
+    
+<center><div class = "note">
+NOTE: Each Model is trained 120 times
+* (k=10 cross validation) x (12 combinations of size and decay)
+</div></center>
+
+</small>
+
+
+
+
+
+Model Selection
+========================================================
+
+<small>
+
+<center>**Model Training and Selection**</center>
+
+```r
+############################################################
+## Model 8: Training and Evaluation
+
+## Set Cross Validation
+fit.control = trainControl(method = "cv", number = 10)
+
+## Create combination of model parameters to train on
+search.grid = expand.grid(decay = c(0, .1, .2), size = c(1, 10, 25, 50))
+
+## Limit the iterations and weights each model can run
+maxIt = 100; maxWt = 15000
+
+fit = train(Texting ~ . - Time, mdl.08.train, method = "nnet",
+            trControl = fit.control,
+            tuneGrid = search.grid,
+            MaxNWts = maxWt,
+            maxit = maxIt)
+
+44503 samples, 12 predictors, 2 classes: '0', '1' 
+
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 40053, 40053, 40052, 40052, 40052, 40052, ... 
+Resampling results across tuning parameters:
+
+  decay  size  Accuracy   Kappa    
+  0.0     1    0.6654826  0.3042036
+  0.0    10    0.7857674  0.5519017
+  0.0    25    0.8135183  0.6129461
+  0.0    50    0.8252473  0.6375013
+  0.1     1    0.6830330  0.3182011
+  0.1    10    0.8052265  0.5934557
+  0.1    25    0.8247982  0.6352580
+  0.1    50    0.8304383  0.6472351
+  0.2     1    0.6809197  0.3126288
+  0.2    10    0.8033167  0.5889500
+  0.2    25    0.8196748  0.6242315
+  0.2    50    0.8241692  0.6336216
+
+```
+
+
+</small>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
