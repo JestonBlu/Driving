@@ -562,24 +562,23 @@ NOTE: Each Model is trained 120 times
 Model Selection
 ========================================================
 
-<small>
 
-<center>**Model Training and Selection**</center>
+<small>
+<center>**Model Training and Validation**</center>
 
 ```r
-############################################################
-## Model 8: Training and Evaluation
-
 ## Set Cross Validation
 fit.control = trainControl(method = "cv", number = 10)
 
 ## Create combination of model parameters to train on
-search.grid = expand.grid(decay = c(0, .1, .2), size = c(1, 10, 25, 50))
+search.grid = expand.grid(decay = c(0, .1, .2), 
+                          size = c(1, 10, 25, 50))
 
 ## Limit the iterations and weights each model can run
 maxIt = 100; maxWt = 15000
 
-fit = train(Texting ~ . - Time, mdl.08.train, method = "nnet",
+fit = train(Texting ~ . - Time, mdl.08.train, 
+            method = "nnet",
             trControl = fit.control,
             tuneGrid = search.grid,
             MaxNWts = maxWt,
@@ -588,26 +587,54 @@ fit = train(Texting ~ . - Time, mdl.08.train, method = "nnet",
 44503 samples, 12 predictors, 2 classes: '0', '1' 
 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 40053, 40053, 40052, 40052, 40052, 40052, ... 
+Summary of sample sizes: 40053, 40053, 40052, 40052, ...
 Resampling results across tuning parameters:
 
-  decay  size  Accuracy   Kappa    
-  0.0     1    0.6654826  0.3042036
-  0.0    10    0.7857674  0.5519017
-  0.0    25    0.8135183  0.6129461
-  0.0    50    0.8252473  0.6375013
-  0.1     1    0.6830330  0.3182011
-  0.1    10    0.8052265  0.5934557
-  0.1    25    0.8247982  0.6352580
-  0.1    50    0.8304383  0.6472351
-  0.2     1    0.6809197  0.3126288
-  0.2    10    0.8033167  0.5889500
-  0.2    25    0.8196748  0.6242315
-  0.2    50    0.8241692  0.6336216
-
+  ------------------------------
+  Decay  Size  Accuracy   Kappa
+  ------------------------------
+  0.0     1    0.6654     0.3042
+  0.0    10    0.7857     0.5519
+  0.0    25    0.8135     0.6129
+  0.0    50    0.8252     0.6375
+  0.1     1    0.6830     0.3182
+  0.1    10    0.8052     0.5934
+  0.1    25    0.8247     0.6352
+  0.1    50    0.8304     0.6472 ## Best Model
+  0.2     1    0.6809     0.3126
+  0.2    10    0.8033     0.5889
+  0.2    25    0.8196     0.6242
+  0.2    50    0.8241     0.6336
+  
 ```
 
+******
+<br><br>
+<center>
+**Parameter Comparisons**<br>
+<img src="Plots/Modeling_Diagnostic_Params.png" alt="Drawing" style="height: 600px; width: 1000px;"/>
+</center>
 
+
+```r
+Neural Network Confusion Matrix
+----------------------------------------------------
+
+      Predicted
+Actual   0     1
+     0 23403  2515
+     1  4061 14524
+
+(Training Set) Overall Performance: 0.8422
+
+      Predicted
+Actual   0     1
+     0 22736  2943
+     1  4616 14208
+
+(Testing Set) Neural Net Overall Performance 0.8200
+
+```
 </small>
 
 

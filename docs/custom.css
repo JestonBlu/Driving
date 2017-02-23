@@ -37,16 +37,19 @@
 
 .reveal pre {
   margin-top: 0;
-  max-width: 95%;
-  border: 1px solid #ccc;
+  width: 150%;
+  border: 1px solid white;
   white-space: pre-wrap;
-  margin-bottom: 1em;
+  box-shadow: 0 0 0px rgba(0,0,0,.3);
 }
 
 .reveal pre code {
-  display: block; padding: 0.5em;
+  display: block;
+  border: 1px solid white;
+  padding: 0.3em;
   font-size: 1.6em;
   line-height: 1.1em;
+  width: 120%;
   background-color: white;
   overflow: visible;
   max-height: none;
