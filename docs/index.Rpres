@@ -565,7 +565,7 @@ Model Fitting
 
 **Model Search Parameters**
   * **Max Iterations**: The number of iterations allowed for training
-    * 100
+    * 100 (500 and 1000 iterations are run for the best models)
   * **Size**: The number of nodes in the hidden layer. Increases training time exponentially
     * [1, 10, 25, 50]
   * **Decay**: A penality applied to weights after each iteration. Moves weights that dont update towards zero.
@@ -582,7 +582,7 @@ NOTE: Each Model is trained 120 times
 
 
 
-Model Selection
+Model Fitting
 ========================================================
 
 
@@ -598,7 +598,7 @@ search.grid = expand.grid(decay = c(0, .1, .2),
                           size = c(1, 10, 25, 50))
 
 ## Limit the iterations and weights each model can run
-maxIt = 100; maxWt = 15000
+maxIt = 1000; maxWt = 15000
 
 fit = train(Texting ~ . - Time, mdl.08.train, 
             method = "nnet",
@@ -630,35 +630,40 @@ Resampling results across tuning parameters:
   0.2    50    0.8241     0.6336
   
 ```
+</small>
 
 ******
-<br><br>
-<center>
-**Parameter Comparisons**<br>
-<img src="Plots/Modeling_Diagnostic_Params.png" alt="Drawing" style="height: 600px; width: 1000px;"/>
-</center>
 
+<center><small>**Parameter Comparisons**<br>
+<img src="Plots/Modeling_Diagnostic_Params.png" alt="Drawing" style="height: 500px; width: 900px;"/>
+</small></center>
 
+<center><small>**Confusion Matrix and Statistical Summaries**</small></center>
+<center><small>
 ```r
-Neural Network Confusion Matrix
-----------------------------------------------------
-
-      Predicted
-Actual   0     1
-     0 23403  2515
-     1  4061 14524
-
-(Training Set) Overall Performance: 0.8422
-
-      Predicted
-Actual   0     1
-     0 22736  2943
-     1  4616 14208
-
-(Testing Set) Neural Net Overall Performance 0.8200
-
+          Reference
+Prediction     0     1
+         0 22736  4616
+         1  2943 14208
+                                          
+               Accuracy : 0.8301          
+                 95% CI : (0.8266, 0.8336)
+    No Information Rate : 0.577           
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.6479          
+  Mcnemars Test P-Value : < 2.2e-16       
+                                          
+            Sensitivity : 0.8854          
+            Specificity : 0.7548          
+         Pos Pred Value : 0.8312          
+         Neg Pred Value : 0.8284          
+             Prevalence : 0.5770          
+         Detection Rate : 0.5109          
+   Detection Prevalence : 0.6146          
+      Balanced Accuracy : 0.8201
 ```
-</small>
+</small></center>
 
 
 
