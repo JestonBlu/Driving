@@ -22,33 +22,33 @@ I did not think about this at all, but I think its a great idea.
 
 ##### Model Performance
 
-| Model     | Data Processing  | Data Split | MaxItr | Size | Decay | Training | Testing | AUC  |
-|:----------|:-----------------|:-----------|:-------|:-----|:------|:---------|:--------|:-----|
-| Model 1:  | Original         | 365 Split  | 100    | 50   | .20   | .760     | .676    | .734 |
-| Model 2:  | Original         | Entire Sim | 100    | 50   | .20   | .754     | .754    | .847 |
-| Model 3:  | Differencing     | 365 Split  | 100    | 10   | .00   | .518     | .516    | .526 |
-| Model 4:  | Differencing     | Entire Sim | 100    | 25   | .10   | .572     | .571    | .637 |
-| Model 5:  | Moving Avg       | 365 Split  | 100    | 10   | .00   | .503     | .502    | .527 |
-| Model 6:  | Moving Avg       | Entire Sim | 100    | 10   | .00   | .528     | .528    | .544 |
-| Model 7:  | 1/2 Sec Cut      | 365 Split  | 100    | 50   | .10   | .820     | .698    | .761 |
-| Model 8:  | 1/2 Sec Cut      | Entire Sim | 100    | 50   | .20   | .788     | .779    | .868 |
-| Model 9:  | 1/2 Sec Diff     | 365 Split  | 100    | 50   | .10   | .633     | .602    | .650 |
-| Model 10: | 1/2 Sec Diff     | Entire Sim | 100    | 50   | .20   | .682     | .622    | .681 |
-| Model 11: | 1/2 Sec Cut Stat | 365 Split  | 100    | 50   | .10   | .846     | .716    | .781 |
-| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 100    | 50   | .20   | .820     | .803    | .891 |
+| Model         | Data Processing      | Data Split     | MaxItr  | Size   | Decay   | Training | Testing  | AUC      |
+|:--------------|:---------------------|:---------------|:--------|:-------|:--------|:---------|:---------|:---------|
+| Model 1:      | Original             | 365 Split      | 100     | 50     | .20     | .760     | .676     | .734     |
+| Model 2:      | Original             | Entire Sim     | 100     | 50     | .20     | .754     | .754     | .847     |
+| Model 3:      | Differencing         | 365 Split      | 100     | 10     | .00     | .518     | .516     | .526     |
+| Model 4:      | Differencing         | Entire Sim     | 100     | 25     | .10     | .572     | .571     | .637     |
+| Model 5:      | Moving Avg           | 365 Split      | 100     | 10     | .00     | .503     | .502     | .527     |
+| Model 6:      | Moving Avg           | Entire Sim     | 100     | 10     | .00     | .528     | .528     | .544     |
+| Model 7:      | 1/2 Sec Cut          | 365 Split      | 100     | 50     | .10     | .820     | .698     | .761     |
+| **Model 8:**  | **1/2 Sec Cut**      | **Entire Sim** | **100** | **50** | **.20** | **.788** | **.779** | **.868** |
+| Model 9:      | 1/2 Sec Diff         | 365 Split      | 100     | 50     | .10     | .633     | .602     | .650     |
+| Model 10:     | 1/2 Sec Diff         | Entire Sim     | 100     | 50     | .20     | .682     | .622     | .681     |
+| Model 11:     | 1/2 Sec Cut Stat     | 365 Split      | 100     | 50     | .10     | .846     | .716     | .781     |
+| **Model 12:** | **1/2 Sec Cut Stat** | **Entire Sim** | **100** | **50** | **.20** | **.820** | **.803** | **.891** |
 
 \newpage
 
 ##### Further Training Best Models
 
-| Model     | Data Processing  | Data Split | MaxItr | Size | Decay | Training | Testing | AUC  |
-|:----------|:-----------------|:-----------|:-------|:-----|:------|:---------|:--------|:-----|
-| Model 8:  | 1/2 Sec Cut      | Entire Sim | 250    | 50   | .10   | .816     | .804    | .893 |
-| Model 8:  | 1/2 Sec Cut      | Entire Sim | 500    | 50   | .10   | .828     | .810    | .899 |
-| Model 8:  | 1/2 Sec Cut      | Entire Sim | 1000   | 50   | .10   | .842     | .820    | .906 |
-| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 250    | 50   | .10   | .858     | .823    | .906 |
-| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 500    | 50   | .20   | .864     | .823    | .907 |
-| Model 12: | 1/2 Sec Cut Stat | Entire Sim | 1000   | 50   | .10   | .871     | .824    | .908 |
+| Model        | Data Processing  | Data Split     | MaxItr   | Size   | Decay   | Training | Testing  | AUC      |
+|:-------------|:-----------------|:---------------|:---------|:-------|:--------|:---------|:---------|:---------|
+| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 250      | 50     | .10     | .816     | .804     | .893     |
+| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 500      | 50     | .10     | .828     | .810     | .899     |
+| **Model 8:** | **1/2 Sec Cut**  | **Entire Sim** | **1000** | **50** | **.10** | **.842** | **.820** | **.906** |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 250      | 50     | .10     | .858     | .823     | .906     |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 500      | 50     | .20     | .864     | .823     | .907     |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 1000     | 50     | .10     | .871     | .824     | .908     |
 
 #### **Are you trying to detect whether texting occurred during a given interval or a single observation?**
 

@@ -215,9 +215,161 @@ ggsave(filename = "docs/Plots/Boxplots_Variance_Texting_Trial.png", plot = g11, 
 
 
 ##
-## Model Fitting
+## Model Accuracy
 ##
 
+library(ggplot2)
+library(plyr)
+library(reshape2)
+
+rm(list = ls())
+
+## Model Performance Metric
+metric = function(confusion) {
+  sensitivity = confusion[4] / (confusion[2] + confusion[4])
+  specificity = confusion[1] / (confusion[1] + confusion[3])
+  score = (sensitivity + specificity) / 2
+  return(score)
+}
+
+
+load("R-Data/data-mdl-08.rda")
+load("R-Models/Itr_1000/mdl_08_nnet.rda")
+stimuli = read.csv("Files/data-stimuli.csv")
+
+
+mdl.08.test$Predict = predict(mdl.08, mdl.08.test, type = "raw")
+y = predict(mdl.08, mdl.08.test, type = "prob")[2]
+mdl.08.test$Prob = y = as.numeric(y$`1`)
+
+mdl.08.test$Predict = revalue(x = mdl.08.test$Predict, replace = c('0' = 'Not Texting', '1' = 'Texting'))
+
+sub = 'T001'
+x = subset(mdl.08.test, Subject == sub)
+x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
+y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
+y1 = y[2,1]; y2 = y[2, 2]
+y3 = y[1,1]; y4 = y[1, 2]
+
+g1 = ggplot(x, aes(x = Time, y = value)) +
+  annotate(geom = "rect", xmin = y1, xmax = y2, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  annotate(geom = "rect", xmin = y3, xmax = y4, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  geom_smooth(aes(y = Prob), se = FALSE, size = .5, span = .2) +
+  geom_point(alpha = .25, aes(color = Predict)) +
+  scale_x_continuous("") +
+  scale_y_continuous("Likelihood Centered on Baseline") +
+  scale_color_manual("Prediction", values = c("black", "#f0b923")) +
+  facet_wrap(~variable) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
+  ggtitle("Subject 01: Accuracy 80%") +
+  theme(plot.title = element_text(hjust = .5))
+
+ggsave(filename = "Plots/Prediction_Subject001.png", plot = g1, width = 13, height = 5)
+ggsave(filename = "docs/Plots/Prediction_Subject001.png", plot = g1, width = 13, height = 5)
+
+
+sub = 'T002'
+x = subset(mdl.08.test, Subject == sub)
+x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
+y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
+y1 = y[2,1]; y2 = y[2, 2]
+y3 = y[1,1]; y4 = y[1, 2]
+
+g2 = ggplot(x, aes(x = Time, y = value)) +
+  annotate(geom = "rect", xmin = y1, xmax = y2, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  annotate(geom = "rect", xmin = y3, xmax = y4, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  geom_smooth(aes(y = Prob), se = FALSE, size = .5, span = .2) +
+  geom_point(alpha = .25, aes(color = Predict)) +
+  scale_x_continuous("") +
+  scale_y_continuous("Likelihood Centered on Baseline") +
+  scale_color_manual("Prediction", values = c("black", "#f0b923")) +
+  facet_wrap(~variable) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
+  ggtitle("Subject 02: Accuracy 72%") +
+  theme(plot.title = element_text(hjust = .5))
+
+ggsave(filename = "Plots/Prediction_Subject002.png", plot = g2, width = 13, height = 5)
+ggsave(filename = "docs/Plots/Prediction_Subject002.png", plot = g2, width = 11, height = 6)
+
+sub = 'T003'
+x = subset(mdl.08.test, Subject == sub)
+x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
+y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
+y1 = y[2,1]; y2 = y[2, 2]
+y3 = y[1,1]; y4 = y[1, 2]
+
+g3 = ggplot(x, aes(x = Time, y = value)) +
+  annotate(geom = "rect", xmin = y1, xmax = y2, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  annotate(geom = "rect", xmin = y3, xmax = y4, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  geom_smooth(aes(y = Prob), se = FALSE, size = .5, span = .2) +
+  geom_point(alpha = .25, aes(color = Predict)) +
+  scale_x_continuous("") +
+  scale_y_continuous("Likelihood Centered on Baseline") +
+  scale_color_manual("Prediction", values = c("black", "#f0b923")) +
+  facet_wrap(~variable) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
+  ggtitle("Subject 03: Accuracy 88%") +
+  theme(plot.title = element_text(hjust = .5))
+
+ggsave(filename = "Plots/Prediction_Subject003.png", plot = g3, width = 13, height = 5)
+ggsave(filename = "docs/Plots/Prediction_Subject003.png", plot = g3, width = 11, height = 6)
+
+
+sub = 'T022'
+x = subset(mdl.08.test, Subject == sub)
+x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
+y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
+y1 = y[2,1]; y2 = y[2, 2]
+y3 = y[1,1]; y4 = y[1, 2]
+
+g4 = ggplot(x, aes(x = Time, y = value)) +
+  annotate(geom = "rect", xmin = y1, xmax = y2, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  annotate(geom = "rect", xmin = y3, xmax = y4, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  geom_smooth(aes(y = Prob), se = FALSE, size = .5, span = .2) +
+  geom_point(alpha = .25, aes(color = Predict)) +
+  scale_x_continuous("") +
+  scale_y_continuous("Likelihood Centered on Baseline") +
+  scale_color_manual("Prediction", values = c("black", "#f0b923")) +
+  facet_wrap(~variable) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
+  ggtitle("Subject 22: Accuracy 98%") +
+  theme(plot.title = element_text(hjust = .5))
+
+ggsave(filename = "Plots/Prediction_Subject022.png", plot = g4, width = 13, height = 5)
+ggsave(filename = "docs/Plots/Prediction_Subject022.png", plot = g4, width = 11, height = 6)
+
+
+sub = 'T038'
+x = subset(mdl.08.test, Subject == sub)
+x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
+y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
+y1 = y[2,1]; y2 = y[2, 2]
+y3 = y[1,1]; y4 = y[1, 2]
+
+g5 = ggplot(x, aes(x = Time, y = value)) +
+  annotate(geom = "rect", xmin = y1, xmax = y2, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  annotate(geom = "rect", xmin = y3, xmax = y4, ymin = -Inf, ymax = Inf, fill = "gray50", alpha = .4) +
+  geom_smooth(aes(y = Prob), se = FALSE, size = .5, span = .2) +
+  geom_point(alpha = .25, aes(color = Predict)) +
+  scale_x_continuous("") +
+  scale_y_continuous("Likelihood Centered on Baseline") +
+  scale_color_manual("Prediction", values = c("black", "#f0b923")) +
+  facet_wrap(~variable) +
+  guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
+  ggtitle("Subject 38: Accuracy 51%") +
+  theme(plot.title = element_text(hjust = .5))
+
+ggsave(filename = "Plots/Prediction_Subject038.png", plot = g5, width = 13, height = 5)
+ggsave(filename = "docs/Plots/Prediction_Subject038.png", plot = g5, width = 11, height = 6)
+
+
+
+
+
+## 02: .717
+## 03: .884  
+## 22: .975
+## 38: .540
 
 
 
@@ -225,4 +377,36 @@ ggsave(filename = "docs/Plots/Boxplots_Variance_Texting_Trial.png", plot = g11, 
 
 
 
+
+# library(pander)
+# 
+# mdl.08.train$Predict = predict(mdl.08, mdl.08.train, type = "raw")
+# mdl.08.test$Predict = predict(mdl.08, mdl.08.test, type = "raw")
+# 
+# subject = as.character(unique(mdl.08.train$Subject))
+# 
+# tab = data.frame()
+# 
+# for (i in 1:59) {
+#   y1 = subset(mdl.08.train, Subject == subject[i])
+#   y2 = subset(mdl.08.test, Subject == subject[i])
+# 
+#   x1 = metric(table(Actual = y1$Texting, Predicted = y1$Predict))
+#   x2 = metric(table(Actual = y2$Texting, Predicted = y2$Predict))
+# 
+#   tab = rbind(tab, data.frame(Subject = subject[i], Train = x1, Test = x2))
+# 
+# }
+# 
+# tab = arrange(tab, desc(Test))
+# tab$Train = round(tab$Train, 3)
+# tab$Test = round(tab$Test, 3)
+# subject = as.character(tab$Subject)
+# 
+# tab2 = t(tab)
+# tab2 = data.frame(tab2)
+# colnames(tab2) = subject
+# tab2 = tab2[-1, ]
+# 
+# pander(tab2, split.table = 90)
 

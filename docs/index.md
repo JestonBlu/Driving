@@ -633,12 +633,12 @@ Prediction     0     1
                                           
             Sensitivity : 0.8854          
             Specificity : 0.7548          
+
          Pos Pred Value : 0.8312          
          Neg Pred Value : 0.8284          
-             Prevalence : 0.5770          
-         Detection Rate : 0.5109          
-   Detection Prevalence : 0.6146          
+       
       Balanced Accuracy : 0.8201
+  Area Under Curve (AUC): 0.906
 ```
 </small></center>
 
@@ -654,6 +654,98 @@ Prediction     0     1
 
 
 
+Model Selection
+========================================================
+left: 55%
+
+<br> 
+
+**Model Performance with 100 Iteration Limit**
+<small>
+
+| Model         | Data Processing      | Data Split     | MaxItr  | Size   | Decay   | Training | Testing  | AUC      |
+|:--------------|:---------------------|:---------------|:--------|:-------|:--------|:---------|:---------|:---------|
+| Model 1:      | Original             | 365 Split      | 100     | 50     | .20     | .760     | .676     | .734     |
+| Model 2:      | Original             | Entire Sim     | 100     | 50     | .20     | .754     | .754     | .847     |
+| Model 3:      | Differencing         | 365 Split      | 100     | 10     | .00     | .518     | .516     | .526     |
+| Model 4:      | Differencing         | Entire Sim     | 100     | 25     | .10     | .572     | .571     | .637     |
+| Model 5:      | Moving Avg           | 365 Split      | 100     | 10     | .00     | .503     | .502     | .527     |
+| Model 6:      | Moving Avg           | Entire Sim     | 100     | 10     | .00     | .528     | .528     | .544     |
+| Model 7:      | 1/2 Sec Cut          | 365 Split      | 100     | 50     | .10     | .820     | .698     | .761     |
+| **Model 8:**  | **1/2 Sec Cut**      | **Entire Sim** | **100** | **50** | **.20** | **.788** | **.779** | **.868** |
+| Model 9:      | 1/2 Sec Diff         | 365 Split      | 100     | 50     | .10     | .633     | .602     | .650     |
+| Model 10:     | 1/2 Sec Diff         | Entire Sim     | 100     | 50     | .20     | .682     | .622     | .681     |
+| Model 11:     | 1/2 Sec Cut Stat     | 365 Split      | 100     | 50     | .10     | .846     | .716     | .781     |
+| **Model 12:** | **1/2 Sec Cut Stat** | **Entire Sim** | **100** | **50** | **.20** | **.820** | **.803** | **.891** |
+
+</small>
+
+**Additional Training for Best Models**
+<small>
+
+| Model        | Data Processing  | Data Split     | MaxItr   | Size   | Decay   | Training | Testing  | AUC      |
+|:-------------|:-----------------|:---------------|:---------|:-------|:--------|:---------|:---------|:---------|
+| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 250      | 50     | .10     | .816     | .804     | .893     |
+| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 500      | 50     | .10     | .828     | .810     | .899     |
+| **Model 8:** | **1/2 Sec Cut**  | **Entire Sim** | **1000** | **50** | **.10** | **.842** | **.820** | **.906** |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 250      | 50     | .10     | .858     | .823     | .906     |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 500      | 50     | .20     | .864     | .823     | .907     |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 1000     | 50     | .10     | .871     | .824     | .908     |
+
+</small>
+
+<div class="note">
+<center><small>NOTE: Blue indicates best models</small></center>
+</div>
+
+**********
+
+<br><br>
+
+<center>
+<img src="Plots/ROC1.png" alt="Drawing" style="width: 1500px"/><br>
+<br><br>
+<img src="Plots/ROC2.png" alt="Drawing" style="width: 1500px"/><br>
+</center>
 
 
 
+
+
+Model Performance
+========================================================
+
+<center>
+<img src="Plots/Prediction_Subject001.png" alt="Drawing" style="width: 2500px;"/>
+</center>
+
+<small>
+* Each point is colored by the prediction of the best model
+* The blue line is a LOESS smoother of the probability predition for that corresponding prediction
+* The shaded regions represent the actual texting window
+* Yellow points within the gray regions represent correct predictions
+</small>
+
+
+
+
+Model Performance
+========================================================
+
+<center>
+<img src="Plots/Prediction_Subject002.png" alt="Drawing" style="width: 3000px;"/>
+</center>
+
+<center>
+<img src="Plots/Prediction_Subject003.png" alt="Drawing" style="width: 3000px;"/>
+</center>
+
+*****
+
+<center>
+<img src="Plots/Prediction_Subject022.png" alt="Drawing" style="width: 3000px;"/>
+</center>
+
+<center>
+<img src="Plots/Prediction_Subject038.png" alt="Drawing" style="width: 3000px;"/>
+</center>

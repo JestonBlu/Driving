@@ -466,7 +466,8 @@ g1 = ggplot(roc.curves, aes(x = x, y = y, color = Model)) +
   ggtitle("Area Under Curve\n100 Iteration Models") +
   theme(plot.title = element_text(hjust = .5))
 
-ggsave(filename = "Presentation/Plots/ROC1.png", plot = g1, width = 7, height = 5)
+ggsave(filename = "Plots/ROC1.png", plot = g1, width = 7, height = 5)
+ggsave(filename = "docs/Plots/ROC1.png", plot = g1, width = 8, height = 4)
 
 roc.curves.best = rbind(subset(roc.curves, Model %in% c("Model 08", "Model 12")), roc.curves.long)
 
@@ -478,4 +479,5 @@ g2 = ggplot(roc.curves.best, aes(x = x, y = y, color = Model)) +
   ggtitle("Area Under Curve\nBest Models") +
   theme(plot.title = element_text(hjust = .5))
 
-ggsave(filename = "Presentation/Plots/ROC2.png", plot = g2, width = 7, height = 5)
+ggsave(filename = "Plots/ROC2.png", plot = g2, width = 7, height = 5)
+ggsave(filename = "docs/Plots/ROC2.png", plot = g2, width = 8, height = 4)
