@@ -635,7 +635,7 @@ Resampling results across tuning parameters:
 ******
 
 <center><small>**Parameter Comparisons**<br>
-<img src="Plots/Modeling_Diagnostic_Params.png" alt="Drawing" style="height: 500px; width: 900px;"/>
+<img src="Plots/Relative_Importance.png" alt="Drawing" style="height: 500px; width: 900px;"/>
 </small></center>
 
 <center><small>**Confusion Matrix and Statistical Summaries**</small></center>
@@ -756,19 +756,19 @@ Model Performance
 ========================================================
 
 <center>
-<img src="Plots/Prediction_Subject002.png" alt="Drawing" style="width: 3000px;"/>
+<img src="Plots/Prediction_Subject002.png" alt="Drawing"/>
 </center>
 
 <center>
-<img src="Plots/Prediction_Subject003.png" alt="Drawing" style="width: 3000px;"/>
+<img src="Plots/Prediction_Subject003.png" alt="Drawing"/>
 </center>
 
 *****
 
 <center>
-<img src="Plots/Prediction_Subject022.png" alt="Drawing" style="width: 3000px;"/>
+<img src="Plots/Prediction_Subject022.png" alt="Drawing"/>
 </center>
 
 <center>
-<img src="Plots/Prediction_Subject038.png" alt="Drawing" style="width: 3000px;"/>
+<img src="Plots/Prediction_Subject038.png" alt="Drawing"/>
 </center>
