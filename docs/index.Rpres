@@ -582,6 +582,68 @@ NOTE: Each Model is trained 120 times
 
 
 
+
+Model Selection
+========================================================
+left: 55%
+
+<br> 
+
+**Model Performance with 100 Iteration Limit**
+<small>
+
+| Model         | Data Processing      | Data Split     | MaxItr  | Size   | Decay   | Training | Testing  | AUC      |
+|:--------------|:---------------------|:---------------|:--------|:-------|:--------|:---------|:---------|:---------|
+| Model 1:      | Original             | 365 Split      | 100     | 50     | .20     | .760     | .676     | .734     |
+| Model 2:      | Original             | Entire Sim     | 100     | 50     | .20     | .754     | .754     | .847     |
+| Model 3:      | Differencing         | 365 Split      | 100     | 10     | .00     | .518     | .516     | .526     |
+| Model 4:      | Differencing         | Entire Sim     | 100     | 25     | .10     | .572     | .571     | .637     |
+| Model 5:      | Moving Avg           | 365 Split      | 100     | 10     | .00     | .503     | .502     | .527     |
+| Model 6:      | Moving Avg           | Entire Sim     | 100     | 10     | .00     | .528     | .528     | .544     |
+| Model 7:      | 1/2 Sec Cut          | 365 Split      | 100     | 50     | .10     | .820     | .698     | .761     |
+| **Model 8:**  | **1/2 Sec Cut**      | **Entire Sim** | **100** | **50** | **.20** | **.788** | **.779** | **.868** |
+| Model 9:      | 1/2 Sec Diff         | 365 Split      | 100     | 50     | .10     | .633     | .602     | .650     |
+| Model 10:     | 1/2 Sec Diff         | Entire Sim     | 100     | 50     | .20     | .682     | .622     | .681     |
+| Model 11:     | 1/2 Sec Cut Stat     | 365 Split      | 100     | 50     | .10     | .846     | .716     | .781     |
+| **Model 12:** | **1/2 Sec Cut Stat** | **Entire Sim** | **100** | **50** | **.20** | **.820** | **.803** | **.891** |
+
+</small>
+
+**Additional Training for Best Models**
+<small>
+
+| Model        | Data Processing  | Data Split     | MaxItr   | Size   | Decay   | Training | Testing  | AUC      |
+|:-------------|:-----------------|:---------------|:---------|:-------|:--------|:---------|:---------|:---------|
+| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 250      | 50     | .10     | .816     | .804     | .893     |
+| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 500      | 50     | .10     | .828     | .810     | .899     |
+| **Model 8:** | **1/2 Sec Cut**  | **Entire Sim** | **1000** | **50** | **.10** | **.842** | **.820** | **.906** |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 250      | 50     | .10     | .858     | .823     | .906     |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 500      | 50     | .20     | .864     | .823     | .907     |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 1000     | 50     | .10     | .871     | .824     | .908     |
+
+</small>
+
+<div class="note">
+<center><small>NOTE: Blue indicates best models</small></center>
+</div>
+
+**********
+
+<br><br>
+
+<center>
+<img src="Plots/ROC1.png" alt="Drawing" style="width: 1500px"/><br>
+<br><br>
+<img src="Plots/ROC2.png" alt="Drawing" style="width: 1500px"/><br>
+</center>
+
+
+
+
+
+
+
+
 Model Fitting
 ========================================================
 
@@ -670,71 +732,6 @@ Prediction     0     1
 
 
 
-
-
-
-
-
-
-
-Model Selection
-========================================================
-left: 55%
-
-<br> 
-
-**Model Performance with 100 Iteration Limit**
-<small>
-
-| Model         | Data Processing      | Data Split     | MaxItr  | Size   | Decay   | Training | Testing  | AUC      |
-|:--------------|:---------------------|:---------------|:--------|:-------|:--------|:---------|:---------|:---------|
-| Model 1:      | Original             | 365 Split      | 100     | 50     | .20     | .760     | .676     | .734     |
-| Model 2:      | Original             | Entire Sim     | 100     | 50     | .20     | .754     | .754     | .847     |
-| Model 3:      | Differencing         | 365 Split      | 100     | 10     | .00     | .518     | .516     | .526     |
-| Model 4:      | Differencing         | Entire Sim     | 100     | 25     | .10     | .572     | .571     | .637     |
-| Model 5:      | Moving Avg           | 365 Split      | 100     | 10     | .00     | .503     | .502     | .527     |
-| Model 6:      | Moving Avg           | Entire Sim     | 100     | 10     | .00     | .528     | .528     | .544     |
-| Model 7:      | 1/2 Sec Cut          | 365 Split      | 100     | 50     | .10     | .820     | .698     | .761     |
-| **Model 8:**  | **1/2 Sec Cut**      | **Entire Sim** | **100** | **50** | **.20** | **.788** | **.779** | **.868** |
-| Model 9:      | 1/2 Sec Diff         | 365 Split      | 100     | 50     | .10     | .633     | .602     | .650     |
-| Model 10:     | 1/2 Sec Diff         | Entire Sim     | 100     | 50     | .20     | .682     | .622     | .681     |
-| Model 11:     | 1/2 Sec Cut Stat     | 365 Split      | 100     | 50     | .10     | .846     | .716     | .781     |
-| **Model 12:** | **1/2 Sec Cut Stat** | **Entire Sim** | **100** | **50** | **.20** | **.820** | **.803** | **.891** |
-
-</small>
-
-**Additional Training for Best Models**
-<small>
-
-| Model        | Data Processing  | Data Split     | MaxItr   | Size   | Decay   | Training | Testing  | AUC      |
-|:-------------|:-----------------|:---------------|:---------|:-------|:--------|:---------|:---------|:---------|
-| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 250      | 50     | .10     | .816     | .804     | .893     |
-| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 500      | 50     | .10     | .828     | .810     | .899     |
-| **Model 8:** | **1/2 Sec Cut**  | **Entire Sim** | **1000** | **50** | **.10** | **.842** | **.820** | **.906** |
-| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 250      | 50     | .10     | .858     | .823     | .906     |
-| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 500      | 50     | .20     | .864     | .823     | .907     |
-| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 1000     | 50     | .10     | .871     | .824     | .908     |
-
-</small>
-
-<div class="note">
-<center><small>NOTE: Blue indicates best models</small></center>
-</div>
-
-**********
-
-<br><br>
-
-<center>
-<img src="Plots/ROC1.png" alt="Drawing" style="width: 1500px"/><br>
-<br><br>
-<img src="Plots/ROC2.png" alt="Drawing" style="width: 1500px"/><br>
-</center>
-
-
-
-
-
 Model Performance
 ========================================================
 
@@ -772,3 +769,98 @@ Model Performance
 <center>
 <img src="Plots/Prediction_Subject038.png" alt="Drawing"/>
 </center>
+
+
+
+
+
+Model Performance
+========================================================
+
+**Total Accuracy by Subject**
+
+<center>
+
+| &nbsp;     | T022  | T086  | T007  | T006  | T018  | T035  | T083  | T076  | T081  | T064  | T020  | T012  | T074  | T009  | T013  | T088  | T003  | T032  | T011  | T044 | **TOP 20** |
+|:-----------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----|:-----------|
+| Train      | 0.981 | 0.960 | 0.919 | 0.943 | 0.940 | 0.956 | 0.956 | 0.949 | 0.929 | 0.922 | 0.931 | 0.928 | 0.925 | 0.914 | 0.907 | 0.937 | 0.907 | 0.915 | 0.916 | .915 | **.932**   |
+| Test       | 0.971 | 0.952 | 0.948 | 0.942 | 0.937 | 0.936 | 0.932 | 0.927 | 0.923 | 0.919 | 0.918 | 0.913 | 0.909 | 0.905 | 0.903 | 0.896 | 0.896 | 0.895 | 0.881 | .880 | **.919**   |
+| GenderMale | 0     | 0     | 1     | 0     | 0     | 0     | 1     | 1     | 1     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 1     | 1     | 1     | 1    | **12**     |
+| AgeOld     | 0     | 1     | 0     | 0     | 0     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 1     | 0     | 0     | 1     | 0     | 1     | 0     | 0    | **7**      |
+
+
+| &nbsp;     | T080  | T016  | T005  | T060  | T039  | T015  | T008  | T046  | T029  | T079  | T051  | T073  | T082  | T024  | T010  | T001  | T066  | T017  | T033  | T042  | **MID 20** |
+|:-----------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----------|
+| Train      | 0.897 | 0.904 | 0.867 | 0.911 | 0.880 | 0.868 | 0.879 | 0.883 | 0.842 | 0.892 | 0.884 | 0.855 | 0.866 | 0.829 | 0.847 | 0.867 | 0.855 | 0.824 | 0.825 | 0.843 | **.865**   |
+| Test       | 0.872 | 0.871 | 0.864 | 0.859 | 0.853 | 0.850 | 0.848 | 0.847 | 0.839 | 0.837 | 0.832 | 0.831 | 0.830 | 0.827 | 0.826 | 0.825 | 0.819 | 0.817 | 0.803 | 0.802 | **.837**   |
+| GenderMale | 0     | 0     | 1     | 0     | 0     | 1     | 0     | 1     | 0     | 0     | 1     | 0     | 1     | 0     | 0     | 1     | 0     | 1     | 0     | 1     | **8**      |
+| AgeOld     | 0     | 0     | 0     | 0     | 1     | 0     | 0     | 1     | 1     | 0     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | **7**      |
+
+
+| &nbsp;     | T031  | T040  | T061  | T036  | T047  | T084  | T077  | T014  | T004  | T021  | T019  | T002  | T054  | T025  | T041  | T034  | T023  | T038  | T027  | **BOTTOM 19** |
+|:-----------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:--------------|
+| Train      | 0.846 | 0.814 | 0.796 | 0.800 | 0.789 | 0.803 | 0.792 | 0.828 | 0.771 | 0.812 | 0.746 | 0.742 | 0.774 | 0.760 | 0.719 | 0.704 | 0.711 | 0.674 | 0.651 | **.764**      |
+| Test       | 0.794 | 0.790 | 0.787 | 0.783 | 0.782 | 0.776 | 0.766 | 0.758 | 0.758 | 0.757 | 0.742 | 0.735 | 0.731 | 0.724 | 0.720 | 0.700 | 0.682 | 0.665 | 0.640 | **.741**      |
+| GenderMale | 0     | 1     | 1     | 1     | 0     | 1     | 0     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 0     | 1     | 1     | 1     | 0     | **10**        |
+| AgeOld     | 1     | 1     | 0     | 1     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 0     | 1     | 1     | **12**        |
+
+</center>
+
+
+Exploring Modeling Effects
+========================================================
+
+
+<center>
+<img src="Plots/Boxplots_Testing_Accuracy_By_Age_Gender.png" alt="Drawing" style="height: 1200px;"/>
+</center>
+
+********
+
+**Evaluating Differences in Age and Gender**
+<small>
+```r
+******************************************************************
+Levene's Test for Homogeneity of Variance
+******************************************************************
+      Df F value Pr(>F)
+group  3  0.3182 0.8122
+      55     
+      
+******************************************************************
+General Linear Model
+******************************************************************
+Deviance Residuals: 
+      Min         1Q     Median         3Q        Max  
+-0.163277  -0.041330  -0.000279   0.059284   0.148769  
+
+Coefficients:
+                      Estimate Std. Error t value Pr(>|t|)    
+(Intercept)            0.80337    0.02261  35.534   <2e-16 ***
+GenderAgeYoung Female  0.05604    0.02953   1.898    0.063 .  
+GenderAgeOld Male      0.02099    0.03033   0.692    0.492    
+GenderAgeYoung Male    0.03718    0.03033   1.226    0.226    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for gaussian family taken to be 0.006133847)
+
+    Null deviance: 0.36163  on 58  degrees of freedom
+Residual deviance: 0.33736  on 55  degrees of freedom
+AIC: -127.25
+
+Number of Fisher Scoring iterations: 2
+
+******************************************************************
+Shapiro-Wilk Normality Test
+******************************************************************
+data:  mdl$residuals
+W = 0.97765, p-value = 0.3482
+```
+</small>
+
+
+
+Conclusions
+========================================================
+

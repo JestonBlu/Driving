@@ -367,37 +367,80 @@ ggsave(filename = "docs/Plots/Prediction_Subject038.png", plot = g5, width = 11,
 ## 22: .975
 ## 38: .540
 
-# library(pander)
-# 
-# mdl.08.train$Predict = predict(mdl.08, mdl.08.train, type = "raw")
-# mdl.08.test$Predict = predict(mdl.08, mdl.08.test, type = "raw")
-# 
-# subject = as.character(unique(mdl.08.train$Subject))
-# 
-# tab = data.frame()
-# 
-# for (i in 1:59) {
-#   y1 = subset(mdl.08.train, Subject == subject[i])
-#   y2 = subset(mdl.08.test, Subject == subject[i])
-# 
-#   x1 = metric(table(Actual = y1$Texting, Predicted = y1$Predict))
-#   x2 = metric(table(Actual = y2$Texting, Predicted = y2$Predict))
-# 
-#   tab = rbind(tab, data.frame(Subject = subject[i], Train = x1, Test = x2))
-# 
-# }
-# 
-# tab = arrange(tab, desc(Test))
-# tab$Train = round(tab$Train, 3)
-# tab$Test = round(tab$Test, 3)
-# subject = as.character(tab$Subject)
-# 
-# tab2 = t(tab)
-# tab2 = data.frame(tab2)
-# colnames(tab2) = subject
-# tab2 = tab2[-1, ]
-# 
-# pander(tab2, split.table = 90)
+load("R-Data/data-mdl-08.rda")
+load("R-Models/Itr_1000/mdl_08_nnet.rda")
+stimuli = read.csv("Files/data-stimuli.csv")
+
+library(plyr)
+library(reshape2)
+library(ggplot2)
+library(gridExtra)
+library(pander)
+library(caret)
+
+
+mdl.08.train$Predict = predict(mdl.08, mdl.08.train, type = "raw")
+mdl.08.test$Predict = predict(mdl.08, mdl.08.test, type = "raw")
+
+subject = as.character(unique(mdl.08.train$Subject))
+
+tab = data.frame()
+
+for (i in 1:59) {
+  y1 = subset(mdl.08.train, Subject == subject[i])
+  y2 = subset(mdl.08.test, Subject == subject[i])
+
+  x1 = confusionMatrix(reference = y1$Texting, data = y1$Predict)$overall[1]
+  x2 = confusionMatrix(reference = y2$Texting, data = y2$Predict)$overall[1]
+
+  tab = rbind(tab, data.frame(Subject = subject[i], 
+                              Train = x1, 
+                              Test = x2,
+                              GenderMale = y2$Gender_Male[1],
+                              AgeOld = y2$Age_Old[1]))
+
+}
+
+tab = arrange(tab, desc(Test))
+tab$GenderAge = "Old Female"
+tab$GenderAge[tab$GenderMale == 1 & tab$AgeOld == 0] = 'Young Male'
+tab$GenderAge[tab$GenderMale == 0 & tab$AgeOld == 0] = 'Young Female'
+tab$GenderAge[tab$GenderMale == 1 & tab$AgeOld == 1] = 'Old Male'
+
+g9 = ggplot(tab, aes(x = GenderAge, y = Test)) +
+  geom_boxplot() +
+  geom_point() +
+  scale_y_continuous("Testing Accuracy") +
+  scale_x_discrete("Age and Gender") +
+  ggtitle("Boxplots of Testing Accuracy by Subject") +
+  theme(plot.title = element_text(hjust = .5))
+
+ggsave(filename = "docs/Plots/Boxplots_Testing_Accuracy_By_Age_Gender.png", 
+       plot = g9, height = 9, width = 6)
+ggsave(filename = "Plots/Boxplots_Testing_Accuracy_By_Age_Gender.png", 
+       plot = g9, height = 9, width = 6)
+
+
+head(tab)
+
+mdl = glm(Test ~ GenderMale*AgeOld, data = tab)
+mdl2 = glm(Test ~ GenderMale + AgeOld, data = tab)
+
+anova(mdl, mdl2)
+
+tab = tab[, -6]
+
+tab$Train = round(tab$Train, 3)
+tab$Test = round(tab$Test, 3)
+subject = as.character(tab$Subject)
+
+tab2 = t(tab)
+tab2 = data.frame(tab2)
+colnames(tab2) = subject
+tab2 = tab2[-1, ]
+
+pander(tab2, split.table = 90)
+
 
 
 

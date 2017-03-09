@@ -262,7 +262,7 @@ load("R-Data/data-mdl-08.rda")
 
 ## Neutral
 
-x = unique(mdl.12.train[, c("Subject", "Age_Old", "Gender_Male")])
+x = unique(mdl.08.train[, c("Subject", "Age_Old", "Gender_Male")])
 dta = cbind(x, data.frame(Time = 0, Anger = 0, Contempt = 0, Disgust = 0, Fear = 0,
     Joy = 0, Sad = 0, Surprise = 0))
 
@@ -276,7 +276,7 @@ for (i in seq(-1, 1, 0.1)) {
     test.Neutral = rbind(test.Neutral, x)
 }
 
-test.Neutral$predict = predict(mdl.12, test.Neutral, type = "prob")[, 2]
+test.Neutral$predict = predict(mdl.08, test.Neutral, type = "prob")[, 2]
 
 ggplot(test.Neutral) +
   geom_boxplot(aes(x = Neutral, y = predict, group = Neutral), alpha = 0.7) +
