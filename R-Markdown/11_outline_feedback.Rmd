@@ -79,8 +79,11 @@ I did not think about this at all, but I think its a great idea.
 | AgeOld     | 1     | 1     | 0     | 1     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 0     | 1     | 1     | **12**        |
 
 
-
-
+|        | Max Accuracy | Min Accuracy | Proportion Male | Proportion Old |
+|:-------|:-------------|:-------------|:----------------|:---------------|
+| Top 20 | .971         | .880         | 60%             | 35%            |
+| Mid 20 | .872         | .802         | 40%             | 35%            |
+| Bot 19 | .794         | .640         | 50%             | 60%            |
 
 #### **Are you trying to detect whether texting occurred during a given interval or a single observation?**
 
