@@ -423,12 +423,17 @@ ggsave(filename = "Plots/Boxplots_Testing_Accuracy_By_Age_Gender.png",
 
 head(tab)
 
-mdl = glm(Test ~ GenderMale*AgeOld, data = tab)
-mdl2 = glm(Test ~ GenderMale + AgeOld, data = tab)
+mdl = glm(Test ~ factor(GenderMale)*factor(AgeOld), data = tab)
+mdl2 = glm(Test ~ factor(GenderMale) + factor(AgeOld), data = tab)
 
 anova(mdl, mdl2)
 
-tab = tab[, -6]
+x = data.frame(GenderAge = tab$GenderAge, Residuals = mdl2$residuals)
+
+leveneTest(Test ~ factor(GenderMale), data = tab, center = "median")
+leveneTest(Residuals ~ GenderAge, data = x)
+
+tatab = tab[, -6]
 
 tab$Train = round(tab$Train, 3)
 tab$Test = round(tab$Test, 3)
@@ -440,6 +445,7 @@ colnames(tab2) = subject
 tab2 = tab2[-1, ]
 
 pander(tab2, split.table = 90)
+
 
 
 
@@ -664,6 +670,7 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
 rel.imp = gar.fun(out.var = "Texting", mod.in = mdl.08$finalModel, bar.plot = FALSE)
 rel.imp$Subject = row.names(rel.imp)
 rel.imp$Subject = gsub(pattern = "Subject", replacement = "", x = rel.imp$Subject)
+rel.imp2 = rel.imp
 
 rel.imp = rel.imp[-(grep("T", rel.imp$Subject)), ]
 
@@ -677,8 +684,6 @@ g1 = ggplot(rel.imp, aes(x = reorder(Subject, rel.imp), y = rel.imp)) +
 
 ggsave(filename = "Plots/Relative_Importance.png", plot = g1, width = 7, height = 5)
 ggsave(filename = "docs/Plots/Relative_Importance.png", plot = g1, width = 7, height = 5)
-
-
 
 
 

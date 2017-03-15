@@ -776,6 +776,7 @@ Model Performance
 
 Model Performance
 ========================================================
+left: 60%
 
 **Total Accuracy by Subject**
 
@@ -797,6 +798,7 @@ Model Performance
 | AgeOld     | 0     | 0     | 0     | 0     | 1     | 0     | 0     | 1     | 1     | 0     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | **7**      |
 
 
+
 | &nbsp;     | T031  | T040  | T061  | T036  | T047  | T084  | T077  | T014  | T004  | T021  | T019  | T002  | T054  | T025  | T041  | T034  | T023  | T038  | T027  | **BOTTOM 19** |
 |:-----------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:--------------|
 | Train      | 0.846 | 0.814 | 0.796 | 0.800 | 0.789 | 0.803 | 0.792 | 0.828 | 0.771 | 0.812 | 0.746 | 0.742 | 0.774 | 0.760 | 0.719 | 0.704 | 0.711 | 0.674 | 0.651 | **.764**      |
@@ -805,6 +807,33 @@ Model Performance
 | AgeOld     | 1     | 1     | 0     | 1     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 0     | 1     | 1     | **12**        |
 
 </center>
+
+**Proportional Summary**
+
+<center>
+
+|        | Proportion Male | Proportion Old | Proportion Old Male | Proportion Old Female |
+|:-------|:---------------:|:--------------:|:-------------------:|:---------------------:|
+| Top 20 | 40.0%           | 26.9%          | 35.7%               | 16.7%                 |
+| Mid 20 | 26.7%           | 26.9%          | 21.4%               | 33.3%                 |
+| Bot 19 | 33.3%           | 46.2%          | 42.9%               | 50.0%                 |
+
+</center>
+
+**********
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+**Takeaways**
+<small><small>
+* 15 of 59 had testing performance > 90%
+* 40 of 59 had testing performance > 80%
+*  3 of 59 had testing performance < 70%
+*  6 of the 7 worst performing Subjects were Old (4 Male, 3 Female)
+* The 15 top performing Subjects (7 Male, 5 Old)
+
+</small></small>
+
 
 
 Exploring Modeling Effects
@@ -821,7 +850,7 @@ Exploring Modeling Effects
 <small>
 ```r
 ******************************************************************
-Levene's Test for Homogeneity of Variance
+Levene's Test for Homogeneity of Variance (Median)
 ******************************************************************
       Df F value Pr(>F)
 group  3  0.3182 0.8122
