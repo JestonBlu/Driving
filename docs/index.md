@@ -132,14 +132,14 @@ Data Preparation
 **Sample of Cleaned Data Showing an Event Transition**
 
 
-|Subject |Trial |Age |Gender | Frame|   Time| Event.Switch|Event    | Action|  Anger| Contempt| Disgust|  Fear|    Joy|    Sad| Surprise| Neutral|Texting |
-|:-------|:-----|:---|:------|-----:|------:|------------:|:--------|------:|------:|--------:|-------:|-----:|------:|------:|--------:|-------:|:-------|
-|T001    |007   |Y   |M      |  2427| 80.900|            0|No Event |      0| 0.0909|   0.0575|  0.4205| 3e-04| 0.0011| 0.1343|        0|  0.2954|0       |
-|T001    |007   |Y   |M      |  2428| 80.933|            0|No Event |      0| 0.0612|   0.0397|  0.4293| 4e-04| 0.0011| 0.1630|        0|  0.3052|0       |
-|T001    |007   |Y   |M      |  2429| 80.967|            0|No Event |      0| 0.1034|   0.0963|  0.3186| 2e-04| 0.0013| 0.0856|        0|  0.3946|0       |
-|T001    |007   |Y   |M      |  2430| 81.000|            1|Texting  |      4| 0.0363|   0.4976|  0.0171| 1e-04| 0.0024| 0.0069|        0|  0.4396|1       |
-|T001    |007   |Y   |M      |  2431| 81.033|            1|Texting  |      4| 0.0059|   0.7285|  0.0027| 4e-04| 0.0068| 0.0063|        0|  0.2493|1       |
-|T001    |007   |Y   |M      |  2432| 81.067|            1|Texting  |      4| 0.0058|   0.6890|  0.0035| 4e-04| 0.0077| 0.0068|        0|  0.2868|1       |
+|Subject |Trial |Age |Gender | Frame|   Time| Event.Switch|Event    | Action|  Anger| Contempt| Disgust|  Fear|    Joy|    Sad| Surprise| Neutral|
+|:-------|:-----|:---|:------|-----:|------:|------------:|:--------|------:|------:|--------:|-------:|-----:|------:|------:|--------:|-------:|
+|T001    |007   |Y   |M      |  2427| 80.900|            0|No Event |      0| 0.0909|   0.0575|  0.4205| 3e-04| 0.0011| 0.1343|        0|  0.2954|
+|T001    |007   |Y   |M      |  2428| 80.933|            0|No Event |      0| 0.0612|   0.0397|  0.4293| 4e-04| 0.0011| 0.1630|        0|  0.3052|
+|T001    |007   |Y   |M      |  2429| 80.967|            0|No Event |      0| 0.1034|   0.0963|  0.3186| 2e-04| 0.0013| 0.0856|        0|  0.3946|
+|T001    |007   |Y   |M      |  2430| 81.000|            1|Texting  |      4| 0.0363|   0.4976|  0.0171| 1e-04| 0.0024| 0.0069|        0|  0.4396|
+|T001    |007   |Y   |M      |  2431| 81.033|            1|Texting  |      4| 0.0059|   0.7285|  0.0027| 4e-04| 0.0068| 0.0063|        0|  0.2493|
+|T001    |007   |Y   |M      |  2432| 81.067|            1|Texting  |      4| 0.0058|   0.6890|  0.0035| 4e-04| 0.0077| 0.0068|        0|  0.2868|
 
 <br>
 
@@ -148,6 +148,9 @@ Data Preparation
 </div></left>
 
 </center>
+
+
+
 
 
 Project Management
@@ -202,10 +205,14 @@ Exploratory Analysis
 <img src="Plots/Texting_vs_Baseline_01.png" alt="Drawing" style="width: 2500px;"/>
 </center>
 
-* <small>The yellow and gray points represent events during the trials</small> 
-* <small>The baseline trial has no events and is gray throughout.</small>
-* <small>**LOESS (Local Polynomial Regression)** lines display the moving average over the entire simulation</small>
-* <small>Many subjects displayed visual differences between the texting simulation and the baseline simulation</small>
+<center><small>
+* The yellow and gray points represent events during the trials
+* The baseline trial has no events and is gray throughout
+* **LOESS (Local Polynomial Regression)** lines display the moving average over the entire simulation
+* Many subjects displayed visual differences between the texting simulation and the baseline simulation
+</small></center>
+
+
 
 
 Exploratory Analysis
@@ -230,18 +237,24 @@ Exploratory Analysis
 </center>
 
 
+
+
+
 Exploratory Analysis
 ========================================================
 
 <center>
+
 <img src="Plots/Texting_vs_Baseline_all.png" alt="Drawing" style="width: 2500px;"/>
+
+<small>
+
+* The same LOESS lines were used to show all 59 subjects on a single plot
+* All observations were centered on the overall average of the baseline simulation
+* Anger, Contempt, Disgust, and Neutral displayed more variation than the other emotions for both trials
+
+</small>
 </center>
-
-* <small>The same LOESS lines were used to show all 59 subjects on a single plot</small>
-* <small>All observations were centered on the overall average of the baseline simulation</small>
-* <small>Anger, Contempt, Disgust, and Neutral displayed more variation than the other emotions for both trials</small>
-
-
 
 
 
@@ -259,20 +272,28 @@ Model Proposal
 <br> 
 
 **Takeaways**
+<small>
+* Differences in variation between the trials suggest that it may be possible to build a model capable of predicting a texting event
 
-* <small>Differences in variation between the trials suggest that it may be possible to build a model capable of predicting a texting event</small>
+* Subject specific plots are unique enough that a individual subjects variables may be needed in modeling
 
-* <small>Subject specific plots are unique enough that a individual subjects variables may be needed in modeling</small>
+* **Baseline Trial**: Trial 4 was used as a baseline trial because the conditions were identical to the Texting Trial (dense traffic with detour). The overall mean for each Subject's emotion in the baseline trial was subtracted from every observation in the Texting Trial.  
 
-* <small>**Baseline Trial**: Trial 4 was used as a baseline trial because the conditions were identical to the Texting Trial (dense traffic with detour)</small>
+</small>
 
-<br>
+**Model Proposal**
+<small>
+* Train a **Feed Forward Neural Network** using emotional likelihoods and demographics to predict when a subject is texting
 
-**Model Proposal**: 
+</small>
 
-* <small>Train Neural Networks using emotional likelihoods and demographics to predict when a subject is texting</small>
-  * <small>Well suited for large data sets of continuous variables</small>
-  * <small>Analogous to logistic regression and appropriate for predicting probabilities</small>
+**Advantages**
+<small>
+* NNets are well suited for large data sets of continuous variables
+
+* Analogous to logistic regression and appropriate for predicting probabilities
+
+</small>
 
 
 
@@ -440,7 +461,7 @@ $$
 
 *******
 
-**Step 4**: Repeat steps 2-3 to update node values
+**Step 4**: Repeat step 2 to update node values
 * <small>S(.633) = .653, Error = **.653** vs previous **.739**</small>
 
 <center>
@@ -491,7 +512,7 @@ left: 30%
 
 $$
 \begin{align*}
-  nnet(Texting = & \text{ } Subject + Age + Gender + Anger + Contempt \text{ } + \\
+  nnet(Texting \sim & \text{ } Subject + Age + Gender + Anger + Contempt \text{ } + \\
   & \text{ } Digust + Fear + Joy + Sad + Surprise + Neutral)\\
 \end{align*}
 $$
@@ -532,7 +553,7 @@ Model Fitting
 * R's **[nnet](https://cran.r-project.org/web/packages/nnet/index.html)** package for feed-forward neural networks
 
 * **The Caret Package**
-  * **[Caret](http://topepo.github.io/caret/index.html)** is a modeling framework for training and testing classification and regression models
+  * **[Caret](http://topepo.github.io/caret/index.html)** is a modeling framework for training classification and regression models
   * Uses models from other packages and offers a rich set of validation test and diagnostic plots
   * Can implement parallel processing of cross validation tasks<br><br>
   
@@ -542,7 +563,7 @@ Model Fitting
 
 **Model Search Parameters**
   * **Max Iterations**: The number of iterations allowed for training
-    * 100 (500 and 1000 iterations are run for the best models)
+    * 100 (250,500 and 1000 iterations are run for the best models)
   * **Size**: The number of nodes in the hidden layer. Increases training time exponentially
     * [1, 10, 25, 50]
   * **Decay**: A penality applied to weights after each iteration. Moves weights that dont update towards zero.
@@ -679,27 +700,24 @@ Resampling results across tuning parameters:
 
 <center><small>**Confusion Matrix and Statistical Summaries**</small></center>
 <center><small>
-```r
-          Reference
-Prediction     0     1
-         0 22736  4616
-         1  2943 14208
+```
+            Reference             Reference
+             0     1                0    1
+    Pred 0 22736  4616     Pred 0 .885 .245
+         1  2943 14208          1 .114 .754  
                                           
                Accuracy : 0.8301          
                  95% CI : (0.8266, 0.8336)
     No Information Rate : 0.577           
-    P-Value [Acc > NIR] : < 2.2e-16       
-                                          
-                  Kappa : 0.6479          
-  Mcnemars Test P-Value : < 2.2e-16       
+                  Kappa : 0.6472
                                           
             Sensitivity : 0.8854          
             Specificity : 0.7548          
 
          Pos Pred Value : 0.8312          
          Neg Pred Value : 0.8284          
-       
       Balanced Accuracy : 0.8201
+      
   Area Under Curve (AUC): 0.906
 ```
 </small></center>
@@ -714,7 +732,6 @@ Model Performance
 
 <center>
 <img src="Plots/Prediction_Subject001.png" alt="Drawing" style="width: 2500px;"/>
-</center>
 
 <small>
 * Each point is colored by the prediction of the best model
@@ -723,7 +740,7 @@ Model Performance
 * Yellow points within the gray regions represent correct predictions
 </small>
 
-
+</center>
 
 
 Model Performance
