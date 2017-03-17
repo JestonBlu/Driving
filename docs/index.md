@@ -51,20 +51,19 @@ Data Introduction
 ========================================================
 
 <center>
-* <small>The data in this project are of 8 driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation.</small>
-* <small>Every simulation observation contains likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds.</small>
-* <small>Stimuli data which records targetted events introduced into each simulation and basic demographic data on each subject are also available.</small>
-* <small>There are over 6.7 million observations in the entire dataset spread accross 777 files.</small>
-</center>
+<small>
+* The data are driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation
+* Each observation contains likelihood scores for 8 facial expressions recorded at fixed intervals of .03 seconds.
+* Stimuli data which records events introduced into each simulation and basic demographic data are also available.
+* There are over 6.7 million observations in the entire dataset spread accross 777 files.
 
-<center>**T001-001.xlsx (Subject 01, Simulation 01)**<br>
+**T001-001.xlsx (Subject 01, Simulation 01)**<br>
 <img src="Screens/faces.png" alt="Drawing" style="width: 1300px;"/>
-</center>
 
 <br> 
 
-<center>
-* <small>The data set used in this project was originally collected and analyzed in **[Dissecting Driver Behaviors Under Cognitive, Emotional, Sensorimotor, and Mixed Stressors](http://www.nature.com/articles/srep25651)**, Scientific Reports 6, Article number: 25651 (2016).</small>
+* The data set used in this project was originally collected and analyzed in **[Dissecting Driver Behaviors Under Cognitive, Emotional, Sensorimotor, and Mixed Stressors](http://www.nature.com/articles/srep25651)**, Scientific Reports 6, Article number: 25651 (2016).
+</small>
 </center>
 
 
@@ -75,8 +74,10 @@ Data Extraction
 ========================================================
 
 <center>
-* <small>**[Python scripts](https://github.com/JestonBlu/Driving/tree/master/Files)** were used to extract and combine the 509 driving simulation files and 267 stimuli files into combined data sets.</small>
-* <small>The subject-simulation identifier was the name of each file. A column labeled ID was created based on the file name to identify the original data set.</small>
+<small>
+* **[Python scripts](https://github.com/JestonBlu/Driving/tree/master/Files)** were used to extract and combine the 509 driving simulation files and 267 stimuli files into combined data sets.
+* The subject-simulation identifier was the name of each file. A column labeled ID was created based on the file name to identify the original data set.
+</small>
 </center>
 
 <center>**Sample of data-faces.csv**
@@ -121,11 +122,12 @@ Data Preparation
 ========================================================
 
 <center>
-
-* <small>The event data captured the starting and ending times of events only.</small>
-* <small>A loop function was written to go through each record and compare time between the simulation and the starting/ending time of the event.</small>
-* <small>If the simulation time fell within the starting/ending time interval in the event data, then all of the records in the time interval were coded with that event (ie: **Texting**)</small>
-* <small>All observations outside of the event time interval were coded as **No Event**.</small>
+<small>
+* Stimuli data captured the starting and ending times of events.
+* A loop function was written to go through each record and compare time between the simulation and the starting/ending time of the event.
+* If the simulation time was between the starting and ending time of an event, then all of the records in the time interval were coded with that event (ie: **Texting**)
+* All observations outside of the event time interval were coded as **No Event**.
+</small>
 
 <br>
 
@@ -159,16 +161,20 @@ Project Management
 <br>
 
 **Reproducible Research**
+<small>
+* Code, plots, and this presentation are organized and hosted in a github repository.
+* The main page includes steps to reproduce the data set and models.
+* The entire dataset is too large to be hosted on github and would need to be retrieved elsewhere.
+* The texting dataset needed to reproduce this analysis is available on the git repository.
 
-* <small>Code, plots, and this presentation are organized and hosted in a github repository.</small>
-* <small>The main page includes steps to reproduce the data set and models</small>
-* <small>The data is too large to be hosted and would need to be retrieved elsewhere</small>
-
+</small>
 
 <br>
 
 <left><div class="note">
-<center><small>Github Project: [https://github.com/jestonblu/driving](https://github.com/jestonblu/driving)</small></center>
+<center><small>
+Github Project: [https://github.com/jestonblu/driving](https://github.com/jestonblu/driving)
+</small></center>
 </div>
 </left>
 
@@ -263,6 +269,8 @@ Exploratory Analysis
 Model Proposal
 ========================================================
 
+<br>
+
 <center>
 <img src="Plots/Boxplots_Variance_by_Trial.png" alt="Drawing" style="width: 1400px;"/>
 </center>
@@ -271,26 +279,21 @@ Model Proposal
 
 <br> 
 
-**Takeaways**
 <small>
+
+**Takeaways**
 * Differences in variation between the trials suggest that it may be possible to build a model capable of predicting a texting event
+* Subject specific plots are unique enough that a variable for subject may be needed in modeling
 
-* Subject specific plots are unique enough that a individual subjects variables may be needed in modeling
-
-* **Baseline Trial**: Trial 4 was used as a baseline trial because the conditions were identical to the Texting Trial (dense traffic with detour). The overall mean for each Subject's emotion in the baseline trial was subtracted from every observation in the Texting Trial.  
-
-</small>
+**Baseline Trial**
+* Trial 4 was used as a baseline trial because the conditions were identical to the Texting Trial (dense traffic with detour). 
+* The overall mean for each Subject's emotion in the baseline trial was subtracted from every observation in the Texting Trial.  
 
 **Model Proposal**
-<small>
 * Train a **Feed Forward Neural Network** using emotional likelihoods and demographics to predict when a subject is texting
 
-</small>
-
-**Advantages**
-<small>
+**Neural Network Advantages**
 * NNets are well suited for large data sets of continuous variables
-
 * Analogous to logistic regression and appropriate for predicting probabilities
 
 </small>
@@ -520,7 +523,7 @@ $$
 **Modeling Strategy**
   * Train the same general model on various slices of the data to see what works best
   
-  * 12 total training/testing data sets created from the combination of Data Processing and Data Split methods
+  * 12 training and testing sets were created from the combination of Data Processing and Data Split methods
   
   * **Data Processing**
     * **Original**: Emotions in the original form measured in .03 second intervals.
@@ -770,35 +773,37 @@ Model Performance
 
 Model Performance
 ========================================================
-left: 60%
+left: 70%
 
-**Total Accuracy by Subject**
+**Balanced Accuracy by Subject**
 
 <center>
 
-| &nbsp;     | T022  | T086  | T007  | T006  | T018  | T035  | T083  | T076  | T081  | T064  | T020  | T012  | T074  | T009  | T013  | T088  | T003  | T032  | T011  | T044 | **TOP 20** |
-|:-----------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----|:-----------|
-| Train      | 0.981 | 0.960 | 0.919 | 0.943 | 0.940 | 0.956 | 0.956 | 0.949 | 0.929 | 0.922 | 0.931 | 0.928 | 0.925 | 0.914 | 0.907 | 0.937 | 0.907 | 0.915 | 0.916 | .915 | **.932**   |
-| Test       | 0.971 | 0.952 | 0.948 | 0.942 | 0.937 | 0.936 | 0.932 | 0.927 | 0.923 | 0.919 | 0.918 | 0.913 | 0.909 | 0.905 | 0.903 | 0.896 | 0.896 | 0.895 | 0.881 | .880 | **.919**   |
-| GenderMale | 0     | 0     | 1     | 0     | 0     | 0     | 1     | 1     | 1     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 1     | 1     | 1     | 1    | **12**     |
-| AgeOld     | 0     | 1     | 0     | 0     | 0     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 1     | 0     | 0     | 1     | 0     | 1     | 0     | 0    | **7**      |
-
-
-| &nbsp;     | T080  | T016  | T005  | T060  | T039  | T015  | T008  | T046  | T029  | T079  | T051  | T073  | T082  | T024  | T010  | T001  | T066  | T017  | T033  | T042  | **MID 20** |
-|:-----------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----------|
-| Train      | 0.897 | 0.904 | 0.867 | 0.911 | 0.880 | 0.868 | 0.879 | 0.883 | 0.842 | 0.892 | 0.884 | 0.855 | 0.866 | 0.829 | 0.847 | 0.867 | 0.855 | 0.824 | 0.825 | 0.843 | **.865**   |
-| Test       | 0.872 | 0.871 | 0.864 | 0.859 | 0.853 | 0.850 | 0.848 | 0.847 | 0.839 | 0.837 | 0.832 | 0.831 | 0.830 | 0.827 | 0.826 | 0.825 | 0.819 | 0.817 | 0.803 | 0.802 | **.837**   |
-| GenderMale | 0     | 0     | 1     | 0     | 0     | 1     | 0     | 1     | 0     | 0     | 1     | 0     | 1     | 0     | 0     | 1     | 0     | 1     | 0     | 1     | **8**      |
-| AgeOld     | 0     | 0     | 0     | 0     | 1     | 0     | 0     | 1     | 1     | 0     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | **7**      |
+|                | T022  | T007  | T086  | T006  | T018  | T083  | T035  | T076  | T081  | T064  | T020  | T012  | T074  | T088  | T013  | T009  | T032  | T003  | T011  | T080  | **Top 20** |
+|:---------------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----------|
+| **Train**      | 0.982 | 0.920 | 0.956 | 0.941 | 0.935 | 0.956 | 0.951 | 0.949 | 0.927 | 0.921 | 0.932 | 0.923 | 0.923 | 0.938 | 0.896 | 0.911 | 0.915 | 0.899 | 0.902 | 0.896 | **.943**   |
+| **Test**       | 0.975 | 0.951 | 0.950 | 0.941 | 0.936 | 0.930 | 0.928 | 0.927 | 0.922 | 0.921 | 0.919 | 0.911 | 0.907 | 0.900 | 0.898 | 0.897 | 0.892 | 0.884 | 0.874 | 0.872 | **.938**   |
+| **GenderMale** | 0     | 1     | 0     | 0     | 0     | 1     | 0     | 1     | 1     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 1     | 1     | 1     | 0     | **11**     |
+| **AgeOld**     | 0     | 0     | 1     | 0     | 0     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 1     | 1     | 0     | 0     | 1     | 0     | 0     | 0     | **7**      |
 
 
 
-| &nbsp;     | T031  | T040  | T061  | T036  | T047  | T084  | T077  | T014  | T004  | T021  | T019  | T002  | T054  | T025  | T041  | T034  | T023  | T038  | T027  | **BOTTOM 19** |
-|:-----------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:--------------|
-| Train      | 0.846 | 0.814 | 0.796 | 0.800 | 0.789 | 0.803 | 0.792 | 0.828 | 0.771 | 0.812 | 0.746 | 0.742 | 0.774 | 0.760 | 0.719 | 0.704 | 0.711 | 0.674 | 0.651 | **.764**      |
-| Test       | 0.794 | 0.790 | 0.787 | 0.783 | 0.782 | 0.776 | 0.766 | 0.758 | 0.758 | 0.757 | 0.742 | 0.735 | 0.731 | 0.724 | 0.720 | 0.700 | 0.682 | 0.665 | 0.640 | **.741**      |
-| GenderMale | 0     | 1     | 1     | 1     | 0     | 1     | 0     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 0     | 1     | 1     | 1     | 0     | **10**        |
-| AgeOld     | 1     | 1     | 0     | 1     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 0     | 1     | 1     | **12**        |
+|                | T016  | T005  | T060  | T044  | T015  | T008  | T079  | T073  | T039  | T082  | T010  | T066  | T029  | T046  | T024  | T051  | T017  | T042  | T001  | T061  | **Mid 20** |
+|:---------------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----------|
+| **Train**      | 0.893 | 0.865 | 0.909 | 0.886 | 0.864 | 0.868 | 0.893 | 0.855 | 0.869 | 0.869 | 0.849 | 0.849 | 0.813 | 0.857 | 0.810 | 0.856 | 0.807 | 0.843 | 0.851 | 0.793 | **.854**   |
+| **Test**       | 0.862 | 0.861 | 0.856 | 0.849 | 0.847 | 0.841 | 0.838 | 0.834 | 0.833 | 0.832 | 0.826 | 0.813 | 0.812 | 0.810 | 0.808 | 0.806 | 0.806 | 0.803 | 0.800 | 0.787 | **.826**   |
+| **GenderMale** | 0     | 1     | 0     | 1     | 1     | 0     | 0     | 0     | 0     | 1     | 0     | 0     | 0     | 1     | 0     | 1     | 1     | 1     | 1     | 1     | **10**     |
+| **AgeOld**     | 0     | 0     | 0     | 1     | 0     | 0     | 0     | 1     | 1     | 0     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 1     | 0     | 0     | **7**      |
+
+
+
+|                | T084  | T077  | T036  | T031  | T033  | T040  | T021  | T014  | T019  | T004  | T002  | T023  | T054  | T041  | T034  | T047  | T025  | T038  | T027  | **Bot 19** |
+|:---------------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----------|
+| **Train**      | 0.806 | 0.794 | 0.789 | 0.810 | 0.768 | 0.782 | 0.802 | 0.815 | 0.742 | 0.728 | 0.717 | 0.748 | 0.741 | 0.698 | 0.688 | 0.703 | 0.699 | 0.559 | 0.540 | **.733**   |
+| **Test**       | 0.780 | 0.770 | 0.766 | 0.765 | 0.751 | 0.750 | 0.748 | 0.748 | 0.734 | 0.721 | 0.719 | 0.706 | 0.698 | 0.697 | 0.677 | 0.670 | 0.660 | 0.532 | 0.514 | **.705**   |
+| **GenderMale** | 1     | 0     | 1     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 0     | 1     | 0     | **9**      |
+| **AgeOld**     | 1     | 1     | 1     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 1     | 1     | 1     | **13**     |
+
 
 </center>
 
@@ -806,11 +811,11 @@ left: 60%
 
 <center>
 
-|        | Proportion Male | Proportion Old | Proportion Old Male | Proportion Old Female |
-|:-------|:---------------:|:--------------:|:-------------------:|:---------------------:|
-| Top 20 | 40.0%           | 26.9%          | 35.7%               | 16.7%                 |
-| Mid 20 | 26.7%           | 26.9%          | 21.4%               | 33.3%                 |
-| Bot 19 | 33.3%           | 46.2%          | 42.9%               | 50.0%                 |
+|        | % Male | % Female | % Old | % Young | % Young Male | % Young Female | % Old Male | % Old Female |
+|:-------|:------:|:---------|:-----:|:--------|:-------------|:---------------|:----------:|:------------:|
+| Top 20 | 36.6%  | 31.0%    | 25.9% | 40.6%   |   40.0%      |  37.5%         |   35.7%    |    16.7%     |
+| Mid 20 | 33.3%  | 34.5%    | 25.9% | 40.6%   |   40.0%      |  43.8%         |   21.4%    |    25.0%     |
+| Bot 19 | 30.0%  | 34.5%    | 48.1% | 18.7%   |   20.0%      |  18.8%         |   42.9%    |    58.3%     |
 
 </center>
 
@@ -818,13 +823,12 @@ left: 60%
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-**Takeaways**
+
 <small><small>
-* 15 of 59 had testing performance > 90%
-* 40 of 59 had testing performance > 80%
-*  3 of 59 had testing performance < 70%
-*  6 of the 7 worst performing Subjects were Old (4 Male, 3 Female)
-* The 15 top performing Subjects (7 Male, 5 Old)
+* 14 of 59 had testing performance > 90%
+* 39 of 59 had testing performance > 80%
+*  7 of 59 had testing performance < 70%
+*  The 7 worst performing Subjects were all Old
 
 </small></small>
 
@@ -844,33 +848,33 @@ Exploring Modeling Effects
 <small>
 ```r
 ******************************************************************
-Levene's Test for Homogeneity of Variance (Median)
+Levene's Test for Homogeneity of Variance (Center = Median)
 ******************************************************************
       Df F value Pr(>F)
-group  3  0.3182 0.8122
-      55     
+group  1  0.2034 0.6537
+      57  
       
 ******************************************************************
 General Linear Model
 ******************************************************************
 Deviance Residuals: 
       Min         1Q     Median         3Q        Max  
--0.163277  -0.041330  -0.000279   0.059284   0.148769  
+-0.269925  -0.047361   0.004553   0.066577   0.184431  
 
 Coefficients:
-                      Estimate Std. Error t value Pr(>|t|)    
-(Intercept)            0.80337    0.02261  35.534   <2e-16 ***
-GenderAgeYoung Female  0.05604    0.02953   1.898    0.063 .  
-GenderAgeOld Male      0.02099    0.03033   0.692    0.492    
-GenderAgeYoung Male    0.03718    0.03033   1.226    0.226    
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   0.76528    0.02732  28.011   <2e-16 ***
+Old Male      0.03652    0.03665   0.996   0.3234    
+Young Female  0.08808    0.03568   2.468   0.0167 *  
+Young Male    0.07124    0.03665   1.943   0.0571 .  
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-(Dispersion parameter for gaussian family taken to be 0.006133847)
+(Dispersion parameter for gaussian family taken to be 0.008957086)
 
-    Null deviance: 0.36163  on 58  degrees of freedom
-Residual deviance: 0.33736  on 55  degrees of freedom
-AIC: -127.25
+    Null deviance: 0.55633  on 58  degrees of freedom
+Residual deviance: 0.49264  on 55  degrees of freedom
+AIC: -104.91
 
 Number of Fisher Scoring iterations: 2
 
@@ -878,7 +882,7 @@ Number of Fisher Scoring iterations: 2
 Shapiro-Wilk Normality Test
 ******************************************************************
 data:  mdl$residuals
-W = 0.97765, p-value = 0.3482
+W = 0.97066, p-value = 0.1645
 ```
 </small>
 
@@ -886,4 +890,39 @@ W = 0.97765, p-value = 0.3482
 
 Conclusions
 ========================================================
+
+<small>
+
+* Neutral, Surprise, and Anger were the most important emotions for successfully identifying texting.
+
+
+* Joy, Contempt, and Fear are the least important emotions for identifying texting.
+
+
+* Young Females had the best overall testing performance while Older Females had the worst overall testing performance.
+
+  * At the 95% confidence level, the testing accuracy between Young Females and Old Females are different.
+  * At the 90% confidence level, the testing accuracy between Young Males vs Old Females are different.
+
+
+* The variable importance plot from the training model indicated that Gender is more important than Age. The testing accuracy results by subject somewhat contradict this claim.
+
+
+* After extending the training iterations, the difference between Model 8 (1/2 Sec Cut) and Model 12 (1/2 Sec Cut Stat) are negligible. This suggests that there is much more information in the average likelihood score than in the other descriptive statistics (sd, min, max, iqr).
+
+
+</small>
+
+
+
+
+
+
+
+
+
+
+
+
+
 

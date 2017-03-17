@@ -339,7 +339,7 @@ ggsave(filename = "Plots/Prediction_Subject022.png", plot = g4, width = 13, heig
 ggsave(filename = "docs/Plots/Prediction_Subject022.png", plot = g4, width = 11, height = 6)
 
 
-sub = 'T038'
+sub = 'T038' #T038
 x = subset(mdl.08.test, Subject == sub)
 x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
 y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
@@ -356,7 +356,7 @@ g5 = ggplot(x, aes(x = Time, y = value)) +
   scale_color_manual("Prediction", values = c("black", "#f0b923")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Subject 38: Accuracy 51%") +
+  ggtitle("Subject 38: Accuracy 53%") +
   theme(plot.title = element_text(hjust = .5))
 
 ggsave(filename = "Plots/Prediction_Subject038.png", plot = g5, width = 13, height = 5)
@@ -390,8 +390,8 @@ for (i in 1:59) {
   y1 = subset(mdl.08.train, Subject == subject[i])
   y2 = subset(mdl.08.test, Subject == subject[i])
 
-  x1 = confusionMatrix(reference = y1$Texting, data = y1$Predict)$overall[1]
-  x2 = confusionMatrix(reference = y2$Texting, data = y2$Predict)$overall[1]
+  x1 = confusionMatrix(reference = y1$Texting, data = y1$Predict, positive = "1")$byClass[11]
+  x2 = confusionMatrix(reference = y2$Texting, data = y2$Predict, positive = "1")$byClass[11]
 
   tab = rbind(tab, data.frame(Subject = subject[i], 
                               Train = x1, 
@@ -425,15 +425,16 @@ head(tab)
 
 mdl = glm(Test ~ factor(GenderMale)*factor(AgeOld), data = tab)
 mdl2 = glm(Test ~ factor(GenderMale) + factor(AgeOld), data = tab)
+mdl3 = glm(Test ~ factor(GenderAge), data = tab)
 
-anova(mdl, mdl2)
+anova(mdl, mdl2,mdl3)
 
 x = data.frame(GenderAge = tab$GenderAge, Residuals = mdl2$residuals)
 
 leveneTest(Test ~ factor(GenderMale), data = tab, center = "median")
 leveneTest(Residuals ~ GenderAge, data = x)
 
-tatab = tab[, -6]
+tab = tab[, -6]
 
 tab$Train = round(tab$Train, 3)
 tab$Test = round(tab$Test, 3)
@@ -444,7 +445,7 @@ tab2 = data.frame(tab2)
 colnames(tab2) = subject
 tab2 = tab2[-1, ]
 
-pander(tab2, split.table = 90)
+pander(tab2, split.table = 160)
 
 
 
