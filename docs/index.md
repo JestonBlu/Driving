@@ -1,7 +1,7 @@
 
 ========================================================
 autosize: true
-font-family: "DejaVu Sans Mono"
+font-family: "Consolas"
 width: 2100
 height: 1400
 css: custom.css
@@ -23,7 +23,7 @@ Contents
 title: true
 <br>
 
-* Data Introduction, Preparation, and Project Management
+* Data Introduction, Extraction, Preparation, and Project Management
 * Exploratory Analysis and Model Proposal
 * Understanding Basic Neural Nets
 * Model Training and Selection
@@ -52,17 +52,17 @@ Data Introduction
 
 <center>
 <small>
-* The data are driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation
+* The data consists of driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation.
 * Each observation contains likelihood scores for 8 facial expressions recorded at fixed intervals of .03 seconds.
-* Stimuli data which records events introduced into each simulation and basic demographic data are also available.
+* Stimuli data, which records events introduced into each simulation, and basic demographic data are also available.
 * There are over 6.7 million observations in the entire dataset spread accross 777 files.
 
 **T001-001.xlsx (Subject 01, Simulation 01)**<br>
 <img src="Screens/faces.png" alt="Drawing" style="width: 1300px;"/>
 
 <br> 
+* The dataset used in this project was originally collected and analyzed in **[Dissecting Driver Behaviors Under Cognitive, Emotional, Sensorimotor, and Mixed Stressors](http://www.nature.com/articles/srep25651)**, Scientific Reports 6, Article number: 25651 (2016).
 
-* The data set used in this project was originally collected and analyzed in **[Dissecting Driver Behaviors Under Cognitive, Emotional, Sensorimotor, and Mixed Stressors](http://www.nature.com/articles/srep25651)**, Scientific Reports 6, Article number: 25651 (2016).
 </small>
 </center>
 
@@ -75,12 +75,14 @@ Data Extraction
 
 <center>
 <small>
-* **[Python scripts](https://github.com/JestonBlu/Driving/tree/master/Files)** were used to extract and combine the 509 driving simulation files and 267 stimuli files into combined data sets.
-* The subject-simulation identifier was the name of each file. A column labeled ID was created based on the file name to identify the original data set.
+
+* **[Python scripts](https://github.com/JestonBlu/Driving/tree/master/Files)** were used to extract and combine the 509 driving simulation files and 267 stimuli files into combined datasets.
+* The subject-simulation identifier was the name of each file. A column labeled ID was created based on the file name to identify the original dataset.
+
 </small>
 </center>
 
-<center>**Sample of data-faces.csv**
+<center><small>**Sample of data-faces.csv**</small>
 
 
 | Frame|   Time|  Anger| Contempt| Disgust|   Fear|    Joy|    Sad| Surprise| Neutral|ID       |
@@ -94,7 +96,7 @@ Data Extraction
 
 </center>
 
-<center>**Sample of data-stimuli.csv**
+<center><small>**Sample of data-stimuli.csv**</small>
 
 
 | Start|    End| Event.Switch| Event.Type|Event                  |ID       |
@@ -124,14 +126,14 @@ Data Preparation
 <center>
 <small>
 * Stimuli data captured the starting and ending times of events.
-* A loop function was written to go through each record and compare time between the simulation and the starting/ending time of the event.
-* If the simulation time was between the starting and ending time of an event, then all of the records in the time interval were coded with that event (ie: **Texting**)
-* All observations outside of the event time interval were coded as **No Event**.
+* A loop function was written to process each record and compare time between the simulation and the starting/ending time of the event.
+* If the simulation time was between the starting and ending time of an event, then all of the records in the time interval were coded with that event (ie: **Texting**).
+* All observations recorded outside the event time interval were coded as **No Event**.
 </small>
 
 <br>
 
-**Sample of Cleaned Data Showing an Event Transition**
+<small>**Sample of Processed Data Showing an Event Transition**</small>
 
 
 |Subject |Trial |Age |Gender | Frame|   Time| Event.Switch|Event    | Action|  Anger| Contempt| Disgust|  Fear|    Joy|    Sad| Surprise| Neutral|
@@ -146,7 +148,7 @@ Data Preparation
 <br>
 
 <left><div class="note">
-  - <small>NOTE: The average texting event lasted 2.5 minutes, but we dont really know what occurred during the event time interval. Was there one long texting action or was the event made up of a series of sending and receiving texts?</small>
+  - <small>NOTE: The average texting event lasted 2.5 minutes, but it is not clear what occurred during the event time interval. Was there one long texting action or was the event made up of a series of sending and receiving texts?</small>
 </div></left>
 
 </center>
@@ -159,22 +161,22 @@ Project Management
 ========================================================
 
 <br>
-
-**Reproducible Research**
 <small>
-* Code, plots, and this presentation are organized and hosted in a github repository.
-* The main page includes steps to reproduce the data set and models.
-* The entire dataset is too large to be hosted on github and would need to be retrieved elsewhere.
-* The texting dataset needed to reproduce this analysis is available on the git repository.
+**Reproducible Research**
 
-</small>
+* Code, plots, and this presentation are organized and hosted in a github repository.
+* The repository includes steps to reproduce the dataset and models.
+* The entire dataset is too large to be hosted on github.
+* The texting dataset needed to reproduce this analysis is available on the github repository.
+
+
 
 <br>
 
 <left><div class="note">
-<center><small>
+<center>
 Github Project: [https://github.com/jestonblu/driving](https://github.com/jestonblu/driving)
-</small></center>
+</center>
 </div>
 </left>
 
@@ -186,8 +188,7 @@ Github Project: [https://github.com/jestonblu/driving](https://github.com/jeston
 <img src="Screens/github.png" alt="Drawing" style="width: 1400px;"/>
 </center>
 
-
-
+</small>
 
 
 
@@ -212,10 +213,10 @@ Exploratory Analysis
 </center>
 
 <center><small>
-* The yellow and gray points represent events during the trials
-* The baseline trial has no events and is gray throughout
-* **LOESS (Local Polynomial Regression)** lines display the moving average over the entire simulation
-* Many subjects displayed visual differences between the texting simulation and the baseline simulation
+* **LOESS (Local Polynomial Regression)** lines display the moving average over the entire simulation.
+* **Texting Trial** The yellow and gray points represent events during the trials.
+* **Baseline Trial** has no events and is gray throughout.
+* Many subjects displayed visual differences between the Texting Trial and the Baseline Trial
 </small></center>
 
 
@@ -255,9 +256,9 @@ Exploratory Analysis
 
 <small>
 
-* The same LOESS lines were used to show all 59 subjects on a single plot
-* All observations were centered on the overall average of the baseline simulation
-* Anger, Contempt, Disgust, and Neutral displayed more variation than the other emotions for both trials
+* The same LOESS lines were used to show all 59 subjects on a single plot.
+* All observations were centered on the overall average of the baseline simulation.
+* Anger, Contempt, Disgust, and Neutral displayed more variation than the other emotions for both trials.
 
 </small>
 </center>
@@ -281,20 +282,20 @@ Model Proposal
 
 <small>
 
-**Takeaways**
-* Differences in variation between the trials suggest that it may be possible to build a model capable of predicting a texting event
-* Subject specific plots are unique enough that a variable for subject may be needed in modeling
+**Summary**
+* Differences in variation between the trials suggest that it may be possible to build a model capable of predicting a texting event.
+* Subject specific plots are unique enough that a variable for each subject may be needed in modeling.
 
 **Baseline Trial**
 * Trial 4 was used as a baseline trial because the conditions were identical to the Texting Trial (dense traffic with detour). 
-* The overall mean for each Subject's emotion in the baseline trial was subtracted from every observation in the Texting Trial.  
+* The overall mean for each subject's emotion in the Baseline Trial was subtracted from every observation in the Texting Trial.  
 
 **Model Proposal**
-* Train a **Feed Forward Neural Network** using emotional likelihoods and demographics to predict when a subject is texting
+* Train a **Feed Forward Neural Network** using emotional likelihoods and demographics to predict when a subject is texting.
 
 **Neural Network Advantages**
-* NNets are well suited for large data sets of continuous variables
-* Analogous to logistic regression and appropriate for predicting probabilities
+* Neural Networks (nnet) are well suited for large datasets of continuous variables.
+* Nnets are analogous to logistic regression and appropriate for predicting probabilities.
 
 </small>
 
@@ -321,7 +322,7 @@ title: false
 Neural Network Basics
 ========================================================
 
-
+<small>
 
 <center>
 **Basic Neural Network Example**
@@ -335,72 +336,79 @@ $$nnet(O1 \sim X1 + X2, size = 3)$$
 
 *******
 
-<br>
+<br><br>
 
 
-**Feed-Forward Neural Networks**
-* <small>Class of Statistical Learning model</small>
-* <small>Uses a training set for tuning the model and a testing set for measuring performance</small>
-* <small>Similar to logistic regression</small>
-* <small>Typically displayed as a diagram of connected nodes</small>
+**Tenents of Feed-Forward Neural Networks:**
+
+* Class of statistical learning model;
+* Uses a training set for tuning the model and a testing set for measuring performance;
+* Similar to logistic regression;
+* Typically displayed as a diagram of connected nodes.
 
 <br>
 
 **Neural Network Components**
-* <small>**Nodes:**</small>
-  * <small>Input Nodes: Input values of the predictor variables</small>
-  * <small>Hidden and Output Nodes: Value are the sumproduct of the connected weights</small>
-* <small>**Weights:** Represents the transformation that takes place between nodes</small>
-* <small>**Activation Function:** Transforms the output into an appropriate scale</small>
-  * <small>For logistic regression, the sigmoid function: $S(x) = \frac{1}{1 + \exp(-x)}$</small>
+
+* **Nodes:**
+  * Input Nodes: Input values of the predictor variables;
+  * Hidden and Output Nodes: Values are the sum product of the connected weights and nodes values.
+* **Weights:** 
+  * Represents the transformation that takes place between nodes.
+* **Activation Function:** 
+  * Transforms the output into an appropriate scale.
+  * For logistic regression, the sigmoid function: $S(x) = \frac{1}{1 + \exp(-x)}$
+
+</small>
 
 
 
 Neural Network Basics
 ========================================================
 
-**Step 1:** Model is Initialized with Random Weights
+<small>
+
+**Step 1:** Model is initialized with random weights.
 
 <br>
 
-**Step 2:** Calculate Hidden Weights and Output Node Prediction
+**Step 2:** Calculate hidden weights and output node prediction.
 
-* <small>Hidden Node values are the sum product of the connected weights and input nodes</small>
+* Hidden node values are the sum product of the connected weights and input nodes:
 
-
-<center><small>
+<center>
 $$
 \begin{align}
-  H1 = & (1)(.2) + (1)(.4) = 0.6, \text{  } S(0.6) = .645 \\
-  H2 = & (1)(.1) + (1)(.6) = 0.7, \text{  }S(0.7) = .668 \\
-  H3 = & (1)(.7) + (1)(.3) = 1.0, \text{  }S(1.0) = .731 \\
+  H1 = & (1)(.2) + (1)(.4) = 0.6, \text{   }S(0.6) = .645 \\
+  H2 = & (1)(.1) + (1)(.6) = 0.7, \text{   }S(0.7) = .668 \\
+  H3 = & (1)(.7) + (1)(.3) = 1.0, \text{   }S(1.0) = .731 \\
 \end{align}
 $$
-</small></center>
+</center>
 
-* <small>Output Node Prediction</small>
+* Output node prediction:
 
-<center><small>
+<center>
 $$
   O1 = (.645)(.3) + (.668)(.5) + (.731)(.7) = 1.039 \\
   S(1.039) = .739
 $$
-</small></center>
+</center>
 
-* <small>Model Error: **.739**</small>
+* Model Error: **.739**
 
 <center>
 <div class="note">
-NOTE: Activation Function <br>
-<small>
+NOTE: Activation Function <br><br>
 $$
 \begin{align}
 S(x) = & \frac{1}{1 + \exp(-x)}
 \end{align}
 $$
-</small>
 </div>
 </center>
+
+</small>
 
 *******
 
@@ -411,7 +419,7 @@ $$
 
 <center>
 <small>
-<div class="note">NOTE: Grayed values did not change from previous step</div>
+<div class="note">NOTE: Grayed values did not change from previous step.</div>
 </small>
 </center>
 
@@ -421,11 +429,12 @@ $$
 Neural Network Basics
 ========================================================
 
-**Step 3:** Update Weights Based on Error
+<small>
+**Step 3:** Update Weights Based on Error.
 
-* <small>Update Weights between Hidden Layer and Output Node</small>
+* Update weights between the hidden layer and output node:
 
-<center><small>
+<center>
 $$
 \begin{align}
   Delta = & S'(.739) = .2187 \\
@@ -437,12 +446,12 @@ $$
   w_9 = & .731 - .299 = .432 \\
 \end{align}
 $$
-</small></center>
+</center>
 
-* <small>Update Weights between Input Node and Hidden Layer</small>
+* Update weights between the input nodes and hidden layer:
 
 
-<center><small>
+<center>
 $$
 \begin{align}
   DeltaWeights = & Delta / [.3, .5, .7] * S'([.6, .7, 1]) \\
@@ -459,27 +468,26 @@ $$
   w_6 = & .3 - .061 = .239 \\
 \end{align}
 $$
-</small></center>
+</center>
 
 
 *******
 
-**Step 4**: Repeat step 2 to update node values
-* <small>S(.633) = .653, Error = **.653** vs previous **.739**</small>
+**Step 4**: Repeat Step 2 to update the hidden nodes and output prediction.
+* S(.633) = .653, Error = **.653** vs previous **.739**
 
 <center>
 **First Iteration of a Basic Neural Network**
 <img src="Screens/nnet_full2.png" alt="Drawing" style="width: 1200px;"/><br>
 </center>
 
-<center>
-<left><div class="note">
-* <small>Grayed values did not change from previous step</small>
-* <small>$S'(x) = S(x)(1 - S(x))$</small>
-</div></left>
-</center>
+<center><left><div class="note">
+NOTE: 
+  * Grayed values did not change from previous step
+  * $S'(x) = S(x)(1 - S(x))$
+</div></left></center>
 
-
+</small>
 
 
 
@@ -521,16 +529,16 @@ $$
 $$
 
 **Modeling Strategy**
-  * Train the same general model on various slices of the data to see what works best
+  * Train the same general model on various slices of the data to see what works best.
   
-  * 12 training and testing sets were created from the combination of Data Processing and Data Split methods
+  * 12 training and testing sets were created from the combination of Data Processing and Data Split methods.
   
   * **Data Processing**
     * **Original**: Emotions in the original form measured in .03 second intervals.
-    * **Differencing**: First order differening of the original observations.
+    * **Differencing**: First order differencing of the original observations.
     * **Moving Avg**: Moving averages n=30 for all of the emotions.
     * **1/2 Sec Cut**: Time cut into 1/2 second intervals with the average value recorded.
-    * **1/2 Sec Diff**: First order differncing of the 1/2 second cut data.
+    * **1/2 Sec Diff**: First order differencing of the 1/2 second cut data.
     * **1/2 Sec Cut Stat**: 1/2 Sec Cut with additional sd, min, max, iqr, and median.<br><br>
 
   * **Data Split**
@@ -553,27 +561,27 @@ Model Fitting
 
 **Statistical Software**
 
-* R's **[nnet](https://cran.r-project.org/web/packages/nnet/index.html)** package for feed-forward neural networks
+* R's **[nnet](https://cran.r-project.org/web/packages/nnet/index.html)** package for feed-forward neural networks.
 
-* **The Caret Package**
-  * **[Caret](http://topepo.github.io/caret/index.html)** is a modeling framework for training classification and regression models
-  * Uses models from other packages and offers a rich set of validation test and diagnostic plots
-  * Can implement parallel processing of cross validation tasks<br><br>
+* **The Caret Package:**
+  * **[Caret](http://topepo.github.io/caret/index.html)** is a modeling framework for training classification and regression models.
+  * It is capable of using models from other packages and offers a rich set of validation tests and diagnostic plots.
+  * It can conveniently implement parallel processing for cross validation tasks.<br><br>
   
-**Performance and Validation Testing**
-  * k=10 cross validation for training sets
-  * AUC (Area Under Curve) and total accuracy<br><br>
+**Validation Testing and Performance**
+  * k=10 cross validation for training sets.
+  * AUC (Area Under Curve) and balanced accuracy ((sensitivity + specificity) / 2).<br><br>
 
 **Model Search Parameters**
-  * **Max Iterations**: The number of iterations allowed for training
-    * 100 (250,500 and 1000 iterations are run for the best models)
-  * **Size**: The number of nodes in the hidden layer. Increases training time exponentially
+  * **Max Iterations**: The number of iterations allowed for training.
+    * 100   (250, 500 and 1000 iterations are run for the best models)
+  * **Size**: The number of nodes in the hidden layer.
     * [1, 10, 25, 50]
-  * **Decay**: A penality applied to weights after each iteration. Moves weights that dont update towards zero.
+  * **Decay**: A penality applied to weights after each iteration.
     * [0, .1, .2] <br><br>
     
 <center><div class = "note">
-NOTE: Each Model is trained 120 times
+NOTE: Each model is trained 120 times;
 * (k=10 cross validation) x (12 combinations of size and decay)
 </div></center>
 
@@ -586,12 +594,9 @@ NOTE: Each Model is trained 120 times
 
 Model Selection
 ========================================================
-left: 55%
+left: 60%
 
-<br> 
-
-**Model Performance with 100 Iteration Limit**
-<small>
+<small>**Model Performance with 100 Iteration Limit**</small>
 
 | Model         | Data Processing      | Data Split     | MaxItr  | Size   | Decay   | Training | Testing  | AUC      |
 |:--------------|:---------------------|:---------------|:--------|:-------|:--------|:---------|:---------|:---------|
@@ -608,10 +613,7 @@ left: 55%
 | Model 11:     | 1/2 Sec Cut Stat     | 365 Split      | 100     | 50     | .10     | .846     | .716     | .781     |
 | **Model 12:** | **1/2 Sec Cut Stat** | **Entire Sim** | **100** | **50** | **.20** | **.820** | **.803** | **.891** |
 
-</small>
-
-**Additional Training for Best Models**
-<small>
+<small>**Additional Training for Best Models**</small>
 
 | Model        | Data Processing  | Data Split     | MaxItr   | Size   | Decay   | Training | Testing  | AUC      |
 |:-------------|:-----------------|:---------------|:---------|:-------|:--------|:---------|:---------|:---------|
@@ -622,15 +624,15 @@ left: 55%
 | Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 500      | 50     | .20     | .864     | .823     | .907     |
 | Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 1000     | 50     | .10     | .871     | .824     | .908     |
 
-</small>
-
 <div class="note">
-<center><small>NOTE: Blue indicates best models</small></center>
+<center><small>NOTE: Blue indicates best models.</small></center>
 </div>
+
+
 
 **********
 
-<br><br>
+<br>
 
 <center>
 <img src="Plots/ROC1.png" alt="Drawing" style="width: 1500px"/><br>
@@ -656,11 +658,11 @@ Model Fitting
 ## Set Cross Validation
 fit.control = trainControl(method = "cv", number = 10)
 
-## Create combination of model parameters to train on
+## Create model parameters
 search.grid = expand.grid(decay = c(0, .1, .2), 
                           size = c(1, 10, 25, 50))
 
-## Limit the iterations and weights each model can run
+## Limit the iterations and weights
 maxIt = 1000; maxWt = 15000
 
 fit = train(Texting ~ . - Time, mdl.08.train, 
@@ -737,10 +739,10 @@ Model Performance
 <img src="Plots/Prediction_Subject001.png" alt="Drawing" style="width: 2500px;"/>
 
 <small>
-* Each point is colored by the prediction of the best model
-* The blue line is a LOESS smoother of the probability predition for that corresponding prediction
-* The shaded regions represent the actual texting window
-* Yellow points within the gray regions represent correct predictions
+* Each point is colored by the prediction of the best model.
+* The blue line is a LOESS smoother of the probability predition for that corresponding prediction.
+* The shaded regions represent the actual texting window.
+* Yellow points within the shaded regions represent correct predictions.
 </small>
 
 </center>
@@ -775,7 +777,7 @@ Model Performance
 ========================================================
 left: 70%
 
-**Balanced Accuracy by Subject**
+<small>**Balanced Accuracy by Subject**</small>
 
 <center>
 
@@ -807,7 +809,7 @@ left: 70%
 
 </center>
 
-**Proportional Summary**
+<small>**Proportional Summary**</small>
 
 <center>
 
@@ -902,10 +904,10 @@ Conclusions
 * Young Females had the best overall testing performance while Older Females had the worst overall testing performance.
 
   * At the 95% confidence level, the testing accuracy between Young Females and Old Females are different.
-  * At the 90% confidence level, the testing accuracy between Young Males vs Old Females are different.
+  * At the 90% confidence level, the testing accuracy between Young Males and Old Females are different.
 
 
-* The variable importance plot from the training model indicated that Gender is more important than Age. The testing accuracy results by subject somewhat contradict this claim.
+* The variable importance plot from the training model indicated that gender is more important than age. The testing accuracy results by subject somewhat contradict this claim.
 
 
 * After extending the training iterations, the difference between Model 8 (1/2 Sec Cut) and Model 12 (1/2 Sec Cut Stat) are negligible. This suggests that there is much more information in the average likelihood score than in the other descriptive statistics (sd, min, max, iqr).

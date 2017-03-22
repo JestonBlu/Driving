@@ -175,7 +175,7 @@ a$Trial = factor(a$Trial, levels = c("Baseline Trial", "Texting Trial"))
 g9 = ggplot(a, aes(x = Trial, y = var)) +
   geom_boxplot(size = .3, outlier.size = .5) +
   scale_y_continuous("Variance") +
-  ggtitle("Boxplots of Variance by Subject") +
+  ggtitle("Box Plots of Variance by Subject") +
   facet_wrap(~variable, scale = "free") +
   theme(plot.title = element_text(hjust = .5))
 
@@ -187,7 +187,7 @@ g10 = ggplot(a, aes(x = AG, y = var)) +
   scale_y_continuous("Variance") +
   scale_x_discrete("Age/Gender") +
   scale_color_discrete("") +
-  ggtitle("Boxplots of Variance by Subject") +
+  ggtitle("Box Plots of Variance by Subject") +
   facet_wrap(~variable, scale = "free") +
   theme(plot.title = element_text(hjust = .5))
 
@@ -201,7 +201,7 @@ b$AG = paste(b$Age, b$Gender, sep = "")
 g11 = ggplot(b, aes(x = Event, y = var)) +
   geom_boxplot(size = .3, outlier.size = .5) +
   scale_y_continuous("Variance") +
-  ggtitle("Boxplots of Variance by Subject", subtitle = "Texting Trial") +
+  ggtitle("Box Plots of Variance by Subject", subtitle = "Texting Trial") +
   facet_wrap(~variable, scale = "free") +
   theme(plot.title = element_text(hjust = .5),
         plot.subtitle = element_text(hjust = .5))
