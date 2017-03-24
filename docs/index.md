@@ -26,8 +26,7 @@ title: true
 * Data Introduction, Extraction, Preparation, and Project Management
 * Exploratory Analysis and Model Proposal
 * Understanding Basic Neural Nets
-* Model Training and Selection
-* Exploring Model Effects
+* Model Training, Selection, and Performance
 
 
 
@@ -166,8 +165,7 @@ Project Management
 
 * Code, plots, and this presentation are organized and hosted in a github repository.
 * The repository includes steps to reproduce the dataset and models.
-* The entire dataset is too large to be hosted on github.
-* The texting dataset needed to reproduce this analysis is available on the github repository.
+* The data for this project are privately owned and not available on the repository at this time.
 
 
 
@@ -413,7 +411,7 @@ $$
 *******
 
 <center>
-**First Iteration of a Basic Neural Network**
+<small>**First Iteration of a Basic Neural Network**</small>
 <img src="Screens/nnet_full1.png" alt="Drawing" style="width: 1200px;"/><br>
 </center>
 
@@ -775,7 +773,7 @@ Model Performance
 
 Model Performance
 ========================================================
-left: 70%
+left: 65%
 
 <small>**Balanced Accuracy by Subject**</small>
 
@@ -809,15 +807,15 @@ left: 70%
 
 </center>
 
-<small>**Proportional Summary**</small>
+<small>**Summary by Age and Gender**</small>
 
 <center>
 
-|        | % Male | % Female | % Old | % Young | % Young Male | % Young Female | % Old Male | % Old Female |
-|:-------|:------:|:---------|:-----:|:--------|:-------------|:---------------|:----------:|:------------:|
-| Top 20 | 36.6%  | 31.0%    | 25.9% | 40.6%   |   40.0%      |  37.5%         |   35.7%    |    16.7%     |
-| Mid 20 | 33.3%  | 34.5%    | 25.9% | 40.6%   |   40.0%      |  43.8%         |   21.4%    |    25.0%     |
-| Bot 19 | 30.0%  | 34.5%    | 48.1% | 18.7%   |   20.0%      |  18.8%         |   42.9%    |    58.3%     |
+|            |  Male  |  Female  |  Old  |  Young  |  Young Male  |  Young Female  |  Old Male  |  Old Female  |
+|:-----------|:------:|:---------|:-----:|:--------|:-------------|:---------------|:----------:|:------------:|
+| **Top 20** | 36.6%  | 31.0%    | 25.9% | 40.6%   |   40.0%      |  37.5%         |   35.7%    |    16.7%     |
+| **Mid 20** | 33.3%  | 34.5%    | 25.9% | 40.6%   |   40.0%      |  43.8%         |   21.4%    |    25.0%     |
+| **Bot 19** | 30.0%  | 34.5%    | 48.1% | 18.7%   |   20.0%      |  18.8%         |   42.9%    |    58.3%     |
 
 </center>
 
@@ -826,13 +824,13 @@ left: 70%
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 
-<small><small>
+<small>
 * 14 of 59 had testing performance > 90%
 * 39 of 59 had testing performance > 80%
 *  7 of 59 had testing performance < 70%
 *  The 7 worst performing Subjects were all Old
 
-</small></small>
+</small>
 
 
 

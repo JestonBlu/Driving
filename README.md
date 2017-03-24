@@ -19,13 +19,15 @@ The data accompanying this project are too large to host on github. I have creat
   * Run `06_data_mdl_setup`, creates training/testing sets
 
 **Reproduce my models**
+  * Run `07_model_nnet_best_model.R`, builds my final model
   * Run `07_model_nnet.R`, builds model objects saved to `R-Models`
-  
+
 **Reproduce my written analysis (produces .pdf reports)**
   * `02_processing_and_exploration.Rmd`, data processing and corrections
   * `04_propasal.Rmd`, initial analysis proposal
   * `05_initial_modeling.Rmd`, first pass models on summarised data
   * `07_modeling_nnet.Rmd`, feed forward neural net models on raw data
+  * `09_Project_Outline.Rmd`, summary of all work
 
 **Directory location of files needed to extract and process the initial dataset only**
   ```
