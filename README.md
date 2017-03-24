@@ -8,7 +8,7 @@ The data accompanying this project are too large to host on github. I have creat
 
 **Required Software**
   * Python (Anaconda 2.7 recommended, pandas package required)
-  * R
+  * R (RStudio Recommended for running .Rmd files)
 
 **Extract and Process Raw Data**
   * Execute `python extract_faces.py` from the Files/ folder.
