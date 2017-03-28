@@ -337,7 +337,7 @@ $$nnet(O1 \sim X1 + X2, size = 3)$$
 <br><br>
 
 
-**Tenents of Feed-Forward Neural Networks:**
+**Tenets of Feed-Forward Neural Networks:**
 
 * Class of statistical learning model;
 * Uses a training set for tuning the model and a testing set for measuring performance;
