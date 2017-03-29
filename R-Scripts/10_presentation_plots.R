@@ -87,8 +87,8 @@ ggsave(filename = "Plots/Texting_vs_Baseline_04.png", plot = g4, width = 13, hei
 ggsave(filename = "docs/Plots/Texting_vs_Baseline_04.png", plot = g4, width = 13, height = 6)
 
 
-## Example Old Male -- Original (worst subject accuracy)
-g5 = ggplot(subset(x, Subject == 'T038'), aes(x = Time, y = value, group = Trial, color = Event)) +
+## Example Old Female -- Original (worst subject accuracy)
+g5 = ggplot(subset(x, Subject == 'T025'), aes(x = Time, y = value, group = Trial, color = Event)) +
   geom_point(alpha = .03, size = .5) +
   geom_smooth(size = .2, aes(color = Trial))+
   scale_x_continuous("Time") +
@@ -96,21 +96,20 @@ g5 = ggplot(subset(x, Subject == 'T038'), aes(x = Time, y = value, group = Trial
   scale_color_manual("", values = c("blue" , "red", "gray50", "#f0b823")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Baseline and Texting Trials", subtitle = "Subject 38") +
+  ggtitle("Baseline and Texting Trials", subtitle = "Subject 25") +
   theme(plot.title = element_text(hjust = .5),
         plot.subtitle = element_text(hjust = .5))
 
-ggsave(filename = "Plots/Texting_vs_Baseline_38_worst.png", plot = g5, width = 13, height = 5)
-ggsave(filename = "docs/Plots/Texting_vs_Baseline_38_worst.png", plot = g5, width = 11, height = 6)
+ggsave(filename = "Plots/Texting_vs_Baseline_25_worst.png", plot = g5, width = 13, height = 5)
+ggsave(filename = "docs/Plots/Texting_vs_Baseline_25_worst.png", plot = g5, width = 11, height = 6)
 
-## Example Old Male -- Original (worst subject accuracy)
+## Example Young Female -- Best overall accuracy
 g6 = ggplot(subset(x, Subject == 'T022'), aes(x = Time, y = value, group = Trial, color = Event)) +
   geom_point(alpha = .03, size = .5) +
   geom_smooth(size = .2, aes(color = Trial))+
   scale_x_continuous("Time") +
   scale_y_continuous("Emotional Likelihood") +
-  scale_color_manual("", values = c("blue" , "red", "gray50", "#f0b823")) +
-  facet_wrap(~variable) +
+  scale_color_manual("", values = c("blue" , "red", "gray50", "#f0b823")) +  facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
   ggtitle("Baseline and Texting Trials", subtitle = "Subject 22") +
   theme(plot.title = element_text(hjust = .5),
@@ -339,7 +338,7 @@ ggsave(filename = "Plots/Prediction_Subject022.png", plot = g4, width = 13, heig
 ggsave(filename = "docs/Plots/Prediction_Subject022.png", plot = g4, width = 11, height = 6)
 
 
-sub = 'T038' #T038
+sub = 'T025' #T038
 x = subset(mdl.08.test, Subject == sub)
 x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
 y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
@@ -356,11 +355,11 @@ g5 = ggplot(x, aes(x = Time, y = value)) +
   scale_color_manual("Prediction", values = c("black", "#f0b923")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Subject 38: Accuracy 53%") +
+  ggtitle("Subject 25: Accuracy 66%") +
   theme(plot.title = element_text(hjust = .5))
 
-ggsave(filename = "Plots/Prediction_Subject038.png", plot = g5, width = 13, height = 5)
-ggsave(filename = "docs/Plots/Prediction_Subject038.png", plot = g5, width = 11, height = 6)
+ggsave(filename = "Plots/Prediction_Subject025.png", plot = g5, width = 13, height = 5)
+ggsave(filename = "docs/Plots/Prediction_Subject025.png", plot = g5, width = 11, height = 6)
 
 ## 02: .717
 ## 03: .884  

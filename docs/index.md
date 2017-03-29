@@ -238,7 +238,7 @@ Exploratory Analysis
 </center>
 
 <center>
-<img src="Plots/Texting_vs_Baseline_38_worst.png" alt="Drawing" style="width: 3000px;"/>
+<img src="Plots/Texting_vs_Baseline_25_worst.png" alt="Drawing" style="width: 3000px;"/>
 </center>
 
 
@@ -764,7 +764,7 @@ Model Performance
 </center>
 
 <center>
-<img src="Plots/Prediction_Subject038.png" alt="Drawing"/>
+<img src="Plots/Prediction_Subject025.png" alt="Drawing"/>
 </center>
 
 

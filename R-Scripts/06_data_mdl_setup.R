@@ -40,15 +40,15 @@ rm(sim.max)
 keep = as.character(text$ID)
 
 ## Did a crash occur during a texting event?
-text$Diff = with(text, TrialEnd - SecondEventEnd)
-
-crash.list = c("T060", "T061", "T064", "T066", "T073", "T074", "T076", "T077", "T079", "T080",
-               "T081", "T082", "T083", "T084", "T086", "T088")
-
-text$SuspectedCrash = "N"
-text$SuspectedCrash[text$ID %in% crash.list] = "Y"
-rm(crash.list)
-
+# text$Diff = with(text, TrialEnd - SecondEventEnd)
+# 
+# crash.list = c("T060", "T061", "T064", "T066", "T073", "T074", "T076", "T077", "T079", "T080",
+#                "T081", "T082", "T083", "T084", "T086", "T088")
+# 
+# text$SuspectedCrash = "N"
+# text$SuspectedCrash[text$ID %in% crash.list] = "Y"
+# rm(crash.list)
+# 
 # qplot(x = text$TrialEnd, y = text$Diff, col = text$SuspectedCrash)
 # summary(text)
 
@@ -70,7 +70,7 @@ texting.sim$Subject = factor(texting.sim$Subject)
 ## The data set on which all models data sets are based
 save(list = "texting.sim", file = 'R-Data/data-mdl-00.rda')
 
-rm(keep, text, stimuli, faces.cen)
+rm(keep, stimuli, faces.cen)
 
 #########################################################################################
 ## Model 01: Scale the data after splitting the simulation in half
