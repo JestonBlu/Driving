@@ -924,12 +924,8 @@ Conclusions
 
 * Young Females had the best overall testing performance while Older Females had the worst overall testing performance.
 
-  * At the 95% confidence level, the testing accuracy between Young Females and Old Females are different.
-  * At the 90% confidence level, the testing accuracy between Young Males and Old Females are different.
-
-
-* The variable importance plot from the training model indicated that gender is more important than age. The testing accuracy results by subject somewhat contradict this claim.
-
+  * At the 95% confidence level, the testing accuracy between Young Females and Old Females are different (pvalue = .016).
+  * At the 90% confidence level, the testing accuracy between Young Males and Old Females are different (pvalue = .057).
 
 * After extending the training iterations, the difference between Model 8 (1/2 Sec Cut) and Model 12 (1/2 Sec Cut Stat) are negligible. This suggests that there is much more information in the average likelihood score than in the other descriptive statistics (sd, min, max, iqr).
 
