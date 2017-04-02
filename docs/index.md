@@ -598,29 +598,31 @@ left: 60%
 
 | Model         | Data Processing      | Data Split     | MaxItr  | Size   | Decay   | Training | Testing  | AUC      |
 |:--------------|:---------------------|:---------------|:--------|:-------|:--------|:---------|:---------|:---------|
-| Model 1:      | Original             | 365 Split      | 100     | 50     | .20     | .760     | .676     | .734     |
-| Model 2:      | Original             | Entire Sim     | 100     | 50     | .20     | .754     | .754     | .847     |
-| Model 3:      | Differencing         | 365 Split      | 100     | 10     | .00     | .518     | .516     | .526     |
-| Model 4:      | Differencing         | Entire Sim     | 100     | 25     | .10     | .572     | .571     | .637     |
-| Model 5:      | Moving Avg           | 365 Split      | 100     | 10     | .00     | .503     | .502     | .527     |
-| Model 6:      | Moving Avg           | Entire Sim     | 100     | 10     | .00     | .528     | .528     | .544     |
-| Model 7:      | 1/2 Sec Cut          | 365 Split      | 100     | 50     | .10     | .820     | .698     | .761     |
-| **Model 8:**  | **1/2 Sec Cut**      | **Entire Sim** | **100** | **50** | **.20** | **.788** | **.779** | **.868** |
-| Model 9:      | 1/2 Sec Diff         | 365 Split      | 100     | 50     | .10     | .633     | .602     | .650     |
-| Model 10:     | 1/2 Sec Diff         | Entire Sim     | 100     | 50     | .20     | .682     | .622     | .681     |
-| Model 11:     | 1/2 Sec Cut Stat     | 365 Split      | 100     | 50     | .10     | .846     | .716     | .781     |
-| **Model 12:** | **1/2 Sec Cut Stat** | **Entire Sim** | **100** | **50** | **.20** | **.820** | **.803** | **.891** |
+| Model 1:      | Original             | 365 Split      | 100     | 50     | .10     | .776     | .693     | .754     |
+| Model 2:      | Original             | Entire Sim     | 100     | 50     | .20     | .766     | .766     | .862     |
+| Model 3:      | Differencing         | 365 Split      | 100     | 25     | .10     | .538     | .529     | .556     |
+| Model 4:      | Differencing         | Entire Sim     | 100     | 25     | .10     | .548     | .548     | .610     |
+| Model 5:      | Moving Avg           | 365 Split      | 100     | 10     | .00     | .503     | .503     | .530     |
+| Model 6:      | Moving Avg           | Entire Sim     | 100     | 10     | .00     | .524     | .524     | .573     |
+| Model 7:      | 1/2 Sec Cut          | 365 Split      | 100     | 50     | .10     | .819     | .694     | .766     |
+| **Model 8:**  | **1/2 Sec Cut**      | **Entire Sim** | **100** | **50** | **.10** | **.801** | **.789** | **.881** |
+| Model 9:      | 1/2 Sec Diff         | 365 Split      | 100     | 25     | .00     | .664     | .631     | .683     |
+| Model 10:     | 1/2 Sec Diff         | Entire Sim     | 100     | 50     | .00     | .500     | .500     | .486     |
+| Model 11:     | 1/2 Sec Cut Stat     | 365 Split      | 100     | 50     | .10     | .855     | .727     | .795     |
+| **Model 12:** | **1/2 Sec Cut Stat** | **Entire Sim** | **100** | **50** | **.20** | **.833** | **.815** | **.900** |
 
-<small>**Additional Training for Best Models**</small>
+\newpage
+
+##### Further Training Best Models
 
 | Model        | Data Processing  | Data Split     | MaxItr   | Size   | Decay   | Training | Testing  | AUC      |
 |:-------------|:-----------------|:---------------|:---------|:-------|:--------|:---------|:---------|:---------|
-| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 250      | 50     | .10     | .816     | .804     | .893     |
-| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 500      | 50     | .10     | .828     | .810     | .899     |
-| **Model 8:** | **1/2 Sec Cut**  | **Entire Sim** | **1000** | **50** | **.10** | **.842** | **.820** | **.906** |
-| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 250      | 50     | .10     | .858     | .823     | .906     |
-| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 500      | 50     | .20     | .864     | .823     | .907     |
-| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 1000     | 50     | .10     | .871     | .824     | .908     |
+| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 250      | 50     | .00     | .844     | .825     | .907     |
+| Model 8:     | 1/2 Sec Cut      | Entire Sim     | 500      | 50     | .10     | .847     | .825     | .911     |
+| **Model 8:** | **1/2 Sec Cut**  | **Entire Sim** | **1000** | **50** | **.10** | **.853** | **.828** | **.917** |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 250      | 50     | .10     | .872     | .837     | .915     |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 500      | 50     | .20     | .880     | .839     | .912     |
+| Model 12:    | 1/2 Sec Cut Stat | Entire Sim     | 1000     | 50     | .10     | .900     | .840     | .913     |
 
 <div class="note">
 <center><small>NOTE: Blue indicates best models.</small></center>
@@ -670,27 +672,27 @@ fit = train(Texting ~ . - Time, mdl.08.train,
             MaxNWts = maxWt,
             maxit = maxIt)
 
-44503 samples, 12 predictors, 2 classes: '0', '1' 
+40255 samples, 12 predictors, 2 classes: '0', '1' 
 
 Resampling: Cross-Validated (10 fold) 
-Summary of sample sizes: 40053, 40053, 40052, 40052, ...
+Summary of sample sizes: 436229, 36229, 36229, ...
 Resampling results across tuning parameters:
 
   ------------------------------
   Decay  Size  Accuracy   Kappa
   ------------------------------
-  0.0     1    0.6654     0.3042
-  0.0    10    0.7857     0.5519
-  0.0    25    0.8135     0.6129
-  0.0    50    0.8252     0.6375
-  0.1     1    0.6830     0.3182
-  0.1    10    0.8052     0.5934
-  0.1    25    0.8247     0.6352
-  0.1    50    0.8304     0.6472 ## Best Model
-  0.2     1    0.6809     0.3126
-  0.2    10    0.8033     0.5889
-  0.2    25    0.8196     0.6242
-  0.2    50    0.8241     0.6336
+  0.0     1    0.643      0.302
+  0.0    10    0.793      0.566
+  0.0    25    0.819      0.625
+  0.0    50    0.833      0.655
+  0.1     1    0.667      0.306
+  0.1    10    0.814      0.612
+  0.1    25    0.834      0.655
+  0.1    50    0.841      0.669
+  0.2     1    0.681      0.310
+  0.2    10    0.814      0.611
+  0.2    25    0.830      0.646
+  0.2    50    0.834      0.654
   
 ```
 </small>
@@ -704,24 +706,25 @@ Resampling results across tuning parameters:
 <center><small>**Confusion Matrix and Statistical Summaries**</small></center>
 <center><small>
 ```
-            Reference             Reference
-             0     1                0    1
-    Pred 0 22736  4616     Pred 0 .885 .245
-         1  2943 14208          1 .114 .754  
+                    Reference
+                     0     1
+            Pred 0 22736  4616
+                 1  2943 14208 
                                           
-               Accuracy : 0.8301          
-                 95% CI : (0.8266, 0.8336)
-    No Information Rate : 0.577           
-                  Kappa : 0.6472
+               Accuracy : 0.8393          
+                 95% CI : (0.8356, 0.8429)
+    No Information Rate : 0.5856           
+                  Kappa : 0.6649
                                           
-            Sensitivity : 0.8854          
-            Specificity : 0.7548          
+            Sensitivity : 0.7656          
+            Specificity : 0.8914          
 
-         Pos Pred Value : 0.8312          
-         Neg Pred Value : 0.8284          
-      Balanced Accuracy : 0.8201
+         Pos Pred Value : 0.8331          
+         Neg Pred Value : 0.8431
+             Prevalence : 0.4144
+      Balanced Accuracy : 0.8285
       
-  Area Under Curve (AUC): 0.906
+  Area Under Curve (AUC): 0.917
 ```
 </small></center>
 
@@ -779,31 +782,28 @@ left: 65%
 
 <center>
 
-|                | T022  | T007  | T086  | T006  | T018  | T083  | T035  | T076  | T081  | T064  | T020  | T012  | T074  | T088  | T013  | T009  | T032  | T003  | T011  | T080  | **Top 20** |
-|:---------------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----------|
-| **Train**      | 0.982 | 0.920 | 0.956 | 0.941 | 0.935 | 0.956 | 0.951 | 0.949 | 0.927 | 0.921 | 0.932 | 0.923 | 0.923 | 0.938 | 0.896 | 0.911 | 0.915 | 0.899 | 0.902 | 0.896 | **.943**   |
-| **Test**       | 0.975 | 0.951 | 0.950 | 0.941 | 0.936 | 0.930 | 0.928 | 0.927 | 0.922 | 0.921 | 0.919 | 0.911 | 0.907 | 0.900 | 0.898 | 0.897 | 0.892 | 0.884 | 0.874 | 0.872 | **.938**   |
-| **GenderMale** | 0     | 1     | 0     | 0     | 0     | 1     | 0     | 1     | 1     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 1     | 1     | 1     | 0     | **11**     |
-| **AgeOld**     | 0     | 0     | 1     | 0     | 0     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 1     | 1     | 0     | 0     | 1     | 0     | 0     | 0     | **7**      |
+| &nbsp;         | T022  | T035  | T086  | T083  | T074  | T018  | T007  | T006  | T020  | T088  | T012  | T032  | T044  | T009  | T064  | T003  | T011  | T082  | T060  | **Top**  |
+|:---------------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:---------|
+| **Train**      | 0.976 | 0.956 | 0.970 | 0.946 | 0.934 | 0.930 | 0.950 | 0.953 | 0.929 | 0.921 | 0.926 | 0.893 | 0.926 | 0.915 | 0.940 | 0.887 | 0.894 | 0.902 | 0.904 | **.921** |
+| **Test**       | 0.964 | 0.945 | 0.943 | 0.936 | 0.933 | 0.927 | 0.924 | 0.922 | 0.921 | 0.910 | 0.904 | 0.902 | 0.900 | 0.898 | 0.895 | 0.885 | 0.884 | 0.882 | 0.880 | **.913** |
+| **GenderMale** | 0     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 0     | 1     | 0     | 1     | 1     | 1     | 0     | 1     | 1     | 1     | 0     | **10**   |
+| **AgeOld**     | 0     | 1     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 1     | 0     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 0     | **7**    |
 
 
-
-|                | T016  | T005  | T060  | T044  | T015  | T008  | T079  | T073  | T039  | T082  | T010  | T066  | T029  | T046  | T024  | T051  | T017  | T042  | T001  | T061  | **Mid 20** |
-|:---------------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----------|
-| **Train**      | 0.893 | 0.865 | 0.909 | 0.886 | 0.864 | 0.868 | 0.893 | 0.855 | 0.869 | 0.869 | 0.849 | 0.849 | 0.813 | 0.857 | 0.810 | 0.856 | 0.807 | 0.843 | 0.851 | 0.793 | **.854**   |
-| **Test**       | 0.862 | 0.861 | 0.856 | 0.849 | 0.847 | 0.841 | 0.838 | 0.834 | 0.833 | 0.832 | 0.826 | 0.813 | 0.812 | 0.810 | 0.808 | 0.806 | 0.806 | 0.803 | 0.800 | 0.787 | **.826**   |
-| **GenderMale** | 0     | 1     | 0     | 1     | 1     | 0     | 0     | 0     | 0     | 1     | 0     | 0     | 0     | 1     | 0     | 1     | 1     | 1     | 1     | 1     | **10**     |
-| **AgeOld**     | 0     | 0     | 0     | 1     | 0     | 0     | 0     | 1     | 1     | 0     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 1     | 0     | 0     | **7**      |
-
-
-
-|                | T084  | T077  | T036  | T031  | T033  | T040  | T021  | T014  | T019  | T004  | T002  | T023  | T054  | T041  | T034  | T047  | T025  | T038  | T027  | **Bot 19** |
+| &nbsp;         | T013  | T081  | T080  | T016  | T079  | T051  | T039  | T015  | T046  | T066  | T076  | T010  | T005  | T008  | T042  | T024  | T077  | T001  | T029  | **Middle** |
 |:---------------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----------|
-| **Train**      | 0.806 | 0.794 | 0.789 | 0.810 | 0.768 | 0.782 | 0.802 | 0.815 | 0.742 | 0.728 | 0.717 | 0.748 | 0.741 | 0.698 | 0.688 | 0.703 | 0.699 | 0.559 | 0.540 | **.733**   |
-| **Test**       | 0.780 | 0.770 | 0.766 | 0.765 | 0.751 | 0.750 | 0.748 | 0.748 | 0.734 | 0.721 | 0.719 | 0.706 | 0.698 | 0.697 | 0.677 | 0.670 | 0.660 | 0.532 | 0.514 | **.705**   |
-| **GenderMale** | 1     | 0     | 1     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 0     | 1     | 0     | **9**      |
-| **AgeOld**     | 1     | 1     | 1     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | 1     | 1     | 1     | 1     | 1     | **13**     |
+| **Train**      | 0.911 | 0.954 | 0.893 | 0.881 | 0.888 | 0.816 | 0.883 | 0.881 | 0.871 | 0.851 | 0.856 | 0.843 | 0.859 | 0.868 | 0.840 | 0.797 | 0.796 | 0.850 | 0.816 | **.860**   |
+| **Test**       | 0.878 | 0.877 | 0.873 | 0.869 | 0.860 | 0.855 | 0.851 | 0.848 | 0.839 | 0.838 | 0.830 | 0.827 | 0.824 | 0.820 | 0.817 | 0.807 | 0.806 | 0.797 | 0.790 | **.832**   |
+| **GenderMale** | 1     | 1     | 0     | 0     | 0     | 1     | 0     | 1     | 1     | 0     | 1     | 0     | 1     | 0     | 1     | 0     | 0     | 1     | 0     | **9**      |
+| **AgeOld**     | 0     | 0     | 0     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 1     | 0     | 0     | 0     | 1     | 0     | 1     | 0     | 1     | **6**      |
 
+
+| &nbsp;         | T017  | T014  | T054  | T031  | T040  | T061  | T033  | T019  | T021  | T036  | T084  | T004  | T073  | T002  | T041  | T025  | T047  | T034  | **Bottom** |
+|:---------------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:------|:-----------|
+| **Train**      | 0.784 | 0.805 | 0.803 | 0.788 | 0.792 | 0.787 | 0.776 | 0.738 | 0.764 | 0.785 | 0.804 | 0.722 | 0.749 | 0.730 | 0.707 | 0.758 | 0.719 | 0.669 | **.760**   |
+| **Test**       | 0.783 | 0.782 | 0.762 | 0.753 | 0.752 | 0.747 | 0.742 | 0.739 | 0.728 | 0.722 | 0.718 | 0.715 | 0.703 | 0.694 | 0.691 | 0.689 | 0.665 | 0.638 | **.723**   |
+| **GenderMale** | 1     | 0     | 1     | 0     | 1     | 1     | 0     | 1     | 1     | 1     | 1     | 0     | 0     | 0     | 0     | 0     | 0     | 1     | **9**      |
+| **AgeOld**     | 0     | 0     | 1     | 1     | 1     | 0     | 1     | 0     | 0     | 1     | 1     | 0     | 1     | 0     | 1     | 1     | 1     | 1     | **11**     |
 
 </center>
 
@@ -811,11 +811,12 @@ left: 65%
 
 <center>
 
-|            |  Male  |  Female  |  Old  |  Young  |  Young Male  |  Young Female  |  Old Male  |  Old Female  |
-|:-----------|:------:|:---------|:-----:|:--------|:-------------|:---------------|:----------:|:------------:|
-| **Top 20** | 36.6%  | 31.0%    | 25.9% | 40.6%   |   40.0%      |  37.5%         |   35.7%    |    16.7%     |
-| **Mid 20** | 33.3%  | 34.5%    | 25.9% | 40.6%   |   40.0%      |  43.8%         |   21.4%    |    25.0%     |
-| **Bot 19** | 30.0%  | 34.5%    | 48.1% | 18.7%   |   20.0%      |  18.8%         |   42.9%    |    58.3%     |
+|            | Male  | Female |  Old  | Young | Young Male | Young Female | Old Male | Old Female |
+|:-----------|:-----:|:-------|:-----:|:------|:-----------|:-------------|:--------:|:----------:|
+| **Top**    | 35.7% | 32.1%  | 29.1% | 37.5% | 35.7%      | 41.1%        |  35.7%   |    9.1%    |
+| **Middle** | 32.1% | 35.7%  | 25.0% | 40.6% | 35.7%      | 41.1%        |  28.5%   |   36.3%    |
+| **Bottom** | 32.1% | 32.1%  | 45.8% | 21.8% | 28.5%      | 17.6%        |  35.7%   |   54.5%    |
+
 
 </center>
 
@@ -825,10 +826,10 @@ left: 65%
 
 
 <small>
-* 14 of 59 had testing performance > 90%
-* 39 of 59 had testing performance > 80%
-*  7 of 59 had testing performance < 70%
-*  The 7 worst performing Subjects were all Old
+* 13 of 56 had testing performance > 90%
+* 36 of 56 had testing performance > 80%
+*  5 of 56 had testing performance < 70%
+*  5 of the 6 worst performaning Subjects were Old (1 Male, 4 Female)
 
 </small>
 
@@ -851,38 +852,35 @@ Exploring Modeling Effects
 Levene's Test for Homogeneity of Variance (Center = Median)
 ******************************************************************
       Df F value Pr(>F)
-group  1  0.2034 0.6537
-      57  
+group  1  0.7054 0.4047
+      54  
       
 ******************************************************************
 General Linear Model
 ******************************************************************
 Deviance Residuals: 
-      Min         1Q     Median         3Q        Max  
--0.269925  -0.047361   0.004553   0.066577   0.184431  
+     Min        1Q    Median        3Q       Max  
+-0.18434  -0.06279   0.01139   0.05423   0.16550 
 
-Coefficients:
-              Estimate Std. Error t value Pr(>|t|)    
-(Intercept)   0.76528    0.02732  28.011   <2e-16 ***
-Old Male      0.03652    0.03665   0.996   0.3234    
-Young Female  0.08808    0.03568   2.468   0.0167 *  
-Young Male    0.07124    0.03665   1.943   0.0571 .  
+Coefficients:   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     0.77983    0.02471  31.558   <2e-16 ***
+Old Male        0.04272    0.03302   1.294   0.2015    
+Young Female    0.07307    0.03171   2.304   0.0252 *  
+Young Male      0.05548    0.03302   1.680   0.0989 . 
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-(Dispersion parameter for gaussian family taken to be 0.008957086)
+(Dispersion parameter for gaussian family taken to be 0.006717054)
 
-    Null deviance: 0.55633  on 58  degrees of freedom
-Residual deviance: 0.49264  on 55  degrees of freedom
-AIC: -104.91
-
-Number of Fisher Scoring iterations: 2
+    Null deviance: 0.38640  on 55  degrees of freedom
+Residual deviance: 0.34929  on 52  degrees of freedom
+AIC: -115.4
 
 ******************************************************************
 Shapiro-Wilk Normality Test
 ******************************************************************
 data:  mdl$residuals
-W = 0.97066, p-value = 0.1645
+W = 0.98393, p-value = 0.6586
 ```
 </small>
 
@@ -901,8 +899,8 @@ Conclusions
 
 * Young Females had the best overall testing performance while Older Females had the worst overall testing performance.
 
-  * At the 95% confidence level, the testing accuracy between Young Females and Old Females are different (pvalue = .016).
-  * At the 90% confidence level, the testing accuracy between Young Males and Old Females are different (pvalue = .057).
+  * At the 95% confidence level, the testing accuracy between Young Females and Old Females are different (pvalue = .025).
+  * At the 90% confidence level, the testing accuracy between Young Males and Old Females are different (pvalue = .098).
 
 * After extending the training iterations, the difference between Model 8 (1/2 Sec Cut) and Model 12 (1/2 Sec Cut Stat) are negligible. This suggests that there is much more information in the average likelihood score than in the other descriptive statistics (sd, min, max, iqr).
 

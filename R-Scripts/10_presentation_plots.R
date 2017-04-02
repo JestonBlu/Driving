@@ -88,7 +88,7 @@ ggsave(filename = "docs/Plots/Texting_vs_Baseline_04.png", plot = g4, width = 13
 
 
 ## Example Old Female -- Original (worst subject accuracy)
-g5 = ggplot(subset(x, Subject == 'T025'), aes(x = Time, y = value, group = Trial, color = Event)) +
+g5 = ggplot(subset(x, Subject == 'T034'), aes(x = Time, y = value, group = Trial, color = Event)) +
   geom_point(alpha = .03, size = .5) +
   geom_smooth(size = .2, aes(color = Trial))+
   scale_x_continuous("Time") +
@@ -96,7 +96,7 @@ g5 = ggplot(subset(x, Subject == 'T025'), aes(x = Time, y = value, group = Trial
   scale_color_manual("", values = c("blue" , "red", "gray50", "#f0b823")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Baseline and Texting Trials", subtitle = "Subject 25") +
+  ggtitle("Baseline and Texting Trials", subtitle = "Subject 34") +
   theme(plot.title = element_text(hjust = .5),
         plot.subtitle = element_text(hjust = .5))
 
@@ -284,7 +284,7 @@ g2 = ggplot(x, aes(x = Time, y = value)) +
   scale_color_manual("Prediction", values = c("black", "#f0b923")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Subject 02: Accuracy 72%") +
+  ggtitle("Subject 02: Accuracy 69%") +
   theme(plot.title = element_text(hjust = .5))
 
 ggsave(filename = "Plots/Prediction_Subject002.png", plot = g2, width = 13, height = 5)
@@ -331,14 +331,14 @@ g4 = ggplot(x, aes(x = Time, y = value)) +
   scale_color_manual("Prediction", values = c("black", "#f0b923")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Subject 22: Accuracy 98%") +
+  ggtitle("Subject 22: Accuracy 96%") +
   theme(plot.title = element_text(hjust = .5))
 
 ggsave(filename = "Plots/Prediction_Subject022.png", plot = g4, width = 13, height = 5)
 ggsave(filename = "docs/Plots/Prediction_Subject022.png", plot = g4, width = 11, height = 6)
 
 
-sub = 'T025' #T038
+sub = 'T034' 
 x = subset(mdl.08.test, Subject == sub)
 x = melt(x, id.vars = c("Subject", "Age_Old", "Gender_Male", "Texting", "Predict", "Prob", "Time"))
 y = subset(stimuli, ID == paste(sub,'-007', sep = ''))
@@ -355,16 +355,13 @@ g5 = ggplot(x, aes(x = Time, y = value)) +
   scale_color_manual("Prediction", values = c("black", "#f0b923")) +
   facet_wrap(~variable) +
   guides(colour = guide_legend(override.aes = list(alpha = 1, size = 1))) +
-  ggtitle("Subject 25: Accuracy 66%") +
+  ggtitle("Subject 34: Accuracy 64%") +
   theme(plot.title = element_text(hjust = .5))
 
-ggsave(filename = "Plots/Prediction_Subject025.png", plot = g5, width = 13, height = 5)
-ggsave(filename = "docs/Plots/Prediction_Subject025.png", plot = g5, width = 11, height = 6)
+ggsave(filename = "Plots/Prediction_Subject034.png", plot = g5, width = 13, height = 5)
+ggsave(filename = "docs/Plots/Prediction_Subject034.png", plot = g5, width = 11, height = 6)
 
-## 02: .717
-## 03: .884  
-## 22: .975
-## 38: .540
+
 
 load("R-Data/data-mdl-08.rda")
 load("R-Models/Itr_1000/mdl_08_nnet.rda")
@@ -385,7 +382,7 @@ subject = as.character(unique(mdl.08.train$Subject))
 
 tab = data.frame()
 
-for (i in 1:59) {
+for (i in 1:56) {
   y1 = subset(mdl.08.train, Subject == subject[i])
   y2 = subset(mdl.08.test, Subject == subject[i])
 
@@ -419,6 +416,7 @@ ggsave(filename = "docs/Plots/Boxplots_Testing_Accuracy_By_Age_Gender.png",
 ggsave(filename = "Plots/Boxplots_Testing_Accuracy_By_Age_Gender.png", 
        plot = g9, height = 9, width = 6)
 
+library(car)
 
 head(tab)
 
@@ -427,6 +425,7 @@ mdl2 = glm(Test ~ factor(GenderMale) + factor(AgeOld), data = tab)
 mdl3 = glm(Test ~ factor(GenderAge), data = tab)
 
 anova(mdl, mdl2,mdl3)
+AIC(mdl, mdl2, mdl3)
 
 x = data.frame(GenderAge = tab$GenderAge, Residuals = mdl2$residuals)
 
@@ -444,7 +443,7 @@ tab2 = data.frame(tab2)
 colnames(tab2) = subject
 tab2 = tab2[-1, ]
 
-pander(tab2, split.table = 160)
+pander(tab2, split.table = 150)
 
 
 
@@ -667,24 +666,24 @@ gar.fun<-function(out.var,mod.in,bar.plot=T,struct=NULL,x.lab=NULL,
   
 }
 
-rel.imp = gar.fun(out.var = "Texting", mod.in = mdl.08$finalModel, bar.plot = FALSE)
-rel.imp$Subject = row.names(rel.imp)
-rel.imp$Subject = gsub(pattern = "Subject", replacement = "", x = rel.imp$Subject)
-rel.imp2 = rel.imp
-
-rel.imp = rel.imp[-(grep("T", rel.imp$Subject)), ]
-
-g1 = ggplot(rel.imp, aes(x = reorder(Subject, rel.imp), y = rel.imp)) +
-  geom_bar(stat = "identity") +
-  scale_y_continuous("Relative Importance") +
-  scale_x_discrete("") +
-  coord_flip() +
-  ggtitle("Relative Importance") +
-  theme(plot.title = element_text(hjust = .5))
-
-ggsave(filename = "Plots/Relative_Importance.png", plot = g1, width = 7, height = 5)
-ggsave(filename = "docs/Plots/Relative_Importance.png", plot = g1, width = 7, height = 5)
-
+# rel.imp = gar.fun(out.var = "Texting", mod.in = mdl.08$finalModel, bar.plot = FALSE)
+# rel.imp$Subject = row.names(rel.imp)
+# rel.imp$Subject = gsub(pattern = "Subject", replacement = "", x = rel.imp$Subject)
+# rel.imp2 = rel.imp
+# 
+# rel.imp = rel.imp[-(grep("T", rel.imp$Subject)), ]
+# 
+# g1 = ggplot(rel.imp, aes(x = reorder(Subject, rel.imp), y = rel.imp)) +
+#   geom_bar(stat = "identity") +
+#   scale_y_continuous("Relative Importance") +
+#   scale_x_discrete("") +
+#   coord_flip() +
+#   ggtitle("Relative Importance") +
+#   theme(plot.title = element_text(hjust = .5))
+# 
+# ggsave(filename = "Plots/Relative_Importance.png", plot = g1, width = 7, height = 5)
+# ggsave(filename = "docs/Plots/Relative_Importance.png", plot = g1, width = 7, height = 5)
+# 
 
 
 
