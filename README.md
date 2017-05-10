@@ -1,5 +1,6 @@
 #### Distracted Driving Final Project
 
+
 This repo is is dedicated to keeping all of the research and analysis related to the final project in my applied statistics masters program at Texas A&M. The data in this project are of 8 driving simulations for 66 individuals ranging from 3,000 to 30,000 observations per simulation. There are over 6.7 million observations in the entire dataset. The data from each simulation includes likelihood scores for 8 facial expressions recorded at a fixed interval of .03 seconds. Stimuli data which records targetted events that were introduced into each simulation and basic demographic data on each subject are also available.
 
 #### Steps to reproducing my work:
