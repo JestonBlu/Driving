@@ -5,6 +5,50 @@ library(ggplot2)
 rm(list = ls())
 load("R-Data/faces.rda")
 
+## Check to make sure there are no observations that dont sum to 1
+faces = faces[faces$Trial %in% c('004', '007'), ]
+faces$Sum = with(faces, Anger + Contempt + Disgust + Fear + Joy + Sad + Surprise + Neutral)
+faces$out = 0
+faces$out[faces$Sum < .99 | faces$Sum > 1.01] = 1
+
+## Whats is the percentage that are off?
+x = ddply(subset(faces, Trial == '004'), .(Subject, Trial, out), summarise, count = length(Subject))
+x = dcast(x, Subject + Trial ~ out)
+x$`1`[is.na(x$`1`)] = 0
+x$pct = with(x, `1` / (`0` + `1`))
+
+y = ddply(subset(faces, Trial == '007'), .(Subject, Trial, out), summarise, count = length(Subject))
+y = dcast(y, Subject + Trial ~ out)
+y$`1`[is.na(y$`1`)] = 0
+y$pct = with(y, `1` / (`0` + `1`))
+
+suspect.x = subset(x, pct < .5, "Subject")
+suspect.y = subset(y, pct < .5, c("Subject", "pct"))
+
+colnames(suspect.y)[2] = "Pct.007"
+
+## Full Join with Pct of records NOT suspect
+z = join(suspect.x, suspect.y, type = "full")
+z = na.omit(z)
+
+#################################################################################
+## Explaination
+##
+## If more than 50% of observations for each Subject do not add up to close to 1 
+## then that subject is removed.
+##
+## Additional all observations that do not add to one are removed as well
+##
+## Remainder is 57 Subjects (2 removed)
+
+z = as.character(z$Subject)
+
+faces = subset(faces, out != 1 & Subject %in% z)
+
+## Remove Temporary Vars
+faces = faces[, 1:18]
+
+
 ## Calculate the baseline
 baseline = ddply(subset(faces, Trial == '004'),
                  .(Subject, Age, Gender), summarise,
@@ -17,9 +61,8 @@ baseline = ddply(subset(faces, Trial == '004'),
                  mu_Surprise = mean(Surprise),
                  mu_Neutral = mean(Neutral))
 
-## Concentrating on simulations 4-7
-faces.cen = faces[faces$Trial %in% c('004', '005', '006', '007'), ]
-faces.cen = join(faces.cen, baseline, by = "Subject", type = "inner")
+## Concentrating on simulations 4 and 7
+faces.cen = join(faces, baseline, by = "Subject", type = "inner")
 
 ## Center all emotions
 faces.cen$Anger = with(faces.cen, Anger - mu_Anger)
@@ -34,65 +77,15 @@ faces.cen$Neutral = with(faces.cen, Neutral - mu_Neutral)
 ## Remove unneeded columsn
 faces.cen = faces.cen[, -(19:29)]
 
-## Calculate the average value and variance for each trial, event, expression
-stats = ddply(faces.cen, .(Subject, Trial, Event, Age, Gender, Event.Switch), summarise,
-              mu_Anger = mean(Anger),
-              var_Anger = var(Anger),
-              iqr_Anger = IQR(Anger),
-              min_Anger = min(Anger),
-              max_Anger = max(Anger),
-              mu_Contempt = mean(Contempt),
-              var_Contempt = var(Contempt),
-              iqr_Contempt = IQR(Contempt),
-              min_Contempt = min(Contempt),
-              max_Contempt = max(Contempt),
-              mu_Disgust = mean(Disgust),
-              var_Disgust = var(Disgust),
-              iqr_Disgust = IQR(Disgust),
-              min_Disgust = min(Disgust),
-              max_Disgust = max(Disgust),
-              mu_Fear = mean(Fear),
-              var_Fear = var(Fear),
-              iqr_Fear = IQR(Fear),
-              min_Fear = min(Fear),
-              max_Fear = max(Fear),
-              mu_Joy = mean(Joy),
-              var_Joy = var(Joy),
-              iqr_Joy = IQR(Joy),
-              min_Joy = min(Joy),
-              max_Joy = max(Joy),
-              mu_Sad = mean(Sad),
-              var_Sad = var(Sad),
-              iqr_Sad = IQR(Sad),
-              min_Sad = min(Sad),
-              max_Sad = max(Sad),
-              mu_Surprise = mean(Surprise),
-              var_Surprise = var(Surprise),
-              iqr_Surprise = IQR(Surprise),
-              min_Surprise = min(Surprise),
-              max_Surprise = max(Surprise),
-              mu_Neutral = mean(Neutral),
-              var_Neutral = var(Neutral),
-              iqr_Neutral = IQR(Neutral),
-              min_Neutral = min(Neutral),
-              max_Neutral = max(Neutral)
-              )
-
 ## Create indicators for Texting
 faces.cen$Texting = 0
-faces.cen$Texting[faces.cen$Event %in% c("Texting", "Texting and Talking")] = 1
+faces.cen$Texting[faces.cen$Event == "Texting"] = 1
 faces.cen$Texting = factor(faces.cen$Texting)
 
 faces$Texting = 0
 faces$Texting[faces$Event %in% c("Texting", "Texting and Talking")] = 1
 faces$Texting = factor(faces$Texting)
 
-stats$texting = 0
-stats$texting[stats$Event %in% c("Texting", "Texting and Talking")] = 1
-stats$texting = factor(stats$texting)
-
 ## Save individual datasets
-save(list = "faces", file = "R-Data/faces.rda")
-save(list = "stats", file = "R-Data/stats.rda")
-save(list = "baseline", file = "R-Data/baseline.rda")
 save(list = "faces.cen", file = "R-Data/faces_cen.rda")
+save(list = "baseline", file = "R-Data/baseline.rda")
